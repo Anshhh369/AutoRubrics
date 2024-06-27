@@ -34,7 +34,7 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 def example_file():
  # Detect the encoding of the file
  # with open(uploaded_files, 'rb') as f:
- raw_data = f.read()
+ raw_data = uploaded_files.read()
  result = chardet.detect(raw_data)
  encoding = result['encoding']
      
