@@ -32,18 +32,26 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
 def example_file():
- # Detect the encoding of the file
- # with open(uploaded_files, 'rb') as f:
- raw_data = uploaded_files.read()
- result = chardet.detect(raw_data)
- encoding = result['encoding']
+    uploaded_files.seek(0)  # Reset file pointer to beginning
+        
+    # Display file details
+    file_details = {"filename": uploaded_files.name, "filetype": uploaded_files.type}
+    st.write(file_details)
+        
+    # Create temporary directory and save file there
+    temp_dir = tempfile.mkdtemp()
+    path = os.path.join(temp_dir, uploaded_files.name)
+    with open(path, "wb") as f:
+        raw_data = f.read()
+        result = chardet.detect(raw_data)
+        encoding = result['encoding']
      
- raw_documents = TextLoader('/Users/anshaya/Downloads/Examples.txt',encoding = encoding).load()
- text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
- documents = text_splitter.split_documents(raw_documents)
- db = Chroma.from_documents(documents, OpenAIEmbeddings())
+        raw_documents = TextLoader('/Users/anshaya/Downloads/Examples.txt',encoding = encoding).load()
+        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+        documents = text_splitter.split_documents(raw_documents)
+        db = Chroma.from_documents(documents, OpenAIEmbeddings())
 
- return db
+    return db
 
 
 def  get_chain(db):
