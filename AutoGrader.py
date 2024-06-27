@@ -12,7 +12,6 @@ import chardet
 import os.path
 import pathlib
 import tempfile
-
 from langchain.chains import LLMChain,RetrievalQA
 from langchain.prompts.chat import (
     ChatPromptTemplate,
@@ -45,6 +44,7 @@ def example_file():
         # Create temporary directory and save file there
         temp_dir = tempfile.mkdtemp()
         path = os.path.join(temp_dir, file.name)
+        
         with open(path, "rb") as f:
             raw_data = f.read()
             result = chardet.detect(raw_data)
@@ -59,6 +59,7 @@ def example_file():
 
 
 def  get_chain(result):
+    
     # Creating the Prompt
  
     template = """
@@ -104,11 +105,11 @@ def  get_chain(result):
     return chain
 
 def get_similiar_docs(query, k=1, score=False):
- if score:
-  similar_docs = db.similarity_search_with_score(query, k=k)
- else:
-  similar_docs = db.similarity_search(query, k=k)
- return similar_docs
+    if score:
+        similar_docs = db.similarity_search_with_score(query, k=k)
+    else:
+        similar_docs = db.similarity_search(query, k=k)
+    return similar_docs
   
 def get_answer(query):
     similar_docs = get_similiar_docs(query)
@@ -127,8 +128,8 @@ uploaded_files = st.file_uploader(
 )
 
 if uploaded_files is not None:
- if "example_file" not in st.session_state:
-  st.session_state.example_file = example_file()
+    if "example_file" not in st.session_state:
+        st.session_state.example_file = example_file()
   
 
 
@@ -142,38 +143,39 @@ if uploaded_files is not None:
 #             st.session_state.vector_store = vector_db()
 
 if uploaded_files is not None:
- option = st.selectbox(
-  "Detail Level of Criteria",
-  ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
-  index=None,
-  placeholder="Select contact method...",
- )
- st.write("You selected:", option)
+    option = st.selectbox(
+        "Detail Level of Criteria",
+        ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
+        index=None,
+        placeholder="Select contact method...",
+    )
+    st.write("You selected:", option)
 
- # Initialize chat history
- if "messages" not in st.session_state:
-  st.session_state.messages = []
- if query := st.chat_input("Ask your question here"):
-  # Display user message in chat message container
-  with st.chat_message("user"):
-   st.markdown(query)
-  # Add user message to chat history
-  st.session_state.messages.append({"role": "user", "content": query})
+    # Initialize chat history
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+        
+        if query := st.chat_input("Ask your question here"):
+            # Display user message in chat message container
+            with st.chat_message("user"):
+                st.markdown(query)
+            # Add user message to chat history
+            st.session_state.messages.append({"role": "user", "content": query})
+            
+            # Get answer from retrieval chain
+            answer = get_answer(query)
+            result = answer["result"]
     
-  # Get answer from retrieval chain
-  answer = get_answer(query)
-  result = answer["result"]
-    
-  # Display assistant response in chat message container
-  with st.chat_message("assistant"):
-   st.markdown(result)
-  # Add assistant response to chat history
-  st.session_state.messages.append({"role": "assistant", "content": result})
-    
-  # Button to clear chat messages
-  def clear_messages():
-   st.session_state.messages = []
-   st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+            # Display assistant response in chat message container
+            with st.chat_message("assistant"):
+                st.markdown(result)
+            # Add assistant response to chat history
+            st.session_state.messages.append({"role": "assistant", "content": result})
+            
+            # Button to clear chat messages
+            def clear_messages():
+                st.session_state.messages = []
+                st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
 
