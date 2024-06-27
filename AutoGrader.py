@@ -55,14 +55,14 @@ def example_file():
     return db
 
 
-def  get_chain(db):
+def  get_chain(result):
     # Creating the Prompt
  
     template = """
      
     You are an expert in rubric generation for any given type of assignment. 
  
-    Start by greeting the user respectfully saying something on your own like "I can help you create a detailed rubric based on your preferences, could you please tell your name?". 
+    Start by greeting the user respectfully. 
     Collect the name from the user and then follow below steps:
     Verify the user input fields selected and then say something on your own like "thank you".
     Gather the {{detailLevel}},{{gradingStrictness}}, {{emphasisAreas}}, {{assignmentType}} and {{assignmentStyle}} information selected by the user. 
@@ -82,7 +82,7 @@ def  get_chain(db):
     """
      
     prompt = PromptTemplate(
-    input_variables=["context", "question"], template=template
+    input_variables=[context = "result", question = "query"], template=template
     )
      
     #Define a function to find similar documents based on a given query
@@ -95,7 +95,7 @@ def  get_chain(db):
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
      
-    chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever(),chain_type_kwargs={'prompt': prompt}
+    chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt}
                                    )
 
     return chain
@@ -109,7 +109,7 @@ def get_similiar_docs(query, k=1, score=False):
   
 def get_answer(query):
     similar_docs = get_similiar_docs(query)
-    answer = chain({"query":query})
+    answer = chain(st.session_state.example_file())
 
     return answer['result']
 
