@@ -7,7 +7,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain_community.document_loaders import TextLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import CharacterTextSplitter
-from langchain_chroma import Chroma
+from langchain.vectorstores import Chroma
 import chardet
 
 from langchain.chains import LLMChain,RetrievalQA
