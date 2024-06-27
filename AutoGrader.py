@@ -1,7 +1,7 @@
 # Importing libraries and modules
 
 import os
-# import openai
+import openai
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain_community.document_loaders import TextLoader
