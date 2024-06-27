@@ -45,7 +45,7 @@ def example_file():
         # Create temporary directory and save file there
         temp_dir = tempfile.mkdtemp()
         path = os.path.join(temp_dir, file.name)
-        with open(path, "wb") as f:
+        with open(path, "rb") as f:
             raw_data = f.read()
             result = chardet.detect(raw_data)
             encoding = result['encoding']
