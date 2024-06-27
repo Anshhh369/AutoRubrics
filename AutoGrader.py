@@ -116,7 +116,7 @@ uploaded_files = st.file_uploader(
 
 if uploaded_files is not None:
  if "example_file" not in st.session_state:
-  st.session_state.example_file
+  st.session_state.example_file = example_file()
   
 
 
