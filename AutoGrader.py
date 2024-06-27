@@ -33,7 +33,7 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
 def example_file():
  # Detect the encoding of the file
- with open(uploaded_file, 'rb') as f:
+ with open(uploaded_files, 'rb') as f:
      raw_data = f.read()
      result = chardet.detect(raw_data)
      encoding = result['encoding']
