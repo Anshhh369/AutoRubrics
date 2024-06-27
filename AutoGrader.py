@@ -46,50 +46,50 @@ def example_file():
  return db
 
 
-def  get_chain(db)
- # Creating the Prompt
+def  get_chain(db):
+    # Creating the Prompt
  
- template = """
+    template = """
+     
+    You are an expert in rubric generation for any given type of assignment. 
  
- You are an expert in rubric generation for any given type of assignment. 
- 
- Start by greeting the user respectfully saying something on your own like "I can help you create a detailed rubric based on your preferences, could you please tell your name?". 
- Collect the name from the user and then follow below steps:
- Verify the user input fields selected and then say something on your own like "thank you".
- Gather the {{detailLevel}},{{gradingStrictness}}, {{emphasisAreas}}, {{assignmentType}} and {{assignmentStyle}} information selected by the user. 
- Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
- Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
- 
- Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
- 
- Context : {context}
+    Start by greeting the user respectfully saying something on your own like "I can help you create a detailed rubric based on your preferences, could you please tell your name?". 
+    Collect the name from the user and then follow below steps:
+    Verify the user input fields selected and then say something on your own like "thank you".
+    Gather the {{detailLevel}},{{gradingStrictness}}, {{emphasisAreas}}, {{assignmentType}} and {{assignmentStyle}} information selected by the user. 
+    Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+    Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
+     
+    Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
+     
+    Context : {context}
+        
+    Human : {question}
+     
+    Assistant : 
+     
+     
+     
+    """
+     
+    prompt = PromptTemplate(
+    input_variables=["context", "question"], template=template
+    )
+     
+    #Define a function to find similar documents based on a given query
+     
     
- Human : {question}
- 
- Assistant : 
- 
- 
- 
- """
- 
- prompt = PromptTemplate(
- input_variables=["context", "question"], template=template
- )
- 
- #Define a function to find similar documents based on a given query
- 
-
- 
- 
- # Assigning the OPENAI model and Retrieval chain
- 
- model_name = "gpt-4"
- llm = ChatOpenAI(model_name=model_name)
- 
- chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever(),chain_type_kwargs={'prompt': prompt}
+     
+     
+    # Assigning the OPENAI model and Retrieval chain
+     
+    model_name = "gpt-4"
+    llm = ChatOpenAI(model_name=model_name)
+     
+    chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever(),chain_type_kwargs={'prompt': prompt}
                                    )
 
-return chain
+    return chain
 
 def get_similiar_docs(query, k=1, score=False):
  if score:
