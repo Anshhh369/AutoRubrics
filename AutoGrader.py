@@ -9,6 +9,9 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import CharacterTextSplitter
 from langchain.vectorstores import Chroma
 import chardet
+import os.path
+import pathlib
+import tempfile
 
 from langchain.chains import LLMChain,RetrievalQA
 from langchain.prompts.chat import (
