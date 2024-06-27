@@ -5,4 +5,3 @@ langchain-openai
 chardet
 langchain_community
 langchain_text_splitters
-langchain_chroma
