@@ -110,7 +110,6 @@ def get_answer(query):
 st.title("🦜🔗 QueryDoc")
 
 
-File uploader for user to upload a document
 uploaded_files = st.file_uploader(
     "Upload your document", type=["txt"], accept_multiple_files=True
 )
