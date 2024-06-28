@@ -36,11 +36,11 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
 def example_file():
     for file in uploaded_files:
-        # file.seek(0)  # Reset file pointer to beginning
+        file.seek(0)  # Reset file pointer to beginning
         
-        # # Display file details
-        # file_details = {"filename": file.name, "filetype": file.type}
-        # st.write(file_details)
+        # Display file details
+        file_details = {"filename": file.name, "filetype": file.type}
+        st.write(file_details)
             
         # # Create temporary directory and save file there
         # temp_dir = tempfile.mkdtemp()
