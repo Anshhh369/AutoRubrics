@@ -147,7 +147,7 @@ if uploaded_files is not None:
 #             # Initialize vector store
 #             st.session_state.vector_store = vector_db()
 
-if uploaded_files is not None:
+# if uploaded_files is not None:
     option = st.selectbox(
         "Detail Level of Criteria",
         ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
@@ -182,5 +182,6 @@ if uploaded_files is not None:
                 st.session_state.messages = []
                 st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
+else:
 
-
+    st.write("please upload an example file")
