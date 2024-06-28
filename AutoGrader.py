@@ -42,15 +42,16 @@ def example_file():
         file_details = {"filename": file.name, "filetype": file.type}
         st.write(file_details)
             
-        # # Create temporary directory and save file there
-        # temp_dir = tempfile.mkdtemp()
-        # path = os.path.join(temp_dir, file.name)
+        # Create temporary directory and save file there
+        temp_dir = tempfile.mkdtemp()
+        path = os.path.join(temp_dir, file.name)
+        st.write(path)
 
-        with NamedTemporaryFile(dir='.', suffix='.txt') as f:
-            f.write(file.getbuffer())
-            # your_function_which_takes_a_path(f.name)
+        # with NamedTemporaryFile(dir='.', suffix='.txt') as f:
+        #     f.write(file.getbuffer())
+        #     # your_function_which_takes_a_path(f.name)
         
-        # with open(path, "rb") as f:
+        with open('path', "rb") as f:
             raw_data = f.read()
             result = chardet.detect(raw_data)
             encoding = result['encoding']
