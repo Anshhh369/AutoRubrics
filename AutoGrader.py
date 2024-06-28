@@ -125,16 +125,19 @@ def get_answer(query):
 
 
 # Title for the web app
-st.title("🦜🔗 QueryDoc")
+st.title("🦜🔗 AutoGrader")
 
 
 uploaded_files = st.file_uploader(
     "Upload your document", type=["txt"], accept_multiple_files=True
 )
-
-if uploaded_files is not None:
-    if "example_file" not in st.session_state:
-        st.session_state.example_file = example_file()
+# Button to process uploaded file
+if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
+    if uploaded_files is None:
+        st.write("Please upload a file first.")
+    elif uploaded_files is not None:
+        if "example_file" not in st.session_state:
+            st.session_state.example_file = example_file()
   
 
 
@@ -148,39 +151,39 @@ if uploaded_files is not None:
 #             st.session_state.vector_store = vector_db()
 
 # if uploaded_files is not None:
-    option = st.selectbox(
-        "Detail Level of Criteria",
-        ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
-        index=None,
-        placeholder="Select contact method...",
-    )
-    st.write("You selected:", option)
-
-    # Initialize chat history
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-        
-        if query := st.chat_input("Ask your question here"):
-            # Display user message in chat message container
-            with st.chat_message("user"):
-                st.markdown(query)
-            # Add user message to chat history
-            st.session_state.messages.append({"role": "user", "content": query})
-            
-            # Get answer from retrieval chain
-            answer = get_answer(query)
-            result = answer["result"]
+        option = st.selectbox(
+            "Detail Level of Criteria",
+            ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
+            index=None,
+            placeholder="Select contact method...",
+        )
+        st.write("You selected:", option)
     
-            # Display assistant response in chat message container
-            with st.chat_message("assistant"):
-                st.markdown(result)
-            # Add assistant response to chat history
-            st.session_state.messages.append({"role": "assistant", "content": result})
+        # Initialize chat history
+        if "messages" not in st.session_state:
+            st.session_state.messages = []
             
-            # Button to clear chat messages
-            def clear_messages():
-                st.session_state.messages = []
-                st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+            if query := st.chat_input("Ask your question here"):
+                # Display user message in chat message container
+                with st.chat_message("user"):
+                    st.markdown(query)
+                # Add user message to chat history
+                st.session_state.messages.append({"role": "user", "content": query})
+                
+                # Get answer from retrieval chain
+                answer = get_answer(query)
+                result = answer["result"]
+        
+                # Display assistant response in chat message container
+                with st.chat_message("assistant"):
+                    st.markdown(result)
+                # Add assistant response to chat history
+                st.session_state.messages.append({"role": "assistant", "content": result})
+                
+                # Button to clear chat messages
+                def clear_messages():
+                    st.session_state.messages = []
+                    st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 else:
 
