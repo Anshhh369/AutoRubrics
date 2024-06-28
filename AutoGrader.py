@@ -51,7 +51,7 @@ def example_file():
         #     f.write(file.getbuffer())
         #     # your_function_which_takes_a_path(f.name)
         
-        with open('path', "rb") as f:
+        with open(path, "rb") as f:
             raw_data = f.read()
             result = chardet.detect(raw_data)
             encoding = result['encoding']
