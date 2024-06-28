@@ -46,7 +46,7 @@ def example_file():
         # temp_dir = tempfile.mkdtemp()
         # path = os.path.join(temp_dir, file.name)
 
-        with NamedTemporaryFile(dir='.', suffix='.csv') as f:
+        with NamedTemporaryFile(dir='.', suffix='.txt') as f:
             f.write(file.getbuffer())
             # your_function_which_takes_a_path(f.name)
         
