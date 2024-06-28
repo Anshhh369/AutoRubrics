@@ -53,11 +53,11 @@ def example_file():
         
         with open(path, "wb") as f:
             f.write(file.getvalue())
-            raw_data = f.read()
-            result = chardet.detect(raw_data)
-            encoding = result['encoding']
+            # raw_data = f.read()
+            # result = chardet.detect(raw_data)
+            # encoding = result['encoding']
          
-            raw_documents = TextLoader('path',encoding = encoding).load()
+            raw_documents = TextLoader(path).load()
             text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
             documents = text_splitter.split_documents(raw_documents)
             db = Chroma.from_documents(documents, OpenAIEmbeddings())
