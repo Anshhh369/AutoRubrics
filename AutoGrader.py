@@ -185,6 +185,4 @@ if st.button("Process Your Files",  help = "Click to process your file before as
                     st.session_state.messages = []
                     st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
-else:
 
-    st.write("please upload an example file")
