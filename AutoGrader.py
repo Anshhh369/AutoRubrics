@@ -62,10 +62,10 @@ def example_file():
             # result = chardet.detect(raw_data)
             # encoding = result['encoding']
          
-            raw_documents = TextLoader(path,encoding = encoding).load()
-            text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-            documents = text_splitter.split_documents(raw_documents)
-            db = Chroma.from_documents(documents, OpenAIEmbeddings())
+        raw_documents = TextLoader(path,encoding = encoding).load()
+        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+        documents = text_splitter.split_documents(raw_documents)
+        db = Chroma.from_documents(documents, OpenAIEmbeddings())
 
     return db
 
