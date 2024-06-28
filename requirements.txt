@@ -6,4 +6,4 @@ chardet
 langchain_community
 langchain_text_splitters
 langchain-chroma
-protobuf==3.20.3
+protobuf==3.20.1
