@@ -12,6 +12,7 @@ import chardet
 import os.path
 import pathlib
 import tempfile
+from tempfile import NamedTemporaryFile
 from langchain.chains import LLMChain,RetrievalQA
 from langchain.prompts.chat import (
     ChatPromptTemplate,
@@ -35,22 +36,26 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
 def example_file():
     for file in uploaded_files:
-        file.seek(0)  # Reset file pointer to beginning
+        # file.seek(0)  # Reset file pointer to beginning
         
-        # Display file details
-        file_details = {"filename": file.name, "filetype": file.type}
-        st.write(file_details)
+        # # Display file details
+        # file_details = {"filename": file.name, "filetype": file.type}
+        # st.write(file_details)
             
-        # Create temporary directory and save file there
-        temp_dir = tempfile.mkdtemp()
-        path = os.path.join(temp_dir, file.name)
+        # # Create temporary directory and save file there
+        # temp_dir = tempfile.mkdtemp()
+        # path = os.path.join(temp_dir, file.name)
+
+        with NamedTemporaryFile(dir='.', suffix='.csv') as f:
+            f.write(file.getbuffer())
+            # your_function_which_takes_a_path(f.name)
         
-        with open(path, "rb") as f:
+        # with open(path, "rb") as f:
             raw_data = f.read()
             result = chardet.detect(raw_data)
             encoding = result['encoding']
          
-            raw_documents = TextLoader('/Users/anshaya/Downloads/Examples.txt',encoding = encoding).load()
+            raw_documents = TextLoader('f.name',encoding = encoding).load()
             text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
             documents = text_splitter.split_documents(raw_documents)
             db = Chroma.from_documents(documents, OpenAIEmbeddings())
