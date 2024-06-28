@@ -144,12 +144,12 @@ if uploaded_files is not None:
             temp_file.write(uploaded_file.getbuffer())
             temp_file_path = temp_file.name
     
-        try:
-            documents = example_file(temp_file_path)
-            st.write("File processed successfully")
-            st.write(documents)
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+        # try:
+        #     documents = example_file(temp_file_path)
+        #     st.write("File processed successfully")
+        #     st.write(documents)
+        # except Exception as e:
+        #     st.error(f"An error occurred: {e}")
         
 # Button to process uploaded file
 if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
