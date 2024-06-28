@@ -34,27 +34,27 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
-def example_file(temp_file_path):
-    for file in uploaded_files:
-        file.seek(0)  # Reset file pointer to beginning
+def example_file(path):
+    # for file in uploaded_files:
+    #     file.seek(0)  # Reset file pointer to beginning
         
-        # Display file details
-        file_details = {"filename": file.name, "filetype": file.type}
-        st.write(file_details)
+    #     # Display file details
+    #     file_details = {"filename": file.name, "filetype": file.type}
+    #     st.write(file_details)
             
-        # Create temporary directory and save file there
-        temp_dir = tempfile.mkdtemp()
-        path = os.path.join(temp_dir, file.name)
-        st.write(path)
+    #     # Create temporary directory and save file there
+    #     temp_dir = tempfile.mkdtemp()
+    #     path = os.path.join(temp_dir, file.name)
+    #     st.write(path)
 
-        detector = chardet.UniversalDetector()
-        with open(path, 'rb') as f:
-            for line in f:
-                detector.feed(line)
-                if detector.done:
-                    break
-        detector.close()
-        enocding = detector.result['encoding']
+    detector = chardet.UniversalDetector()
+    with open(path, 'rb') as f:
+        for line in f:
+            detector.feed(line)
+            if detector.done:
+                break
+    detector.close()
+    enocding = detector.result['encoding']
     
         # with open(path, "wb") as f:
         #     f.write(file.getvalue())
@@ -62,10 +62,10 @@ def example_file(temp_file_path):
             # result = chardet.detect(raw_data)
             # encoding = result['encoding']
          
-        raw_documents = TextLoader(temp_file_path,encoding = encoding).load()
-        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-        documents = text_splitter.split_documents(raw_documents)
-        db = Chroma.from_documents(documents, OpenAIEmbeddings())
+    raw_documents = TextLoader(path,encoding = encoding).load()
+    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    documents = text_splitter.split_documents(raw_documents)
+    db = Chroma.from_documents(documents, OpenAIEmbeddings())
 
     return db
 
@@ -139,16 +139,17 @@ uploaded_files = st.file_uploader(
     "Upload your document", type=["txt"], accept_multiple_files=True
 )
 if uploaded_files is not None:
-    with NamedTemporaryFile(delete=False) as temp_file:
-        temp_file.write(uploaded_files.getbuffer())
-        temp_file_path = temp_file.name
-
-    try:
-        documents = example_file(temp_file_path)
-        st.write("File processed successfully")
-        st.write(documents)
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
+    for uploaded_file in uploaded_files:
+        with NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(uploaded_file.getbuffer())
+            temp_file_path = temp_file.name
+    
+        try:
+            documents = example_file(temp_file_path)
+            st.write("File processed successfully")
+            st.write(documents)
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
         
 # Button to process uploaded file
 if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
