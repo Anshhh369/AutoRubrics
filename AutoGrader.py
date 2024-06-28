@@ -34,7 +34,7 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
-def example_file():
+def example_file(temp_file_path):
     for file in uploaded_files:
         file.seek(0)  # Reset file pointer to beginning
         
@@ -62,7 +62,7 @@ def example_file():
             # result = chardet.detect(raw_data)
             # encoding = result['encoding']
          
-        raw_documents = TextLoader(path,encoding = encoding).load()
+        raw_documents = TextLoader(temp_file_path,encoding = encoding).load()
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
         documents = text_splitter.split_documents(raw_documents)
         db = Chroma.from_documents(documents, OpenAIEmbeddings())
@@ -138,6 +138,18 @@ st.title("🦜🔗 AutoGrader")
 uploaded_files = st.file_uploader(
     "Upload your document", type=["txt"], accept_multiple_files=True
 )
+if uploaded_files is not None:
+    with NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(uploaded_files.getbuffer())
+        temp_file_path = temp_file.name
+
+    try:
+        documents = example_file(temp_file_path)
+        st.write("File processed successfully")
+        st.write(documents)
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        
 # Button to process uploaded file
 if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
     if uploaded_files is None:
