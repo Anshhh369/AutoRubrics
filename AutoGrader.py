@@ -47,17 +47,22 @@ def example_file():
         path = os.path.join(temp_dir, file.name)
         st.write(path)
 
-        # with NamedTemporaryFile(dir='.', suffix='.txt') as f:
-        #     f.write(file.getbuffer())
-        #     # your_function_which_takes_a_path(f.name)
-        
-        with open(path, "wb") as f:
-            f.write(file.getvalue())
+        detector = chardet.UniversalDetector()
+        with open(path, 'rb') as f:
+            for line in f:
+                detector.feed(line)
+                if detector.done:
+                    break
+        detector.close()
+        enocding = detector.result['encoding']
+    
+        # with open(path, "wb") as f:
+        #     f.write(file.getvalue())
             # raw_data = f.read()
             # result = chardet.detect(raw_data)
             # encoding = result['encoding']
          
-            raw_documents = TextLoader(path).load()
+            raw_documents = TextLoader(path,encoding = encoding).load()
             text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
             documents = text_splitter.split_documents(raw_documents)
             db = Chroma.from_documents(documents, OpenAIEmbeddings())
