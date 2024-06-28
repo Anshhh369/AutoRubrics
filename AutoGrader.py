@@ -157,7 +157,7 @@ if st.button("Process Your Files",  help = "Click to process your file before as
         st.write("Please upload a file first.")
     elif uploaded_files is not None:
         if "example_file" not in st.session_state:
-            st.session_state.example_file = example_file()
+            st.session_state.example_file = example_file(temp_file_path)
   
 
 
