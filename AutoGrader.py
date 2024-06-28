@@ -54,7 +54,7 @@ def example_file(path):
             if detector.done:
                 break
     detector.close()
-    enocding = detector.result['encoding']
+    encoding = detector.result['encoding']
     
         # with open(path, "wb") as f:
         #     f.write(file.getvalue())
