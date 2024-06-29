@@ -143,7 +143,7 @@ if uploaded_files is not None:
         with NamedTemporaryFile(delete=False) as temp_file:
             temp_file.write(uploaded_file.getbuffer())
             temp_file_path = temp_file.name
-            st.write("temp_file_path")
+            st.write(temp_file_path)
     
         # try:
         #     documents = example_file(temp_file_path)
