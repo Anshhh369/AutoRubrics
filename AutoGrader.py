@@ -141,9 +141,9 @@ uploaded_files = st.file_uploader(
 if uploaded_files is not None:
     for uploaded_file in uploaded_files:
         with NamedTemporaryFile(delete=False) as temp_file:
-            temp_file.write(uploaded_file.getbuffer())
+            x = temp_file.write(uploaded_file.getbuffer())
             temp_file_path = temp_file.name
-            st.write(temp_file_path)
+            st.write(x)
     
         # try:
         #     documents = example_file(temp_file_path)
