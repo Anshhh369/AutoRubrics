@@ -141,7 +141,7 @@ uploaded_files = st.file_uploader(
 if uploaded_files is not None:
     for uploaded_file in uploaded_files:
         with NamedTemporaryFile(delete=False) as temp_file:
-            x = temp_file.write(uploaded_file.value())
+            x = temp_file.write(uploaded_file.getvalue())
             temp_file_path = temp_file.name
             st.write(x)
     
