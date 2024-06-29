@@ -67,7 +67,7 @@ def example_file(path):
     documents = text_splitter.split_documents(raw_documents)
     db = Chroma.from_documents(documents, OpenAIEmbeddings())
 
-return db
+    return db
 
 
 def  get_chain(result):
@@ -143,6 +143,7 @@ if uploaded_files is not None:
         with NamedTemporaryFile(delete=False) as temp_file:
             temp_file.write(uploaded_file.getbuffer())
             temp_file_path = temp_file.name
+            st.write("temp_file_path")
     
         # try:
         #     documents = example_file(temp_file_path)
