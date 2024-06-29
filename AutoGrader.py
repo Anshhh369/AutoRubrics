@@ -67,7 +67,7 @@ def example_file(path):
     documents = text_splitter.split_documents(raw_documents)
     db = Chroma.from_documents(documents, OpenAIEmbeddings())
 
-    return db
+return db
 
 
 def  get_chain(result):
