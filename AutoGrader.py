@@ -22,6 +22,7 @@ from langchain.prompts.chat import (
 )
 
 from langchain import PromptTemplate
+import pysqlite3
 
 ## Set up the environment
 # Load secret keys
