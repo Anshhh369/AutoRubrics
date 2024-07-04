@@ -103,7 +103,7 @@ def  get_chain(result):
      
     """
 
-    prompt_template.format(context = "result", question = "query") 
+    template.format(context = "result", question = "query") 
     prompt = PromptTemplate(
         template=template
     )
