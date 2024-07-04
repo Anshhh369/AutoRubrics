@@ -52,10 +52,13 @@ def example_file():
         path = os.path.join(temp_dir, uploaded_file.name)
         with open(path, "wb") as f:
             f.write(uploaded_file.getvalue())
+            
+        with open(path, "rb") as f:
             for line in f:
                 detector.feed(line)
                 if detector.done:
                     break
+
         detector.close()
         encoding = detector.result['encoding']
     
