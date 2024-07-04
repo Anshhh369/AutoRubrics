@@ -133,7 +133,7 @@ def  get_chain(result):
   
 def get_answer(query):
     chain = get_chain(st.session_state.example_file())
-    answe = chain({"query": query})
+    answer = chain({"query": query})
 
     return answer['result']
 
