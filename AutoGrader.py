@@ -193,7 +193,7 @@ if query := st.chat_input("Ask your question here"):
             
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        st.markdown(result)
+        st.markdown(answer)
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": result})
                     
