@@ -135,6 +135,16 @@ def get_answer(query):
 
     return answer['result']
 
+def select_option():
+    option = st.selectbox(
+        "Detail Level of Criteria",
+        ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
+        index=None,
+        placeholder="Select contact method...",
+    )
+    st.write("You selected:", option)
+
+    return option
 
 
 # Title for the web app
@@ -171,15 +181,8 @@ if st.button("Process Your Files",  help = "Click to process your file before as
     if uploaded_files is not None:
         if "example_file" not in st.session_state:
             st.session_state.example_file = example_file(path)
-  
-        option = st.selectbox(
-            "Detail Level of Criteria",
-            ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
-            index=None,
-            placeholder="Select contact method...",
-        )
-        st.write("You selected:", option)
 
+        options = select_option()
         
         if "messages" not in st.session_state:
             st.session_state.messages = []
