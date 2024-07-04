@@ -132,7 +132,7 @@ def  get_chain(result):
 #     return similar_docs
   
 def get_answer(query):
-    chain = get_chain(st.session_state.example_file())
+    chain = get_chain(st.session_state.vector_store)
     answer = chain({"query": query})
 
     return answer['result']
@@ -167,8 +167,8 @@ uploaded_files = st.file_uploader(
 # Button to process uploaded file
 if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
     if uploaded_files is not None:
-        if "example_file" not in st.session_state:
-            st.session_state.example_file = example_file()
+        if "vector_store" not in st.session_state:
+            st.session_state.vector_store = example_file()
 
 options = select_option()
         
