@@ -195,7 +195,7 @@ if st.button("Process Your Files",  help = "Click to process your file before as
         if option is None:
             st.write("Please select an option")
 
-        if option is not None:
+        elif option is not None:
             if "messages" not in st.session_state:
                 st.session_state.messages = []
                 
