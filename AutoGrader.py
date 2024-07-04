@@ -212,6 +212,6 @@ if st.button("Process Your Files",  help = "Click to process your file before as
             # Button to clear chat messages
             def clear_messages():
                 st.session_state.messages = []
-                st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+            st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
