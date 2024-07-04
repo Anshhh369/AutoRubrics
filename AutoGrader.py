@@ -155,6 +155,9 @@ if uploaded_files is not None:
         path = os.path.join(temp_dir, uploaded_file.name)
         with open(path, "wb") as f:
             f.write(uploaded_file.getvalue())
+
+else:
+    st.write("Please upload a file first.")
     
         # try:
         #     documents = example_file(temp_file_path)
@@ -168,8 +171,6 @@ if st.button("Process Your Files",  help = "Click to process your file before as
     if uploaded_files is not None:
         if "example_file" not in st.session_state:
             st.session_state.example_file = example_file(path)
-    else:
-        st.write("Please upload a file first.")
   
         option = st.selectbox(
             "Detail Level of Criteria",
