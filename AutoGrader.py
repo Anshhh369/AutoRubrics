@@ -54,11 +54,10 @@ def example_file(path):
     #     st.write(path)
 
     detector = chardet.UniversalDetector()
-    with open(path, 'rb') as f:
-        for line in f:
-            detector.feed(line)
-            if detector.done:
-                break
+    for line in f:
+        detector.feed(line)
+        if detector.done:
+            break
     detector.close()
     encoding = detector.result['encoding']
     
