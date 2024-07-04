@@ -140,10 +140,15 @@ uploaded_files = st.file_uploader(
 )
 if uploaded_files is not None:
     for uploaded_file in uploaded_files:
-        with NamedTemporaryFile(delete=False) as temp_file:
-            x = temp_file.write(uploaded_file.getvalue())
-            temp_file_path = temp_file.name
-            st.write(x)
+        # Display file details
+        file_details = {"filename": uploaded_file.name, "filetype": uploaded_file.type}
+        st.write(file_details)
+        
+        # Create temporary directory and save file there
+        temp_dir = tempfile.mkdtemp()
+        path = os.path.join(temp_dir, uploaded_file.name)
+        with open(path, "wb") as f:
+            f.write(uploaded_file.getvalue())
     
         # try:
         #     documents = example_file(temp_file_path)
@@ -158,7 +163,7 @@ if st.button("Process Your Files",  help = "Click to process your file before as
         st.write("Please upload a file first.")
     elif uploaded_files is not None:
         if "example_file" not in st.session_state:
-            st.session_state.example_file = example_file(temp_file_path)
+            st.session_state.example_file = example_file(path)
   
 
 
