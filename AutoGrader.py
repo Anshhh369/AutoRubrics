@@ -102,9 +102,10 @@ def  get_chain(result):
      
      
     """
-     
+
+    prompt.format(context = "result", question = "query") 
     prompt = PromptTemplate(
-    input_variables=[context == "result", question == "query"], template=template
+        template=template
     )
      
     #Define a function to find similar documents based on a given query
