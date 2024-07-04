@@ -171,18 +171,6 @@ if st.button("Process Your Files",  help = "Click to process your file before as
         if "example_file" not in st.session_state:
             st.session_state.example_file = example_file(path)
   
-
-
-# # Button to process uploaded file
-# if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
-#     if uploaded_files is None:
-#         st.write("Please upload a file first.")
-#     elif uploaded_files is not None:
-#         if "vector_store" not in st.session_state:
-#             # Initialize vector store
-#             st.session_state.vector_store = vector_db()
-
-# if uploaded_files is not None:
         option = st.selectbox(
             "Detail Level of Criteria",
             ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
@@ -199,26 +187,31 @@ if st.button("Process Your Files",  help = "Click to process your file before as
             if "messages" not in st.session_state:
                 st.session_state.messages = []
                 
-                if query := st.chat_input("Ask your question here"):
-                    # Display user message in chat message container
-                    with st.chat_message("user"):
-                        st.markdown(query)
-                    # Add user message to chat history
-                    st.session_state.messages.append({"role": "user", "content": query})
-                    
-                    # Get answer from retrieval chain
-                    answer = get_answer(query)
-                    result = answer["result"]
+            # Display chat messages from history on app rerun
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
             
-                    # Display assistant response in chat message container
-                    with st.chat_message("assistant"):
-                        st.markdown(result)
-                    # Add assistant response to chat history
-                    st.session_state.messages.append({"role": "assistant", "content": result})
+            if query := st.chat_input("Ask your question here"):
+                # Display user message in chat message container
+                with st.chat_message("user"):
+                    st.markdown(query)
+                # Add user message to chat history
+                st.session_state.messages.append({"role": "user", "content": query})
                     
-                    # Button to clear chat messages
-                    def clear_messages():
-                        st.session_state.messages = []
-                        st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+                # Get answer from retrieval chain
+                answer = get_answer(query)
+                result = answer["result"]
+            
+                # Display assistant response in chat message container
+                with st.chat_message("assistant"):
+                    st.markdown(result)
+                # Add assistant response to chat history
+                st.session_state.messages.append({"role": "assistant", "content": result})
+                    
+                # Button to clear chat messages
+                def clear_messages():
+                    st.session_state.messages = []
+                    st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
