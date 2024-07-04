@@ -165,11 +165,11 @@ if uploaded_files is not None:
         
 # Button to process uploaded file
 if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
-    if uploaded_files is None:
-        st.write("Please upload a file first.")
-    elif uploaded_files is not None:
+    if uploaded_files is not None:
         if "example_file" not in st.session_state:
             st.session_state.example_file = example_file(path)
+    else:
+        st.write("Please upload a file first.")
   
         option = st.selectbox(
             "Detail Level of Criteria",
@@ -179,11 +179,9 @@ if st.button("Process Your Files",  help = "Click to process your file before as
         )
         st.write("You selected:", option)
     
-        # Initialize chat history
-        if option is None:
-            st.write("Please select an option")
 
-        elif option is not None:
+
+        if option is not None:
             if "messages" not in st.session_state:
                 st.session_state.messages = []
                 
@@ -213,5 +211,9 @@ if st.button("Process Your Files",  help = "Click to process your file before as
                 def clear_messages():
                     st.session_state.messages = []
                     st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+
+        # Initialize chat history
+        else:
+            st.write("Please select an option")
 
 
