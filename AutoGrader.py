@@ -153,10 +153,6 @@ st.title("🦜🔗 AutoGrader")
 uploaded_files = st.file_uploader(
     "Upload your document", type=["txt"], accept_multiple_files=True
 )
-if uploaded_files is not None:
-
-else:
-    st.write("Please upload a file first.")
     
         # try:
         #     documents = example_file(temp_file_path)
