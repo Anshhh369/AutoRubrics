@@ -40,7 +40,7 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
-def example_file(path):
+def example_file():
     detector = chardet.UniversalDetector()
     for uploaded_file in uploaded_files:
         # Display file details
@@ -165,7 +165,7 @@ uploaded_files = st.file_uploader(
 if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
     if uploaded_files is not None:
         if "example_file" not in st.session_state:
-            st.session_state.example_file = example_file(path)
+            st.session_state.example_file = example_file()
 
 options = select_option()
         
