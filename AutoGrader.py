@@ -195,7 +195,7 @@ if query := st.chat_input("Ask your question here"):
     with st.chat_message("assistant"):
         st.markdown(answer)
     # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": result})
+    st.session_state.messages.append({"role": "assistant", "content": answer})
                     
     # Button to clear chat messages
     def clear_messages():
