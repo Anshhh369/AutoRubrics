@@ -23,6 +23,12 @@ from langchain.prompts.chat import (
 
 from langchain import PromptTemplate
 
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+import sqlite3
+
 ## Set up the environment
 # Load secret keys
 
