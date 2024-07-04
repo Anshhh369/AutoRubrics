@@ -120,6 +120,8 @@ def  get_chain(result):
     chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt}
                                    )
 
+    st.session_state.chat_active = True
+    
     return chain
 
 def get_similiar_docs(query, k=1, score=False):
