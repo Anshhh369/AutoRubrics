@@ -41,25 +41,23 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
 def example_file(path):
-    # for file in uploaded_files:
-    #     file.seek(0)  # Reset file pointer to beginning
-        
-    #     # Display file details
-    #     file_details = {"filename": file.name, "filetype": file.type}
-    #     st.write(file_details)
-            
-    #     # Create temporary directory and save file there
-    #     temp_dir = tempfile.mkdtemp()
-    #     path = os.path.join(temp_dir, file.name)
-    #     st.write(path)
-
     detector = chardet.UniversalDetector()
-    for line in f:
-        detector.feed(line)
-        if detector.done:
-            break
-    detector.close()
-    encoding = detector.result['encoding']
+    for uploaded_file in uploaded_files:
+        # Display file details
+        file_details = {"filename": uploaded_file.name, "filetype": uploaded_file.type}
+        st.write(file_details)
+        
+        # Create temporary directory and save file there
+        temp_dir = tempfile.mkdtemp()
+        path = os.path.join(temp_dir, uploaded_file.name)
+        with open(path, "wb") as f:
+            f.write(uploaded_file.getvalue())
+            for line in f:
+                detector.feed(line)
+                if detector.done:
+                    break
+        detector.close()
+        encoding = detector.result['encoding']
     
         # with open(path, "wb") as f:
         #     f.write(file.getvalue())
@@ -156,16 +154,6 @@ uploaded_files = st.file_uploader(
     "Upload your document", type=["txt"], accept_multiple_files=True
 )
 if uploaded_files is not None:
-    for uploaded_file in uploaded_files:
-        # Display file details
-        file_details = {"filename": uploaded_file.name, "filetype": uploaded_file.type}
-        st.write(file_details)
-        
-        # Create temporary directory and save file there
-        temp_dir = tempfile.mkdtemp()
-        path = os.path.join(temp_dir, uploaded_file.name)
-        with open(path, "wb") as f:
-            f.write(uploaded_file.getvalue())
 
 else:
     st.write("Please upload a file first.")
