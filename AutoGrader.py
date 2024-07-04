@@ -124,16 +124,16 @@ def  get_chain(result):
     
     return chain
 
-def get_similiar_docs(query, k=1, score=False):
-    if score:
-        similar_docs = db.similarity_search_with_score(query, k=k)
-    else:
-        similar_docs = db.similarity_search(query, k=k)
-    return similar_docs
+# def get_similiar_docs(query, k=1, score=False):
+#     if score:
+#         similar_docs = db.similarity_search_with_score(query, k=k)
+#     else:
+#         similar_docs = db.similarity_search(query, k=k)
+#     return similar_docs
   
 def get_answer(query):
-    similar_docs = get_similiar_docs(query)
-    answer = chain(st.session_state.example_file())
+    chain = get_chain(st.session_state.example_file())
+    answe = chain({"query": query})
 
     return answer['result']
 
