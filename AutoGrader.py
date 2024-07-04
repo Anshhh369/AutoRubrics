@@ -192,29 +192,33 @@ if st.button("Process Your Files",  help = "Click to process your file before as
         st.write("You selected:", option)
     
         # Initialize chat history
-        if "messages" not in st.session_state:
-            st.session_state.messages = []
+        if option is None:
+            st.write("Please select an option")
+
+        if option is not None:
+            if "messages" not in st.session_state:
+                st.session_state.messages = []
+                
+                if query := st.chat_input("Ask your question here"):
+                    # Display user message in chat message container
+                    with st.chat_message("user"):
+                        st.markdown(query)
+                    # Add user message to chat history
+                    st.session_state.messages.append({"role": "user", "content": query})
+                    
+                    # Get answer from retrieval chain
+                    answer = get_answer(query)
+                    result = answer["result"]
             
-            if query := st.chat_input("Ask your question here"):
-                # Display user message in chat message container
-                with st.chat_message("user"):
-                    st.markdown(query)
-                # Add user message to chat history
-                st.session_state.messages.append({"role": "user", "content": query})
-                
-                # Get answer from retrieval chain
-                answer = get_answer(query)
-                result = answer["result"]
-        
-                # Display assistant response in chat message container
-                with st.chat_message("assistant"):
-                    st.markdown(result)
-                # Add assistant response to chat history
-                st.session_state.messages.append({"role": "assistant", "content": result})
-                
-                # Button to clear chat messages
-                def clear_messages():
-                    st.session_state.messages = []
-                    st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+                    # Display assistant response in chat message container
+                    with st.chat_message("assistant"):
+                        st.markdown(result)
+                    # Add assistant response to chat history
+                    st.session_state.messages.append({"role": "assistant", "content": result})
+                    
+                    # Button to clear chat messages
+                    def clear_messages():
+                        st.session_state.messages = []
+                        st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
