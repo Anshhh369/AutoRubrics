@@ -117,12 +117,12 @@ def  get_chain(result):
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
      
-    chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt}
+    r_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt}
                                    )
 
     st.session_state.chat_active = True
     
-    return chain
+    return r_chain
 
 # def get_similiar_docs(query, k=1, score=False):
 #     if score:
