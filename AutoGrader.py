@@ -178,11 +178,12 @@ if st.button("Process Your Files",  help = "Click to process your file before as
             index=None,
             placeholder="Select contact method...",
         )
-        st.write("You selected:", option)
+
     
 
 
         if option is not None:
+            st.write("You selected:", option)
             if "messages" not in st.session_state:
                 st.session_state.messages = []
                 
