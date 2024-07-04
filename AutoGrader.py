@@ -190,7 +190,6 @@ if query := st.chat_input("Ask your question here"):
                     
     # Get answer from retrieval chain
     answer = get_answer(query)
-    result = answer["result"]
             
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
