@@ -153,53 +153,53 @@ def select_option():
 # Title for the web app
 st.title("🦜🔗 AutoGrader")
 
+# Multi-page navigation
+page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Question"])
 
-uploaded_files = st.file_uploader(
-    "Upload your document", type=["txt"], accept_multiple_files=True
-)
-    
-        # try:
-        #     documents = example_file(temp_file_path)
-        #     st.write("File processed successfully")
-        #     st.write(documents)
-        # except Exception as e:
-        #     st.error(f"An error occurred: {e}")
-        
-# Button to process uploaded file
-if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
-    if uploaded_files is not None:
-        if "vector_store" not in st.session_state:
-            st.session_state.vector_store = example_file()
+if page == "Home":
+    st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
+    options = select_option()
 
-options = select_option()
-        
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-                
-# Display chat messages from history on app rerun
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+elif page == "Upload Document":
+    uploaded_files = st.file_uploader(
+        "Upload your document", type=["txt"], accept_multiple_files=True
+    )
             
-if query := st.chat_input("Ask your question here"):
-    # Display user message in chat message container
-    with st.chat_message("user"):
-        st.markdown(query)
-    # Add user message to chat history
-    st.session_state.messages.append({"role": "user", "content": query})
-                    
-    # Get answer from retrieval chain
-    answer = get_answer(query)
-            
-    # Display assistant response in chat message container
-    with st.chat_message("assistant"):
-        st.markdown(answer)
-    # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": answer})
-                    
-    # Button to clear chat messages
-    def clear_messages():
+    # Button to process uploaded file
+    if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
+        if uploaded_files is not None:
+            if "vector_store" not in st.session_state:
+                st.session_state.vector_store = example_file()
+
+
+elif page == "Ask Question":
+    if "messages" not in st.session_state:
         st.session_state.messages = []
-    st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+                
+    # Display chat messages from history on app rerun
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+                
+    if query := st.chat_input("Ask your question here"):
+        # Display user message in chat message container
+        with st.chat_message("user"):
+            st.markdown(query)
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": query})
+                        
+        # Get answer from retrieval chain
+        answer = get_answer(query)
+                
+        # Display assistant response in chat message container
+        with st.chat_message("assistant"):
+            st.markdown(answer)
+        # Add assistant response to chat history
+        st.session_state.messages.append({"role": "assistant", "content": answer})
+                        
+        # Button to clear chat messages
+        def clear_messages():
+            st.session_state.messages = []
+        st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
