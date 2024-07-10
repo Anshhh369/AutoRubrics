@@ -40,7 +40,7 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
-def example_file():
+def example_file(uploaded_files):
     detector = chardet.UniversalDetector()
     for uploaded_file in uploaded_files:
         # Display file details
@@ -126,6 +126,9 @@ def get_answer(query):
     return answer['result']
 
 def select_option():
+    if "option" not in st.session_state:
+        st.session_state.option = None
+    
     option = st.selectbox(
         "Detail Level of Criteria",
         ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
