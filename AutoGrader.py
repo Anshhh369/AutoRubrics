@@ -148,7 +148,7 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    st.session_state.options = select_option()
+    st.session_state.option = select_option()
 
 elif page == "Upload Document":
     if "uploaded_files" not in st.session_state:
