@@ -37,6 +37,15 @@ secrets = st.secrets  # Accessing secrets (API keys) stored securely
 openai_api_key = secrets["openai"]["api_key"]  # Accessing OpenAI API key from secrets
 os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable for OpenAI API key
 
+# Initialize session state variables
+if "option" not in st.session_state:
+    st.session_state.option = None
+if "uploaded_files" not in st.session_state:
+    st.session_state.uploaded_files = None
+if "vector_store" not in st.session_state:
+    st.session_state.vector_store = None
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
@@ -126,14 +135,11 @@ def get_answer(query):
     return answer['result']
 
 def select_option():
-    if "option" not in st.session_state:
-        st.session_state.option = None
-    
     option = st.selectbox(
         "Detail Level of Criteria",
         ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
-        index=None,
-        placeholder="Select contact method...",
+        index=("Broad Overview", "Moderately Detailed", "Highly Detailed").index(st.session_state.option),
+        on_change=lambda: st.session_state.update({"option": st.session_state.option})
     )
     st.write("You selected:", option)
 
