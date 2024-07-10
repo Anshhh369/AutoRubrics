@@ -61,12 +61,6 @@ def example_file():
 
         detector.close()
         encoding = detector.result['encoding']
-    
-        # with open(path, "wb") as f:
-        #     f.write(file.getvalue())
-            # raw_data = f.read()
-            # result = chardet.detect(raw_data)
-            # encoding = result['encoding']
          
         raw_documents = TextLoader(path,encoding = encoding).load()
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
@@ -87,7 +81,7 @@ def  get_chain(result):
     Start by greeting the user respectfully. 
     Collect the name from the user and then follow below steps:
 
-    Gather the options information selected by the user. 
+    Gather the inputs selected by the user from {options} variable. 
     Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
     Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
@@ -103,7 +97,7 @@ def  get_chain(result):
      
     """
 
-    template.format(context = "result", question = "query") 
+    template.format(options = "option", context = "result", question = "query") 
     prompt = PromptTemplate(
         template=template
     )
