@@ -102,7 +102,7 @@ def  get_chain(result):
      
     """
 
-    template.format(options = "st.session_state.option", context = "result", question = "query") 
+    template.format(options = "option", context = "result", question = "query") 
     prompt = PromptTemplate(
         template=template
     )
@@ -145,7 +145,7 @@ def select_option():
     st.write("You selected:", option)
     st.session_state.option = option
 
-    return option
+    return st.session_state.option
 
 
 # Title for the web app
