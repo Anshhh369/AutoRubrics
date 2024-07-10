@@ -135,13 +135,19 @@ def get_answer(query):
     return answer['result']
 
 def select_option():
+    
+    options = ("Broad Overview", "Moderately Detailed", "Highly Detailed")
+    
+    if st.session_state.option not in options:
+        st.session_state.option = options[0]
+        
     option = st.selectbox(
         "Detail Level of Criteria",
-        ("Broad Overview", "Moderately Detailed", "Highly Detailed"),
-        index=("Broad Overview", "Moderately Detailed", "Highly Detailed").index(st.session_state.option),
-        on_change=lambda: st.session_state.update({"option": st.session_state.option})
+        options,
+        index=options.index(st.session_state.option)
     )
     st.write("You selected:", option)
+    st.session_state.option = option
 
     return option
 
