@@ -169,7 +169,8 @@ elif page == "Upload Document":
     # Button to process uploaded file
     if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
         if "st.session_state.uploaded_files" is not None:
-            st.session_state.vector_store = example_file(st.session_state.uploaded_files)
+            if st.session_state.vector_store is None:
+                st.session_state.vector_store = example_file(st.session_state.uploaded_files)
 
 
 elif page == "Ask Question":
