@@ -118,13 +118,6 @@ def  get_chain(result):
     st.session_state.chat_active = True
     
     return r_chain
-
-# def get_similiar_docs(query, k=1, score=False):
-#     if score:
-#         similar_docs = db.similarity_search_with_score(query, k=k)
-#     else:
-#         similar_docs = db.similarity_search(query, k=k)
-#     return similar_docs
   
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
@@ -152,18 +145,21 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    options = select_option()
+    st.session_state.options = select_option()
 
 elif page == "Upload Document":
-    uploaded_files = st.file_uploader(
+    if "uploaded_files" not in st.session_state:
+        st.session_state.uploaded_files = None
+        
+    st.session_state.uploaded_files = st.file_uploader(
         "Upload your document", type=["txt"], accept_multiple_files=True
     )
             
     # Button to process uploaded file
     if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
-        if uploaded_files is not None:
+        if "st.session_state.uploaded_files" is not None:
             if "vector_store" not in st.session_state:
-                st.session_state.vector_store = example_file()
+                st.session_state.vector_store = example_file(st.session_state.uploaded_files)
 
 
 elif page == "Ask Question":
