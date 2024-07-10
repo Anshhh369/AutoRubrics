@@ -40,8 +40,7 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 # Initialize session state variables
 if "option" not in st.session_state:
     st.session_state.option = None
-if "uploaded_files" not in st.session_state:
-    st.session_state.uploaded_files = None
+
 
 
 
@@ -103,7 +102,7 @@ def  get_chain(result):
      
     """
 
-    template.format(options = "option", context = "result", question = "query") 
+    template.format(options = "st.session_state.option", context = "result", question = "query") 
     prompt = PromptTemplate(
         template=template
     )
