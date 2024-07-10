@@ -41,7 +41,8 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 if "option" not in st.session_state:
     st.session_state.option = None
 
-
+if "vector_store" not in st.session_state:
+    st.session_state.vector_store = None
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
@@ -102,7 +103,7 @@ def  get_chain(result):
      
     """
 
-    template.format(options = "option", context = "result", question = "query") 
+    template.format(options = "st.session_state.option", context = "result", question = "query") 
     prompt = PromptTemplate(
         template=template
     )
@@ -143,9 +144,8 @@ def select_option():
         index=options.index(st.session_state.option)
     )
     st.write("You selected:", option)
-    st.session_state.option = option
 
-    return st.session_state.option
+    return option
 
 
 # Title for the web app
@@ -169,8 +169,7 @@ elif page == "Upload Document":
     # Button to process uploaded file
     if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
         if "st.session_state.uploaded_files" is not None:
-            if "vector_store" not in st.session_state:
-                st.session_state.vector_store = example_file(st.session_state.uploaded_files)
+            st.session_state.vector_store = example_file(st.session_state.uploaded_files)
 
 
 elif page == "Ask Question":
