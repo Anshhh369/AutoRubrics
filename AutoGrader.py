@@ -103,7 +103,7 @@ def  get_chain(result):
      
     """
 
-    template.format(options = "option", context = "result", question = "query") 
+    template.format(options = "st.session_state.option", context = "result", question = "query") 
     prompt = PromptTemplate(
         template=template
     )
@@ -144,8 +144,9 @@ def select_option():
         index=options.index(st.session_state.option)
     )
     st.write("You selected:", option)
+    st.session_state.option = option
 
-    return option
+    return st.session_state.option
 
 
 # Title for the web app
@@ -188,10 +189,9 @@ elif page == "Ask Question":
             st.markdown(query)
         # Add user message to chat history
         st.session_state.messages.append({"role": "user", "content": query})
-        option = st.session_state.option
                         
         # Get answer from retrieval chain
-        answer = get_answer(query,option)
+        answer = get_answer(query,st.session_state.option)
                 
         # Display assistant response in chat message container
         with st.chat_message("assistant"):
