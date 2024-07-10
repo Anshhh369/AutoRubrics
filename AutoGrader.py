@@ -103,7 +103,7 @@ def  get_chain(result):
      
     """
 
-    template.format(options = "st.session_state.option", context = "result", question = "query") 
+    template.format(options = "option", context = "result", question = "query") 
     prompt = PromptTemplate(
         template=template
     )
@@ -125,7 +125,7 @@ def  get_chain(result):
     
     return r_chain
   
-def get_answer(query):
+def get_answer(query, option):
     chain = get_chain(st.session_state.vector_store)
     answer = chain({"query": query, "option": st.session_state.option})
 
@@ -188,9 +188,10 @@ elif page == "Ask Question":
             st.markdown(query)
         # Add user message to chat history
         st.session_state.messages.append({"role": "user", "content": query})
+        option = st.session_state.option
                         
         # Get answer from retrieval chain
-        answer = get_answer(query)
+        answer = get_answer(query,option)
                 
         # Display assistant response in chat message container
         with st.chat_message("assistant"):
