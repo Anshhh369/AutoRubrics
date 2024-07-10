@@ -42,10 +42,7 @@ if "option" not in st.session_state:
     st.session_state.option = None
 if "uploaded_files" not in st.session_state:
     st.session_state.uploaded_files = None
-if "vector_store" not in st.session_state:
-    st.session_state.vector_store = None
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
