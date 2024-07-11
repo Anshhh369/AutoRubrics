@@ -104,7 +104,7 @@ def  get_chain(result, options):
      
     """
     
-    system_prompt.format(options = "options", context = "result", question = "{question}")
+    system_prompt.format(options = "options", context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -128,7 +128,7 @@ def  get_chain(result, options):
   
 def get_answer(query, options):
     chain = get_chain(st.session_state.vector_store, st.session_state.option)
-    answer = chain({"question": query})
+    answer = chain({"query": query})
 
     return answer['result']
 
