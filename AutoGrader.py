@@ -90,7 +90,7 @@ def  get_chain(result):
     Start by greeting the user respectfully. 
     Collect the name from the user and then follow below steps:
 
-    Gather the inputs selected by the user which are present in options variable. 
+    Gather the inputs selected by the user which are present in {options} variable. 
     Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
     Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
@@ -106,10 +106,7 @@ def  get_chain(result):
      
     """
 
-    template.format(context = "result", question = "query") 
-    prompt = PromptTemplate(
-        template=template
-    )
+    prompt = PromptTemplate(template=template, input_variables=["options", "context", "question"])
      
     #Define a function to find similar documents based on a given query
      
@@ -130,7 +127,7 @@ def  get_chain(result):
   
 def get_answer(query, option):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query, "option": st.session_state.option})
+    answer = chain({"query": query, "options": st.session_state.option, "context": result})
 
     return answer['result']
 
@@ -149,7 +146,7 @@ def select_option():
     st.write("You selected:", option)
     st.session_state.option = option
 
-    return st.session_state.option
+    return option
 
 
 # Title for the web app
