@@ -90,7 +90,7 @@ def  get_chain(result):
      
     You are an expert in rubric generation for any given type of assignment. 
  
-    Start by greeting the user respectfully and help them answer {questions}. 
+    Start by greeting the user respectfully and help them answer their {question}. 
     Collect the name from the user and then follow below steps:
 
     Gather the inputs selected by the user which are present in {options} variable. 
@@ -104,10 +104,10 @@ def  get_chain(result):
      
     """
     
-    system_prompt.format(options = "st.session_state.options", context = "result", questions = "query")
+    system_prompt.format(options = "st.session_state.option", context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
-        [("system", system_prompt), ("human", "{questions}")]
+        [("system", system_prompt), ("human", "{question}")]
     )
 
     
