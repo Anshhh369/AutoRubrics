@@ -82,7 +82,7 @@ def example_file(uploaded_files):
     return db
 
 
-def  get_chain(result, options):
+def  get_chain(result):
     
     # Creating the Prompt
  
@@ -126,8 +126,8 @@ def  get_chain(result, options):
     
     return r_chain
   
-def get_answer(query, options):
-    chain = get_chain(st.session_state.vector_store, options)
+def get_answer(query):
+    chain = get_chain(st.session_state.vector_store)
     answer = chain({"query": query})
 
     return answer['result']
@@ -145,7 +145,6 @@ def select_option():
         index=options.index(st.session_state.option)
     )
     st.write("You selected:", option)
-    st.session_state.option = option
 
     return option
 
@@ -158,7 +157,7 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    select_option()
+    options = select_option()
 
 elif page == "Upload Document": 
     st.session_state.uploaded_files = st.file_uploader(
@@ -186,9 +185,9 @@ elif page == "Ask Question":
                 st.markdown(query)
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": query})
-                            
+            
             # Get answer from retrieval chain
-            answer = get_answer(query,st.session_state.option)
+            answer = get_answer(query)
                     
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
