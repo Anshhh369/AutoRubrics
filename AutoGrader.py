@@ -127,7 +127,7 @@ def  get_chain(result):
   
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query, "options": st.session_state.option, "context": result})
+    answer = chain({"query": query, "options": st.session_state.option, "context": st.session_state.vector_store})
 
     return answer['result']
 
