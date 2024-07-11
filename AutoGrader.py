@@ -185,6 +185,8 @@ elif page == "Ask Question":
                 st.markdown(query)
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": query})
+
+            options = select_option()
             
             # Get answer from retrieval chain
             answer = get_answer(query)
