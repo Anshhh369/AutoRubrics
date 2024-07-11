@@ -44,6 +44,9 @@ if "option" not in st.session_state:
 if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
 
+if "uploaded_files" not in st.session_state:
+        st.session_state.uploaded_files = None
+
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
 def example_file(uploaded_files):
@@ -159,10 +162,7 @@ if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
     st.session_state.option = select_option()
 
-elif page == "Upload Document":
-    if "uploaded_files" not in st.session_state:
-        st.session_state.uploaded_files = None
-        
+elif page == "Upload Document": 
     st.session_state.uploaded_files = st.file_uploader(
         "Upload your document", type=["txt"], accept_multiple_files=True
     )
