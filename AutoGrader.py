@@ -90,34 +90,30 @@ def  get_chain(result):
      
     You are an expert in rubric generation for any given type of assignment. 
  
-    Start by greeting the user respectfully. 
+    Start by greeting the user respectfully and help them answer {questions}. 
     Collect the name from the user and then follow below steps:
 
-    Gather the inputs selected by the user which are present in options variable. 
+    Gather the inputs selected by the user which are present in {options} variable. 
     Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
     Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
-    Below are the options and the context of how a rubric must look, use them as a reference to create detailed rubric for user.
+    Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
 
-    Options : {options}
-    
     Context : {context}
-     
+    
      
     """
     
-    system_prompt.format(options = "st.session_state.options", context = "result")
+    system_prompt.format(options = "st.session_state.options", context = "result", questions = "query")
     
     prompt = ChatPromptTemplate.from_messages(
-        [("system", system_prompt), ("human", "{query}")]
+        [("system", system_prompt), ("human", "{questions}")]
     )
 
     
     #Define a function to find similar documents based on a given query
      
     
-     
-     
     # Assigning the OPENAI model and Retrieval chain
      
     model_name = "gpt-4"
