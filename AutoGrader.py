@@ -82,7 +82,7 @@ def example_file(uploaded_files):
     return db
 
 
-def  get_chain(result):
+def  get_chain(result, options):
     
     # Creating the Prompt
  
@@ -127,7 +127,7 @@ def  get_chain(result):
     return r_chain
   
 def get_answer(query):
-    chain = get_chain(st.session_state.vector_store)
+    chain = get_chain(st.session_state.vector_store, options)
     answer = chain({"query": query})
 
     return answer['result']
@@ -172,7 +172,6 @@ elif page == "Upload Document":
 
 elif page == "Ask Question":
     if st.session_state.vector_store:
-
         options = select_option()
         
         # Display chat messages from history on app rerun
