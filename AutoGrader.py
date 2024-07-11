@@ -45,7 +45,10 @@ if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
 
 if "uploaded_files" not in st.session_state:
-        st.session_state.uploaded_files = None
+    st.session_state.uploaded_files = None
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
@@ -83,7 +86,7 @@ def  get_chain(result):
     
     # Creating the Prompt
  
-    template = """
+    system_prompt = """
      
     You are an expert in rubric generation for any given type of assignment. 
  
@@ -99,17 +102,17 @@ def  get_chain(result):
     Options : {options}
     
     Context : {context}
-        
-    Human : {question}
-     
-    Assistant : 
-     
      
      
     """
+    
+    system_prompt.format(options = "st.session_state.options", context = "result")
+    
+    prompt = ChatPromptTemplate.from_messages(
+        [("system", system_prompt), ("human", "{question}")]
+    )
 
-    prompt = PromptTemplate(template=template, input_variables=["options", "context", "question"])
-     
+    
     #Define a function to find similar documents based on a given query
      
     
@@ -129,7 +132,7 @@ def  get_chain(result):
   
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query, "options": st.session_state.option, "context": "result"})
+    answer = chain({"question": query})
 
     return answer['result']
 
@@ -159,7 +162,7 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    st.session_state.option = select_option()
+    select_option()
 
 elif page == "Upload Document": 
     st.session_state.uploaded_files = st.file_uploader(
@@ -174,33 +177,32 @@ elif page == "Upload Document":
 
 
 elif page == "Ask Question":
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    if st.session_state.vector_store:
                 
-    # Display chat messages from history on app rerun
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-                
-    if query := st.chat_input("Ask your question here"):
-        # Display user message in chat message container
-        with st.chat_message("user"):
-            st.markdown(query)
-        # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": query})
-                        
-        # Get answer from retrieval chain
-        answer = get_answer(query)
-                
-        # Display assistant response in chat message container
-        with st.chat_message("assistant"):
-            st.markdown(answer)
-        # Add assistant response to chat history
-        st.session_state.messages.append({"role": "assistant", "content": answer})
-                        
-        # Button to clear chat messages
-        def clear_messages():
-            st.session_state.messages = []
-        st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+        # Display chat messages from history on app rerun
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+                    
+        if query := st.chat_input("Ask your question here"):
+            # Display user message in chat message container
+            with st.chat_message("user"):
+                st.markdown(query)
+            # Add user message to chat history
+            st.session_state.messages.append({"role": "user", "content": query})
+                            
+            # Get answer from retrieval chain
+            answer = get_answer(query)
+                    
+            # Display assistant response in chat message container
+            with st.chat_message("assistant"):
+                st.markdown(answer)
+            # Add assistant response to chat history
+            st.session_state.messages.append({"role": "assistant", "content": answer})
+                            
+            # Button to clear chat messages
+            def clear_messages():
+                st.session_state.messages = []
+            st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
