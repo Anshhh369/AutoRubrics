@@ -82,7 +82,7 @@ def example_file(uploaded_files):
     return db
 
 
-def  get_chain(result):
+def  get_chain(result, options):
     
     # Creating the Prompt
  
@@ -104,7 +104,7 @@ def  get_chain(result):
      
     """
     
-    system_prompt.format(options = "{options}", context = "result", question = "query")
+    system_prompt.format(options = "options", context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -126,9 +126,9 @@ def  get_chain(result):
     
     return r_chain
   
-def get_answer(query, options):
-    chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query, "options" : options})
+def get_answer(query):
+    chain = get_chain(st.session_state.vector_store, st.session_state.option)
+    answer = chain({"query": query })
 
     return answer['result']
 
@@ -145,6 +145,8 @@ def select_option():
         index=options.index(st.session_state.option)
     )
     st.write("You selected:", option)
+    st.session_state.option = option
+    
 
     return option
 
@@ -187,7 +189,7 @@ elif page == "Ask Question":
             st.session_state.messages.append({"role": "user", "content": query})
             
             # Get answer from retrieval chain
-            answer = get_answer(query, st.session_state.option)
+            answer = get_answer(query)
                     
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
