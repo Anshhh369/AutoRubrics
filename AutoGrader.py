@@ -104,7 +104,7 @@ def  get_chain(result):
      
     """
     
-    system_prompt.format(options = "option", context = "result", question = "query")
+    system_prompt.format(options = "options", context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -158,7 +158,7 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    select_option()
+    options = select_option()
 
 elif page == "Upload Document": 
     st.session_state.uploaded_files = st.file_uploader(
