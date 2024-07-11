@@ -90,12 +90,14 @@ def  get_chain(result):
     Start by greeting the user respectfully. 
     Collect the name from the user and then follow below steps:
 
-    Gather the inputs selected by the user which are present in {options} variable. 
+    Gather the inputs selected by the user which are present in options variable. 
     Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
     Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
-    Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
-     
+    Below are the options and the context of how a rubric must look, use them as a reference to create detailed rubric for user.
+
+    Options : {options}
+    
     Context : {context}
         
     Human : {question}
@@ -127,7 +129,7 @@ def  get_chain(result):
   
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query, "options": st.session_state.option, "context": "result"})
+    answer = chain({"query": query, "options": option, "context": "result"})
 
     return answer['result']
 
