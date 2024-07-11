@@ -157,7 +157,6 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    options = select_option()
 
 elif page == "Upload Document": 
     st.session_state.uploaded_files = st.file_uploader(
@@ -173,7 +172,9 @@ elif page == "Upload Document":
 
 elif page == "Ask Question":
     if st.session_state.vector_store:
-                
+
+        options = select_option()
+        
         # Display chat messages from history on app rerun
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
@@ -185,8 +186,6 @@ elif page == "Ask Question":
                 st.markdown(query)
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": query})
-
-            options = select_option()
             
             # Get answer from retrieval chain
             answer = get_answer(query)
