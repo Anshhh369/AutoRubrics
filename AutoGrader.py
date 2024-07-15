@@ -93,7 +93,7 @@ def  get_chain(result,options):
     Start by greeting the user respectfully and help them answer their {question}. 
     Collect the name from the user and then follow below steps:
 
-    Gather the inputs selected by the user which are present in {options} variable. 
+    Gather the {inputs} selected by the user. 
     Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
     Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
@@ -104,7 +104,7 @@ def  get_chain(result,options):
      
     """
     
-    system_prompt.format(options = "options", context = "result", question = "query")
+    system_prompt.format(inputs = "options", context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -145,7 +145,6 @@ def select_option():
         index=options.index(st.session_state.option)
     )
     st.write("You selected:", option)
-    st.session_state.option = option
     
 
     return option
