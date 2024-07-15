@@ -82,7 +82,7 @@ def example_file(uploaded_files):
     return db
 
 
-def  get_chain(result,options):
+def  get_chain(result):
     
     # Creating the Prompt
  
@@ -104,7 +104,7 @@ def  get_chain(result,options):
      
     """
     
-    system_prompt.format(inputs = "options", context = "result", question = "query")
+    system_prompt.format(inputs = "st.session_state.option", context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -127,7 +127,7 @@ def  get_chain(result,options):
     return r_chain
   
 def get_answer(query):
-    chain = get_chain(st.session_state.vector_store,st.session_state.option)
+    chain = get_chain(st.session_state.vector_store)
     answer = chain({"query": query})
 
     return answer['result']
