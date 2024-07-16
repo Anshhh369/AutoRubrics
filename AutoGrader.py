@@ -106,7 +106,7 @@ def  get_chain(result):
 
 
     document_prompt = PromptTemplate(
-        input_variables=["option"],
+        input_variables=[option = "option", question = "query"],
         template=template
     )
     document_variable_name = "result"
@@ -172,11 +172,11 @@ def  get_chain(result):
 
     st.session_state.chat_active = True
     
-    return r_chain
+    return chain
   
-def get_answer(query,inputs):
+def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain.invoke({"query": query, "inputs": inputs})
+    answer = chain({"query": query})
 
     return answer['result']
 
