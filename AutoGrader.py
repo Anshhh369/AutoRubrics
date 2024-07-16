@@ -45,12 +45,6 @@ secrets = st.secrets  # Accessing secrets (API keys) stored securely
 openai_api_key = secrets["openai"]["api_key"]  # Accessing OpenAI API key from secrets
 os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable for OpenAI API key
 
-speak_toolkit = NLAToolkit.from_llm_and_url(llm, "https://api.speak.com/openapi.yaml")
-klarna_toolkit = NLAToolkit.from_llm_and_url(
-    llm, "https://www.klarna.com/us/shopping/public/openai/v0/api-docs/"
-)
-
-natural_language_tools = speak_toolkit.get_tools() + klarna_toolkit.get_tools()
 
 # Initialize session state variables
 if "option" not in st.session_state:
@@ -140,6 +134,13 @@ def  get_chain(result):
     return sequential_chain
 
 def python_agent():
+    speak_toolkit = NLAToolkit.from_llm_and_url(llm, "https://api.speak.com/openapi.yaml")
+    klarna_toolkit = NLAToolkit.from_llm_and_url(
+        llm, "https://www.klarna.com/us/shopping/public/openai/v0/api-docs/"
+    )
+    
+    natural_language_tools = speak_toolkit.get_tools() + klarna_toolkit.get_tools()
+
     agent_executor = create_python_agent(
         llm=llm,
         tool=natural_language_tools,
