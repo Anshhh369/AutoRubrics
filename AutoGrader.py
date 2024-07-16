@@ -107,7 +107,7 @@ def  get_chain(result):
     system_prompt.format(inputs = "inputs", context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
-        [("system", system_prompt), ("human", "{question}", "{inputs}")]
+        [("system", system_prompt), ("human", "{question}")]
     )
 
     
