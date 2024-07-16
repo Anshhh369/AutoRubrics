@@ -176,9 +176,9 @@ def  get_chain(result):
     
     return chain
   
-def get_answer(query):
+def get_answer(query, options):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query})
+    answer = chain({"query": query,"options": options})
 
     return answer['result']
 
@@ -239,7 +239,7 @@ elif page == "Ask Question":
             st.session_state.messages.append({"role": "user", "content": query})
             
             # Get answer from retrieval chain
-            answer = get_answer(query)
+            answer = get_answer(query,st.session_state.option)
                     
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
