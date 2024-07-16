@@ -104,7 +104,7 @@ def  get_chain(result):
      
     """
     
-    system_prompt.format(inputs = "inputs", context = "result", question = "query")
+    system_prompt.format(context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -126,9 +126,9 @@ def  get_chain(result):
     
     return r_chain
   
-def get_answer(query):
+def get_answer(query,inputs):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain.invoke({"query": query, "inputs": st.session_state.option})
+    answer = chain.invoke({"query": query, "inputs": inputs})
 
     return answer['result']
 
@@ -189,7 +189,7 @@ elif page == "Ask Question":
             st.session_state.messages.append({"role": "user", "content": query})
             
             # Get answer from retrieval chain
-            answer = get_answer(query)
+            answer = get_answer(query,st.session_state.option)
                     
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
