@@ -94,7 +94,7 @@ def example_file(uploaded_files):
 def  get_chain(result):
 
     user_query_template = PromptTemplate(
-        input_variables=[question == "query"],
+        input_variables=["question" == query],
         template="""
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully and help them answer their {question}.
@@ -102,14 +102,14 @@ def  get_chain(result):
     )
 
     option_selection_template = PromptTemplate(
-        input_variables=[selected_option == "st.session_state.option"],
+        input_variables=["selected_option" == st.session_state.option],
         template="""
         Collect the name from the user and then verify the {selected_option} selected by the user.
         """
     )
     
     context_based_template = PromptTemplate(
-        input_variables=[context == "result"],
+        input_variables=["context" == result],
         template = """
         Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
