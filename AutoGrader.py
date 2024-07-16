@@ -8,6 +8,9 @@ from langchain_community.document_loaders import TextLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import CharacterTextSplitter
 from langchain.vectorstores import Chroma
+from langchain.chains import StuffDocumentsChain, LLMChain
+from langchain_core.prompts import PromptTemplate
+from langchain_community.llms import OpenAI
 import chardet
 import os.path
 import pathlib
@@ -83,32 +86,71 @@ def example_file(uploaded_files):
 
 
 def  get_chain(result):
+
     
-    # Creating the Prompt
- 
-    system_prompt = """
-     
+
+    # This controls how each document will be formatted. Specifically,
+    # it will be passed to `format_document` - see that function for more
+    # details.
+
+    template = """
+
+
     You are an expert in rubric generation for any given type of assignment. 
  
     Start by greeting the user respectfully and help them answer their {question}. 
     Collect the name from the user and then follow below steps:
 
-    Gather the {options} selected by the user. 
-    Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
-    Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-     
-    Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
-
-    Context : {context}
-    
-     
+    Gather the {option} selected by the user. 
     """
-    
-    system_prompt.format(options = "inputs", context = "result", question = "query")
-    
-    prompt = ChatPromptTemplate.from_messages(
-        [("system", system_prompt), ("human", "{question}")]
+
+
+    document_prompt = PromptTemplate(
+        input_variables=["option"],
+        template=template
     )
+    document_variable_name = "result"
+    # llm = OpenAI()
+    # The prompt here should take as an input variable the
+    # `document_variable_name`
+
+
+    prompt = PromptTemplate.from_template(
+        """ 
+        use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+        Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
+        Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
+
+        Context : {result}
+
+    )
+
+    
+    # # Creating the Prompt
+ 
+    # system_prompt = """
+     
+    # You are an expert in rubric generation for any given type of assignment. 
+ 
+    # Start by greeting the user respectfully and help them answer their {question}. 
+    # Collect the name from the user and then follow below steps:
+
+    # Gather the {options} selected by the user. 
+    # Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+    # Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
+     
+    # Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
+
+    # Context : {context}
+    
+     
+    # """
+    
+    # system_prompt.format(options = "inputs", context = "result", question = "query")
+    
+    # prompt = ChatPromptTemplate.from_messages(
+    #     [("system", system_prompt), ("human", "{question}")]
+    # )
 
     
     #Define a function to find similar documents based on a given query
@@ -121,6 +163,12 @@ def  get_chain(result):
      
     r_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt}
                                    )
+
+    chain = StuffDocumentsChain(
+        llm_chain=r_chain,
+        document_prompt=document_prompt,
+        document_variable_name=document_variable_name
+    )
 
     st.session_state.chat_active = True
     
