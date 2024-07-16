@@ -104,7 +104,7 @@ def  get_chain(result):
      
     """
     
-    system_prompt.format(inputs = "st.session_state.option", context = "result", question = "query")
+    system_prompt.format(context = "result", question = "query")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -128,7 +128,7 @@ def  get_chain(result):
   
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query})
+    answer = chain.invoke({"query": query, "inputs": st.session_state.option})
 
     return answer['result']
 
