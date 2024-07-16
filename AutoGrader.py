@@ -25,6 +25,11 @@ from langchain.prompts.chat import (
 )
 
 from langchain import PromptTemplate
+from langchain.agents import AgentType, initialize_agent
+from langchain.requests import Requests
+from langchain_community.agent_toolkits import NLAToolkit
+
+
 
 __import__('pysqlite3')
 import sys
@@ -39,6 +44,13 @@ secrets = st.secrets  # Accessing secrets (API keys) stored securely
 
 openai_api_key = secrets["openai"]["api_key"]  # Accessing OpenAI API key from secrets
 os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable for OpenAI API key
+
+speak_toolkit = NLAToolkit.from_llm_and_url(llm, "https://api.speak.com/openapi.yaml")
+klarna_toolkit = NLAToolkit.from_llm_and_url(
+    llm, "https://www.klarna.com/us/shopping/public/openai/v0/api-docs/"
+)
+
+natural_language_tools = speak_toolkit.get_tools() + klarna_toolkit.get_tools()
 
 # Initialize session state variables
 if "option" not in st.session_state:
@@ -87,99 +99,70 @@ def example_file(uploaded_files):
 
 def  get_chain(result):
 
-    
-
-    # This controls how each document will be formatted. Specifically,
-    # it will be passed to `format_document` - see that function for more
-    # details.
-
-    template = """
-
-
-    You are an expert in rubric generation for any given type of assignment. 
- 
-    Start by greeting the user respectfully and help them answer their {question}. 
-    Collect the name from the user and verify below information from the context. 
-    
-    Context: {options}
-
-
-    """
-
-
-    document_prompt = PromptTemplate(
-        input_variables=[options == "st.session_state.option", question == "query"],
-        template=template
+    user_query_template = PromptTemplate(
+        input_variables=[question == "query"],
+        template="""
+        You are an expert in rubric generation for any given type of assignment. 
+        Start by greeting the user respectfully and help them answer their {question}.
+        """
     )
-    document_variable_name = "result"
-    # llm = OpenAI()
-    # The prompt here should take as an input variable the
-    # `document_variable_name`
 
-
-    prompt = PromptTemplate.from_template(
-        """ 
-        use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
-        Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-        Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
-
-        Context : {result}
+    option_selection_template = PromptTemplate(
+        input_variables=[selected_option == "st.session_state.option"],
+        template="""
+        Collect the name from the user and then verify the {selected_option} selected by the user.
         """
     )
     
-    # # Creating the Prompt
- 
-    # system_prompt = """
+    context_based_template = PromptTemplate(
+        input_variables=[context == "result"],
+        template = """
+        Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+        Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
-    # You are an expert in rubric generation for any given type of assignment. 
- 
-    # Start by greeting the user respectfully and help them answer their {question}. 
-    # Collect the name from the user and then follow below steps:
+        Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
 
-    # Gather the {options} selected by the user. 
-    # Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
-    # Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-     
-    # Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
-
-    # Context : {context}
+        Context : {context}
+        """
+    )
     
-     
-    # """
-    
-    # system_prompt.format(options = "inputs", context = "result", question = "query")
-    
-    # prompt = ChatPromptTemplate.from_messages(
-    #     [("system", system_prompt), ("human", "{question}")]
-    # )
-
-    
-    #Define a function to find similar documents based on a given query
-     
-    
-    # Assigning the OPENAI model and Retrieval chain
-     
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
-     
-    r_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt}
-                                   )
+    
+    user_query_chain = LLMChain(llm=llm, prompt=user_query_template, verbose=True, output_key='question')
+    option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
+    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': context_based_template})
 
-    chain = StuffDocumentsChain(
-        llm_chain=r_chain,
-        document_prompt=document_prompt,
-        document_variable_name=document_variable_name
-    )
+    sequential_chain = SequentialChain(chains=[user_query_chain, option_selection_chain, context_based_chain], input_variables=['question'], output_variables=['selected_option', 'context'], verbose=True)
 
     st.session_state.chat_active = True
     
-    return chain
-  
+    return sequential_chain
+
+def python_agent():
+    agent_executor = create_python_agent(
+        llm=llm,
+        tool=natural_language_tools,
+        verbose=True,
+        agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        handle_parsing_errors=True,
+        )
+    
+    return agent_executor
+
+
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query,"options": st.session_state.option})
+    answer = sequential_chain({"query": query})
+    if answer == "done":
+        solution = python_agent().run(
+            f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {st.session_state.option}."
+        )
+        return solution
+        
+    else:
 
-    return answer['result']
+        return answer['result']
 
 def select_option():
     
@@ -246,6 +229,13 @@ elif page == "Ask Question":
                 st.markdown(answer)
             # Add assistant response to chat history
             st.session_state.messages.append({"role": "assistant", "content": answer})
+
+            with st.chat_message("")
+
+            with st.chat_message("user"):
+                st.markdown()
+
+
                             
             # Button to clear chat messages
             def clear_messages():
@@ -253,3 +243,105 @@ elif page == "Ask Question":
             st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # # This controls how each document will be formatted. Specifically,
+    # # it will be passed to `format_document` - see that function for more
+    # # details.
+
+    # template = """
+
+
+    # You are an expert in rubric generation for any given type of assignment. 
+ 
+    # Start by greeting the user respectfully and help them answer their {question}. 
+    # Collect the name from the user and verify below information from the context. 
+    
+    # Context: {options}
+
+
+    # """
+
+
+    # document_prompt = PromptTemplate(
+    #     input_variables=[options == "st.session_state.option", question == "query"],
+    #     template=template
+    # )
+    # document_variable_name = "result"
+    # # llm = OpenAI()
+    # # The prompt here should take as an input variable the
+    # # `document_variable_name`
+
+
+    # prompt = PromptTemplate.from_template(
+    #     """ 
+    #     use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+    #     Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
+    #     Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
+
+    #     Context : {result}
+    #     """
+    # )
+    
+    # # # Creating the Prompt
+ 
+    # # system_prompt = """
+     
+    # # You are an expert in rubric generation for any given type of assignment. 
+ 
+    # # Start by greeting the user respectfully and help them answer their {question}. 
+    # # Collect the name from the user and then follow below steps:
+
+    # # Gather the {options} selected by the user. 
+    # # Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+    # # Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
+     
+    # # Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
+
+    # # Context : {context}
+    
+     
+    # # """
+    
+    # # system_prompt.format(options = "inputs", context = "result", question = "query")
+    
+    # # prompt = ChatPromptTemplate.from_messages(
+    # #     [("system", system_prompt), ("human", "{question}")]
+    # # )
+
+    
+    # #Define a function to find similar documents based on a given query
+     
+    
+    # # Assigning the OPENAI model and Retrieval chain
+     
+    # model_name = "gpt-4"
+    # llm = ChatOpenAI(model_name=model_name)
+     
+    # r_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt}
+    #                                )
+
+    # chain = StuffDocumentsChain(
+    #     llm_chain=r_chain,
+    #     document_prompt=document_prompt,
+    #     document_variable_name=document_variable_name
+    # )
