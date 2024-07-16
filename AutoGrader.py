@@ -126,7 +126,6 @@ def  get_chain(result):
         Context : {result}
         """
     )
-
     
     # # Creating the Prompt
  
@@ -176,9 +175,9 @@ def  get_chain(result):
     
     return chain
   
-def get_answer(query, options):
+def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query,"options": options})
+    answer = chain({"query": query,"options": st.session_state.option})
 
     return answer['result']
 
@@ -206,9 +205,10 @@ st.title("🦜🔗 AutoGrader")
 # Multi-page navigation
 page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Question"])
 
+
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-
+    st.session_state.option = select_option()
     
 
 elif page == "Upload Document": 
@@ -225,8 +225,6 @@ elif page == "Upload Document":
 
 elif page == "Ask Question":
     if st.session_state.vector_store:
-
-        st.session_state.option = select_option()
         
         # Display chat messages from history on app rerun
         for message in st.session_state.messages:
@@ -241,7 +239,7 @@ elif page == "Ask Question":
             st.session_state.messages.append({"role": "user", "content": query})
             
             # Get answer from retrieval chain
-            answer = get_answer(query,st.session_state.option)
+            answer = get_answer(query)
                     
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
