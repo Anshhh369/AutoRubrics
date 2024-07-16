@@ -208,7 +208,7 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    st.session_state.option = select_option()
+
     
 
 elif page == "Upload Document": 
@@ -225,6 +225,8 @@ elif page == "Upload Document":
 
 elif page == "Ask Question":
     if st.session_state.vector_store:
+
+        st.session_state.option = select_option()
         
         # Display chat messages from history on app rerun
         for message in st.session_state.messages:
