@@ -106,7 +106,7 @@ def  get_chain(result):
 
 
     document_prompt = PromptTemplate(
-        input_variables=[option = "option", question = "query"],
+        input_variables=[option == "option", question == "query"],
         template=template
     )
     document_variable_name = "result"
