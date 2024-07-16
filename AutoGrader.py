@@ -237,7 +237,7 @@ elif page == "Ask Question":
             st.session_state.messages.append({"role": "user", "content": query})
             
             # Get answer from retrieval chain
-            answer = get_answer(query,st.session_state.option)
+            answer = get_answer(query)
                     
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
