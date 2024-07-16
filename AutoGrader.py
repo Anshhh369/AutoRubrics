@@ -229,13 +229,6 @@ elif page == "Ask Question":
                 st.markdown(answer)
             # Add assistant response to chat history
             st.session_state.messages.append({"role": "assistant", "content": answer})
-
-            with st.chat_message("")
-
-            with st.chat_message("user"):
-                st.markdown()
-
-
                             
             # Button to clear chat messages
             def clear_messages():
