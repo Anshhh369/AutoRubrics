@@ -99,14 +99,16 @@ def  get_chain(result):
     You are an expert in rubric generation for any given type of assignment. 
  
     Start by greeting the user respectfully and help them answer their {question}. 
-    Collect the name from the user and then follow below steps:
+    Collect the name from the user and verify below information from the context. 
+    
+    Context: {options}
 
-    Gather the {option} selected by the user. 
+
     """
 
 
     document_prompt = PromptTemplate(
-        input_variables=[option == "st.session_state.option", question == "query"],
+        input_variables=[options == "st.session_state.option", question == "query"],
         template=template
     )
     document_variable_name = "result"
