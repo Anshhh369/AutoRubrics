@@ -122,7 +122,7 @@ def  get_chain(result):
         Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
 
         Context : {result}
-
+        """
     )
 
     
