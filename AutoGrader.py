@@ -8,7 +8,7 @@ from langchain_community.document_loaders import TextLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import CharacterTextSplitter
 from langchain.vectorstores import Chroma
-from langchain.chains import StuffDocumentsChain, LLMChain
+from langchain.chains import StuffDocumentsChain, LLMChain, SequentialChain
 from langchain_core.prompts import PromptTemplate
 from langchain_community.llms import OpenAI
 import chardet
