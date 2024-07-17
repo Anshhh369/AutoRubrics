@@ -142,7 +142,7 @@ def python_agent():
 
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store, st.session_state.selected_option)
-    answer = chain({"question": query,"selected_option": st.session_state.selected_option,"context": st.session_state.vector_store})
+    answer = chain({"query": query,"selected_option": st.session_state.selected_option,"context": st.session_state.vector_store})
     if answer == "done":
         solution = python_agent().run(
             f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {st.session_state.selected_option}."
