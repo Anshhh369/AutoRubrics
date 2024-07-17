@@ -156,8 +156,8 @@ def python_agent():
 
 
 def get_answer(query):
-    chain = get_chain(st.session_state.vector_store, selected_option)
-    answer = chain({"query": query})
+    chain = get_chain(st.session_state.vector_store, st.session_state.selected_option)
+    answer = chain({"query": query,"selected_option": st.session_state.selected_option,"context": st.session_state.vector_store})
     if answer == "done":
         solution = python_agent().run(
             f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {st.session_state.selected_option}."
@@ -195,7 +195,7 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    selected_option = select_option()
+    st.session_state.selected_option = select_option()
     
 
 elif page == "Upload Document": 
