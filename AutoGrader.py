@@ -91,14 +91,14 @@ def example_file(uploaded_files):
     return db
 
 
-def  get_chain(result,selected_option):
+def  get_chain(result):
 
     template_1 = PromptTemplate(
-        input_variables=["question" == query, "selected_option" == st.session_state.vector_store, "context" == result],
+        input_variables=["question" == query, "context" == result],
         template = """
         You are an expert in rubric generation for any given type of assignment. 
-        Start by greeting the user respectfully, answer their {question} and verify their {selected_option}.
-        Finally  based on the {selected_option}, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+        Start by greeting the user respectfully, answer their {question} and verify the options they selected.
+        use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
         Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
@@ -142,7 +142,7 @@ def python_agent():
 
 def get_answer(query):
     st.write(f"Selected Option: {st.session_state.selected_option}")
-    chain = get_chain(st.session_state.vector_store, st.session_state.selected_option)
+    chain = get_chain(st.session_state.vector_store)
     answer = chain({"query": query})
     if answer == "done":
         solution = python_agent().run(
