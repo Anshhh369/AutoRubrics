@@ -94,24 +94,24 @@ def example_file(uploaded_files):
 def  get_chain(result):
 
     user_query_template = PromptTemplate(
-        input_variables=["question" == query],
+        input_variables=["question" == query, "selected_option" == st.session_state.selected_option],
         template="""
         You are an expert in rubric generation for any given type of assignment. 
-        Start by greeting the user respectfully and help them answer their {question}.
+        Start by greeting the user respectfully, help them answer their {question} and verify their {selected_option}.
         """
     )
 
-    option_selection_template = PromptTemplate(
-        input_variables=["selected_option" == st.session_state.selected_option],
-        template="""
-        Collect the name from the user and then verify the {selected_option} chosen by the user.
-        """
-    )
+    # option_selection_template = PromptTemplate(
+    #     input_variables=["selected_option" == st.session_state.selected_option],
+    #     template="""
+    #     Collect the name from the user and then verify the {selected_option} chosen by the user.
+    #     """
+    # )
     
     context_based_template = PromptTemplate(
-        input_variables=["context" == result],
+        input_variables=["selected_option" == st.session_state.selected_option, "context" == result],
         template = """
-        Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+        Finally  based on the {selected_option}, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
         Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
@@ -123,11 +123,11 @@ def  get_chain(result):
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
     
-    user_query_chain = LLMChain(llm=llm, prompt=user_query_template, verbose=True, output_key='question')
-    option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
-    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': context_based_template})
+    user_query_chain = LLMChain(llm=llm, prompt=user_query_template, verbose=True, output_key='selected_option')
+    # option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
+    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': context_based_template}, output_key='rubrics')
 
-    sequential_chain = SequentialChain(chains=[user_query_chain, option_selection_chain, context_based_chain], input_variables=['question','selected_option'], output_variables=['context'], verbose=True)
+    sequential_chain = SequentialChain(chains=[user_query_chain, context_based_chain], input_variables=['question','context'], output_variables=['selected_option','rubrics'], verbose=True)
 
     st.session_state.chat_active = True
     
@@ -157,7 +157,7 @@ def get_answer(query):
     answer = chain({"question": query, "selected_option": st.session_state.selected_option})
     if answer == "done":
         solution = python_agent().run(
-            f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {selected_option}."
+            f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {st.session_state.selected_option}."
         )
         return solution
         
