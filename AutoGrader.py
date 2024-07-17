@@ -48,7 +48,7 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 
 # Initialize session state variables
 if "selected_option" not in st.session_state:
-    st.session_state.selected_option = None
+    st.session_state.selected_option = []
 
 if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
