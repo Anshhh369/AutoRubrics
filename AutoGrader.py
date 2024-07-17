@@ -102,7 +102,7 @@ def  get_chain(result):
     )
 
     option_selection_template = PromptTemplate(
-        input_variables=["selected_option" == selected_option],
+        input_variables=["selected_option" == st.session_state.selected_option],
         template="""
         Collect the name from the user and then verify the {selected_option} chosen by the user.
         """
@@ -154,7 +154,7 @@ def python_agent():
 
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"question": query, "selected_option": selected_option})
+    answer = chain({"question": query, "selected_option": st.session_state.selected_option})
     if answer == "done":
         solution = python_agent().run(
             f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {selected_option}."
