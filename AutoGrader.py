@@ -169,15 +169,15 @@ def select_option():
     
     options = ("Broad Overview", "Moderately Detailed", "Highly Detailed")
     
-    if st.session_state.option not in options:
-        st.session_state.option = options[0]
+    if st.session_state.selected_option not in options:
+        st.session_state.selected_option = options[0]
         
     selected_option = st.selectbox(
         "Detail Level of Criteria",
         options,
-        index=options.index(st.session_state.option)
+        index=options.index(st.session_state.selected_option)
     )
-    st.write("You selected:", option)
+    st.write("You selected:", selected_option)
     st.session_state.selected_option = selected_option
 
     return selected_option
