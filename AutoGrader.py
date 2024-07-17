@@ -112,7 +112,7 @@ def  get_chain(result):
         
         """
 
-    system_prompt.format(question = "query", context = "result")
+    system_prompt.format(question = "query", context = "result", chat_history)
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -167,7 +167,7 @@ def python_agent():
 
 
 def get_answer(query):
-    st.write(f"Selected Option: {st.session_state.selected_option}")
+    # st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain(st.session_state.vector_store)
     answer = chain({"query": query})
     
