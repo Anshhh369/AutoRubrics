@@ -93,9 +93,7 @@ def example_file(uploaded_files):
 
 def  get_chain(result):
 
-    template_1 = PromptTemplate(
-        input_variables=["question" == query, "context" == result],
-        template = """
+    system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, answer their {question} and verify the options they selected.
         use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
@@ -104,8 +102,18 @@ def  get_chain(result):
         Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
 
         Context : {context}
+
+        Human: {question}
+
+        Assistant: 
         
         """
+    )
+
+    system_prompt.format(question = "query", context = "result")
+    
+    prompt = ChatPromptTemplate.from_messages(
+        [("system", system_prompt), ("human", "{question}")]
     )
     
     model_name = "gpt-4"
@@ -113,7 +121,7 @@ def  get_chain(result):
     
     # user_query_chain = LLMChain(llm=llm, prompt=user_query_template, verbose=True, output_key='verified_options')
     # option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
-    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': template_1})
+    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt})
 
     # sequential_chain = SequentialChain(chains=[user_query_chain, context_based_chain], input_variables=['question','selected_option', 'context'], output_variables=['verified_options','rubrics'], verbose=True)
 
