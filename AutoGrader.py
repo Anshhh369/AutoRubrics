@@ -94,10 +94,10 @@ def example_file(uploaded_files):
 def  get_chain(result,selected_option):
 
     user_query_template = PromptTemplate(
-        input_variables=["selected_option" == selected_option],
+        input_variables=["question" == query, "selected_option" == selected_option],
         template="""
         You are an expert in rubric generation for any given type of assignment. 
-        Start by greeting the user respectfully and verify their {selected_option}.
+        Start by greeting the user respectfully, answer their {question} and verify their {selected_option}.
         """
     )
 
@@ -154,7 +154,7 @@ def python_agent():
 
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store, st.session_state.selected_option)
-    answer = chain.run
+    answer = chain({"question": query})
     if answer == "done":
         solution = python_agent().run(
             f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {st.session_state.selected_option}."
