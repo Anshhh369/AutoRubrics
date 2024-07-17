@@ -96,7 +96,7 @@ def  get_chain(result):
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, collect the name of the user.
-        Verify the options they selected, follow below steps:
+        Verify the options they selected and then follow below steps:
         use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
