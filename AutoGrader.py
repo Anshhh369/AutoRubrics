@@ -47,8 +47,8 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 
 
 # Initialize session state variables
-if "option" not in st.session_state:
-    st.session_state.option = None
+if "selected_option" not in st.session_state:
+    st.session_state.selected_option = None
 
 if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
@@ -172,15 +172,15 @@ def select_option():
     if st.session_state.option not in options:
         st.session_state.option = options[0]
         
-    option = st.selectbox(
+    selected_option = st.selectbox(
         "Detail Level of Criteria",
         options,
         index=options.index(st.session_state.option)
     )
     st.write("You selected:", option)
-    st.session_state.option = option
+    st.session_state.selected_option = selected_option
 
-    return st.session_state.option
+    return selected_option
 
 
 # Title for the web app
