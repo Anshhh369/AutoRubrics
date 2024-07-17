@@ -94,7 +94,7 @@ def example_file(uploaded_files):
 def  get_chain(result):
 
     user_query_template = PromptTemplate(
-        input_variables=["question" == query],
+        input_variables=["question"],
         template="""
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully and help them answer their {question}.
@@ -102,7 +102,7 @@ def  get_chain(result):
     )
 
     option_selection_template = PromptTemplate(
-        input_variables=["selected_option" == st.session_state.option],
+        input_variables=["selected_option"],
         template="""
         Collect the name from the user and then verify the {selected_option} selected by the user.
         """
@@ -127,7 +127,7 @@ def  get_chain(result):
     option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
     context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': context_based_template})
 
-    sequential_chain = SequentialChain(chains=[user_query_chain, option_selection_chain, context_based_chain], verbose=True)
+    sequential_chain = SequentialChain(chains=[user_query_chain, option_selection_chain, context_based_chain], input_variables=['question','selected_option'], output_variables=['context'], verbose=True)
 
     st.session_state.chat_active = True
     
@@ -154,7 +154,7 @@ def python_agent():
 
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = chain({"query": query})
+    answer = chain({"question": query, "selected_option": selected_option})
     if answer == "done":
         solution = python_agent().run(
             f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {selected_option}."
