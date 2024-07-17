@@ -127,7 +127,7 @@ def  get_chain(result):
     option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
     context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': context_based_template})
 
-    sequential_chain = SequentialChain(chains=[user_query_chain, option_selection_chain, context_based_chain], input_variables=['question'], output_variables=['selected_option', 'context'], verbose=True)
+    sequential_chain = SequentialChain(chains=[user_query_chain, option_selection_chain, context_based_chain], verbose=True)
 
     st.session_state.chat_active = True
     
@@ -154,10 +154,10 @@ def python_agent():
 
 def get_answer(query):
     chain = get_chain(st.session_state.vector_store)
-    answer = sequential_chain({"query": query})
+    answer = chain({"query": query})
     if answer == "done":
         solution = python_agent().run(
-            f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {st.session_state.option}."
+            f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {selected_option}."
         )
         return solution
         
@@ -178,7 +178,7 @@ def select_option():
         index=options.index(st.session_state.option)
     )
     st.write("You selected:", option)
-    
+    st.session_state.option = option
 
     return option
 
@@ -192,7 +192,7 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    st.session_state.option = select_option()
+    selected_option = select_option()
     
 
 elif page == "Upload Document": 
