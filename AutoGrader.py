@@ -107,6 +107,8 @@ def  get_chain(result):
         Human: {question}
 
         Assistant: 
+
+        {chat_history}
         
         """
 
@@ -115,19 +117,31 @@ def  get_chain(result):
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
     )
-    
+
+    memory = ConversationBufferMemory(memory_key="chat_history")
+
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
     
     # user_query_chain = LLMChain(llm=llm, prompt=user_query_template, verbose=True, output_key='verified_options')
     # option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
-    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt})
+    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt},memory = memory)
 
     # sequential_chain = SequentialChain(chains=[user_query_chain, context_based_chain], input_variables=['question','selected_option', 'context'], output_variables=['verified_options','rubrics'], verbose=True)
 
     st.session_state.chat_active = True
     
     return context_based_chain
+
+import re
+
+def extract_information(conversation, pattern):
+    for line in conversation:
+        match = re.search(pattern, line, re.IGNORECASE)
+        if match:
+            return match.group(1)
+    return None
+    
 
 def python_agent():
     speak_toolkit = NLAToolkit.from_llm_and_url(llm, "https://api.speak.com/openapi.yaml")
@@ -145,39 +159,69 @@ def python_agent():
         handle_parsing_errors=True,
         )
     
-    return agent_executor
+    solution = agent_executor.run(
+        f"Generate a rubric referring to this: {st.session_state.selected_option}."
+    )
+    
+    return solution
 
 
 def get_answer(query):
     st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain(st.session_state.vector_store)
     answer = chain({"query": query})
-    if answer == "done":
-        solution = python_agent().run(
-            f"Generate a rubric referring to this: {st.session_state.selected_option}."
-        )
-        return solution
-        
-    else:
-
-        return answer['result']
+    
+    return answer['result']
 
 def select_option():
     
-    options = ("Broad Overview", "Moderately Detailed", "Highly Detailed")
+    options_1 = ("Broad Overview", "Moderately Detailed", "Highly Detailed")
+    options_2 = ("Linient","Somewhat Linient","Moderate","Very Strict")
+    options_3 = ("Technical Accuracy","Depth of Analysis","Clarity and Creativity","Real-World Application","Problem Solving Skills")
+    options_4 = ("Writing Report or Essay","Coding or Programming Aissignment","Design or Creative Project","Research Paper or Thesis","Case Study Analysis")
+    options_5 = ("Research Oriented","Problem Solving","Case Studies","Presentations","Experiential Learning","Literature Reviews","Reflective Journals")
     
-    if st.session_state.selected_option not in options:
-        st.session_state.selected_option = options[0]
-        
-    selected_option = st.selectbox(
+    option_1 = st.selectbox(
         "Detail Level of Criteria",
-        options,
-        index=options.index(st.session_state.selected_option)
+        options_1,
+        index = None
     )
-    st.write("You selected:", selected_option)
-    st.session_state.selected_option = selected_option
+    st.write("You selected:", option_1)
+    st.session_state.selected_option.append(option_1)
 
-    return selected_option
+    option_2 = st.selectbox(
+        "Grading Strictness",
+        options_2,
+        index = None
+    )
+    st.write("You selected:", option_2)
+    st.session_state.selected_option.append(option_2)
+    
+    option_3 = st.selectbox(
+        "Area of Emphasis in Grading",
+        options_3,
+        index = None
+    )
+    st.write("You selected:", option_3)
+    st.session_state.selected_option.append(option_3)
+
+    option_4 = st.selectbox(
+        "Assignment Type",
+        options_4,
+        index = None
+    )
+    st.write("You selected:", option_4)
+    st.session_state.selected_option.append(option_4)
+
+    option_5 = st.Selectbox(
+        "Assignment Style"
+        options_5,
+        index = None
+    )
+    st.write("You selected:", option_5)
+    st.session_state.selected_option.append(option_5)
+        
+    return st.session_state.selected_option
 
 
 # Title for the web app
@@ -228,6 +272,32 @@ elif page == "Ask Question":
                     st.markdown(answer)
                 # Add assistant response to chat history
                 st.session_state.messages.append({"role": "assistant", "content": answer})
+
+                while True:
+                    # Extract name information
+                    pattern_name = r'\bDetail Level of Criteria:\s*(.*)'
+                    detailedness = extract_information(messages, pattern_name)
+    
+                    # Extract service information
+                    pattern_service = r'\bGrading Strictness:\s*(.*)'
+                    strictness = extract_information(messages, pattern_service)
+    
+                    # Extract location information
+                    pattern_location = r'\bArea of Emphasis in Grading:\s*(.*)'
+                    area = extract_information(messages, pattern_location)
+    
+                    # Extract time information
+                    pattern_time = r'\bAssisgnment Type:\s*(.*)'
+                    type = extract_information(messages, pattern_time)
+       
+                    # Extract email information
+                    pattern_email = r'\bAssisgnment Style:\s*(.*)'
+                    style = extract_information(messages, pattern_email)
+
+                    #Performing Action
+                    if detailedness and strictness and area and type and style:
+                        answer = python_agent()
+                        st.write(answer)
                                 
                 # Button to clear chat messages
                 def clear_messages():
