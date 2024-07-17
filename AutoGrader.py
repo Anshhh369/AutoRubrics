@@ -156,7 +156,7 @@ def python_agent():
 
 
 def get_answer(query):
-    chain = get_chain(st.session_state.vector_store, st.session_state.selected_option)
+    chain = get_chain(st.session_state.vector_store, selected_option)
     answer = chain({"query": query})
     if answer == "done":
         solution = python_agent().run(
