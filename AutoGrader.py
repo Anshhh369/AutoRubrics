@@ -94,7 +94,7 @@ def example_file(uploaded_files):
 def  get_chain(result,selected_option):
 
     template_1 = PromptTemplate(
-        input_variables=["question", "selected_option", "context"],
+        input_variables=["question" == query, "selected_option" == st.session_state.vector_store, "context" == result],
         template = """
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, answer their {question} and verify their {selected_option}.
@@ -143,7 +143,7 @@ def python_agent():
 def get_answer(query):
     st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain(st.session_state.vector_store, st.session_state.selected_option)
-    answer = chain({"query": query,"selected_option": st.session_state.selected_option,"context": st.session_state.vector_store})
+    answer = chain({"query": query})
     if answer == "done":
         solution = python_agent().run(
             f"Generate a rubric referring to this: {st.session_state.vector_store}, using these options: {st.session_state.selected_option}."
