@@ -23,6 +23,8 @@ from langchain.prompts.chat import (
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
+from langchain.memory import ConversationBufferMemory
+
 
 from langchain import PromptTemplate
 from langchain.agents import AgentType, initialize_agent
@@ -112,7 +114,7 @@ def  get_chain(result):
         
         """
 
-    system_prompt.format(question = "query", context = "result", chat_history)
+    system_prompt.format(question = "query", context = "result")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
