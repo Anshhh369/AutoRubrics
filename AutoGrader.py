@@ -276,23 +276,23 @@ elif page == "Ask Question":
                 while True:
                     # Extract name information
                     pattern_name = r'\bDetail Level of Criteria:\s*(.*)'
-                    detailedness = extract_information(st.session_state.messages, pattern_name)
+                    detailedness = extract_information(message, pattern_name)
     
                     # Extract service information
                     pattern_service = r'\bGrading Strictness:\s*(.*)'
-                    strictness = extract_information(st.session_state.messages, pattern_service)
+                    strictness = extract_information(message, pattern_service)
     
                     # Extract location information
                     pattern_location = r'\bArea of Emphasis in Grading:\s*(.*)'
-                    area = extract_information(st.session_state.messages, pattern_location)
+                    area = extract_information(message, pattern_location)
     
                     # Extract time information
                     pattern_time = r'\bAssisgnment Type:\s*(.*)'
-                    type = extract_information(st.session_state.messages, pattern_time)
+                    type = extract_information(message, pattern_time)
        
                     # Extract email information
                     pattern_email = r'\bAssisgnment Style:\s*(.*)'
-                    style = extract_information(st.session_state.messages, pattern_email)
+                    style = extract_information(message, pattern_email)
                     
                     #Performing Action
                     if detailedness and strictness and area and type and style:
