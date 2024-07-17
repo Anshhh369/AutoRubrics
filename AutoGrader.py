@@ -214,7 +214,7 @@ def select_option():
     st.session_state.selected_option.append(option_4)
 
     option_5 = st.Selectbox(
-        "Assignment Style"
+        "Assignment Style",
         options_5,
         index = None
     )
