@@ -209,7 +209,7 @@ elif page == "Upload Document":
 
 elif page == "Ask Question":
     if st.session_state.vector_store:
-        if selected_option is not None:
+        if st.session_state.selected_option:
         
             # Display chat messages from history on app rerun
             for message in st.session_state.messages:
