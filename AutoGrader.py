@@ -109,7 +109,6 @@ def  get_chain(result):
         Assistant: 
         
         """
-    )
 
     system_prompt.format(question = "query", context = "result")
     
