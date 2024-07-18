@@ -102,7 +102,7 @@ def format_chat_history(messages):
         formatted_history += f"{role}: {content}\n"
     return formatted_history
 
-def  get_chain():
+def  get_chain(selected_options):
 
     chat_history = format_chat_history(st.session_state.messages)
 
@@ -119,7 +119,7 @@ def  get_chain():
          
         """
 
-    system_prompt.format(selected_options = "st.session_state.selected_option", chat_history = "chat_history")
+    system_prompt.format("selected_options", "chat_history")
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
     )
@@ -176,7 +176,7 @@ def python_agent():
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chain = get_chain()
+    chain = get_chain(st.session_state.selected_option)
     answer = chain({"question": query, "selected_options": st.session_state.selected_option, "chat_history": chat_history})
     
     return answer
