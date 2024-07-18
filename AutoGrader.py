@@ -102,8 +102,9 @@ def  get_chain():
         After collecting the name, verify the {selected_options} one by one such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
+        Do not repeat questions.
          
-        
+        {chat_history}
         """
 
     
@@ -113,12 +114,12 @@ def  get_chain():
 
     prompt.format_messages(question = "query", selected_options = "st.session_state.selected_option")
 
-    # memory = ConversationBufferMemory(memory_key="chat_history")
+    memory = ConversationBufferMemory(memory_key="chat_history")
 
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
     
-    user_query_chain = LLMChain(llm=llm, prompt=prompt, verbose=True)
+    user_query_chain = LLMChain(llm=llm, prompt=prompt, verbose=True, memory = memory)
     # option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
     # context_based_chain = RetrievalQA.from_chain_type(llm, retriever=options.as_retriever(),chain_type_kwargs={'prompt': prompt})
 
