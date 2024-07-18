@@ -119,7 +119,7 @@ def  get_chain():
          
         """
 
-    system_prompt.format_messages(selected_options = "st.session_state.selected_option", chat_history = "chat_history")
+    system_prompt.format(selected_options = "st.session_state.selected_option", chat_history = "chat_history")
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
     )
