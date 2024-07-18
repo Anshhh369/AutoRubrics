@@ -125,7 +125,7 @@ def  get_chain(options):
         [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format_messages(question = "query", selected_options = "st.session_state.selected_option", chat_history = "chat_history")
+    prompt.format_messages(question = "query", options = "st.session_state.selected_option", chat_history = "chat_history")
     
 
     model_name = "gpt-4"
@@ -181,7 +181,7 @@ def python_agent():
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain(st.session_state.selected_option)
-    answer = chain({"question": query, "selected_options": st.session_state.selected_option, "chat_history": chat_history})
+    answer = chain({"question": query, "options": st.session_state.selected_option, "chat_history": chat_history})
     
     return answer['text']
 
@@ -314,11 +314,12 @@ elif page == "Upload Document":
     st.session_state.uploaded_files = st.file_uploader(
         "Upload your document", type=["txt"], accept_multiple_files=True
     )
-    if "st.session_state.uploaded_files" is not None:
+    if st.session_state.uploaded_files is None:
+        st.write("Please upload a file first")
+    elif st.session_state.uploaded_files is not None:
         if st.session_state.vector_store is None:
             st.session_state.vector_store = example_file(st.session_state.uploaded_files)
-    else:
-        st.write("Please upload a file first")
+
 
         
 
