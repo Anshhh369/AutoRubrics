@@ -93,12 +93,12 @@ def example_file(uploaded_files):
     return db
 
 
-def  get_chain(result):
+def  get_chain(result, options):
 
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, collect the name of the user.
-        Verify the options such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
+        Verify the {selected_options} such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
         use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
@@ -112,7 +112,7 @@ def  get_chain(result):
         
         """
 
-    system_prompt.format(question = "query", context = "result")
+    system_prompt.format(question = "query", context = "result", selected_options = "options")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -169,7 +169,7 @@ def python_agent():
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chain = get_chain(st.session_state.vector_store)
+    chain = get_chain(st.session_state.vector_store,st.session_state.selected_option)
     answer = chain({"query": query})
     
     return answer['result']
