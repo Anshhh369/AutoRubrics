@@ -111,7 +111,7 @@ def  get_chain():
         [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format("question", "selected_options")
+    prompt.format_messages(question = "query", selected_options = "st.session_state.selected_option")
 
     # memory = ConversationBufferMemory(memory_key="chat_history")
 
