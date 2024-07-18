@@ -94,17 +94,17 @@ def example_file(uploaded_files):
 
     return db
     
-# def format_chat_history(messages):
-#     formatted_history = ""
-#     for message in messages:
-#         role = "user" if message["role"] == "user" else "Assistant"
-#         content = message["content"]
-#         formatted_history += f"{role}: {content}\n"
-#     return formatted_history
+def format_chat_history(messages):
+    formatted_history = ""
+    for message in messages:
+        role = "user" if message["role"] == "user" else "Assistant"
+        content = message["content"]
+        formatted_history += f"{role}: {content}\n"
+    return formatted_history
 
 def  get_chain():
 
-    history = StreamlitChatMessageHistory(key="st.session_state.messages")
+    chat_history = format_chat_history(st.session_state.messages)
 
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
@@ -115,16 +115,16 @@ def  get_chain():
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
         Do not repeat questions.
 
-        {history}
+        {chat_history}
          
         """
 
     
     prompt = ChatPromptTemplate.from_messages(
-        [("system", system_prompt), MessagesPlaceholder(variable_name="history"), ("human", "{question}")]
+        [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format_messages(question = "query", selected_options = "st.session_state.selected_option")
+    prompt.format_messages(question = "query", selected_options = "st.session_state.selected_option", chat_history = "chat_history")
     
 
     model_name = "gpt-4"
@@ -177,7 +177,7 @@ def python_agent():
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain()
-    answer = chain({"question": query, "selected_options": st.session_state.selected_option, "history": history})
+    answer = chain({"question": query, "selected_options": st.session_state.selected_option, "chat_history": chat_history})
     
     return answer
 
