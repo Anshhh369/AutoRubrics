@@ -105,6 +105,7 @@ def format_chat_history(messages):
 def  get_chain():
 
     chat_history = format_chat_history(st.session_state.messages)
+    st.write(chat_history)
 
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
