@@ -223,68 +223,67 @@ def select_option():
 st.title("🦜🔗 AutoGrader")
 
 # Multi-page navigation
-page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Question"])
+page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document"])
 
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    if st.session_state.selected_option is None:
-        st.session_state.selected_option = select_option()
+    st.session_state.selected_option = select_option()
     
     
-        if st.session_state.selected_option:
-            # Display chat messages from history on app rerun
-            for message in st.session_state.messages:
-                with st.chat_message(message["role"]):
-                    st.markdown(message["content"])
+    if st.session_state.selected_option:
+        # Display chat messages from history on app rerun
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
                             
-            if query := st.chat_input("Ask your question here"):
-                # Display user message in chat message container
-                with st.chat_message("user"):
-                    st.markdown(query)
-                # Add user message to chat history
-                st.session_state.messages.append({"role": "user", "content": query})
+        if query := st.chat_input("Ask your question here"):
+            # Display user message in chat message container
+            with st.chat_message("user"):
+                st.markdown(query)
+            # Add user message to chat history
+            st.session_state.messages.append({"role": "user", "content": query})
                     
-                # Get answer from retrieval chain
-                answer = get_answer(query)
+            # Get answer from retrieval chain
+            answer = get_answer(query)
                             
-                # Display assistant response in chat message container
-                with st.chat_message("assistant"):
-                    st.markdown(answer)
-                # Add assistant response to chat history
-                st.session_state.messages.append({"role": "assistant", "content": answer})
+            # Display assistant response in chat message container
+            with st.chat_message("assistant"):
+                st.markdown(answer)
+            # Add assistant response to chat history                
+            st.session_state.messages.append({"role": "assistant", "content": answer})
     
-                while True:
-                    # Extract name information
-                    pattern_name = r'\bDetail Level of Criteria:\s*(.*)'
-                    detailedness = extract_information(st.session_state.messages, pattern_name)
+            while True:
+                # Extract name information
+                pattern_name = r'\bDetail Level of Criteria:\s*(.*)'
+                detailedness = extract_information(st.session_state.messages, pattern_name)
         
-                    # Extract service information
-                    pattern_service = r'\bGrading Strictness:\s*(.*)'
-                    strictness = extract_information(st.session_state.messages, pattern_service)
+                # Extract service information
+                pattern_service = r'\bGrading Strictness:\s*(.*)'
+                strictness = extract_information(st.session_state.messages, pattern_service)
         
-                    # Extract location information
-                    pattern_location = r'\bArea of Emphasis in Grading:\s*(.*)'
-                    area = extract_information(st.session_state.messages, pattern_location)
+                # Extract location information
+                pattern_location = r'\bArea of Emphasis in Grading:\s*(.*)'
+                area = extract_information(st.session_state.messages, pattern_location)
         
-                    # Extract time information
-                    pattern_time = r'\bAssisgnment Type:\s*(.*)'
-                    type = extract_information(st.session_state.messages, pattern_time)
+                # Extract time information
+                pattern_time = r'\bAssisgnment Type:\s*(.*)'
+                type = extract_information(st.session_state.messages, pattern_time)
            
-                    # Extract email information
-                    pattern_email = r'\bAssisgnment Style:\s*(.*)'
-                    style = extract_information(st.session_state.messages, pattern_email)
+                # Extract email information
+                pattern_email = r'\bAssisgnment Style:\s*(.*)'
+                style = extract_information(st.session_state.messages, pattern_email)
                         
-                    #Performing Action
-                    if detailedness and strictness and area and type and style:
-                        answer = python_agent()
-                        st.write(answer)
-                        break
+                #Performing Action
+                if detailedness and strictness and area and type and style:
+                    answer = python_agent()
+                    st.write(answer)
+                    break
                                     
-                # Button to clear chat messages
-                def clear_messages():
-                    st.session_state.messages = []
-                st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+            # Button to clear chat messages
+            def clear_messages():
+                st.session_state.messages = []
+            st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
     
