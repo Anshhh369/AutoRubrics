@@ -167,7 +167,7 @@ def get_answer(query):
     chain = get_chain()
     answer = chain({"question": query, "selected_options": st.session_state.selected_option})
     
-    return answer['result']
+    return answer
 
 def select_option():
     
