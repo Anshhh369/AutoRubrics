@@ -112,7 +112,7 @@ def  get_chain(options):
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, collect the name of the user.
 
-        After collecting the name, ask and verify the {options} selected by the user and then follow below steps:
+        After collecting the name, ask and verify the {options} selected by the user such as Detail level of criteria,Grading strictness,Area of emphasis, Assignment type and Assignment style.
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
         Keep the chat history to have memory and not repeat questions.
@@ -261,16 +261,7 @@ if page == "Home":
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": query})
 
-            chat_history = format_chat_history(st.session_state.messages)
-                    
-            # Get answer from retrieval chain
-            answer = get_answer(query)
-                            
-            # Display assistant response in chat message container
-            with st.chat_message("assistant"):
-                st.markdown(answer)
-            # Add assistant response to chat history                
-            st.session_state.messages.append({"role": "assistant", "content": answer})
+            chat_history = format_chat_history(st.session_state.messages)       
     
             while True:
                 # Extract name information
@@ -299,7 +290,14 @@ if page == "Home":
                     st.write(answer)
                     break
                 else:
-                    break
+                    # Get answer from retrieval chain
+                    answer = get_answer(query)
+                            
+            # Display assistant response in chat message container
+            with st.chat_message("assistant"):
+                st.markdown(answer)
+            # Add assistant response to chat history                
+            st.session_state.messages.append({"role": "assistant", "content": answer})
                                     
             # Button to clear chat messages
             def clear_messages():
