@@ -93,11 +93,18 @@ def example_file(uploaded_files):
         db = Chroma.from_documents(documents, OpenAIEmbeddings())
 
     return db
-
+    
+# def format_chat_history(messages):
+#     formatted_history = ""
+#     for message in messages:
+#         role = "user" if message["role"] == "user" else "Assistant"
+#         content = message["content"]
+#         formatted_history += f"{role}: {content}\n"
+#     return formatted_history
 
 def  get_chain():
 
-    history = StreamlitChatMessageHistory(key="chat_messages")
+    history = StreamlitChatMessageHistory(key="st.session_state.messages")
 
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
