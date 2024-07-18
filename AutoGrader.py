@@ -102,19 +102,20 @@ def format_chat_history(messages):
         formatted_history += f"{role}: {content}\n"
     return formatted_history
 
-def  get_chain(selected_options):
+def  get_chain(options):
 
     chat_history = format_chat_history(st.session_state.messages)
     st.write(chat_history)
 
     system_prompt = """
+    
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, collect the name of the user.
 
-        After collecting the name, verify the {selected_options} one by one such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
+        After collecting the name, ask and verify the {options} selected by the user and then follow below steps:
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-        Keep the chat history and do not repeat questions.
+        Keep the chat history to have memory and not repeat questions.
         
         chat history: {chat_history}
          
@@ -168,7 +169,10 @@ def python_agent():
         )
     
     solution = agent_executor.run(
-        f"Generate a rubric referring to this: {st.session_state.vector_store}, based on this: {st.session_state.selected_option}."
+        f"""
+        Based on the: {st.session_state.selected_option}, generate a rubric referring to the context: {st.session_state.vector_store}. 
+        If there is no context available, ask the user to upload one.
+        """
     )
     
     return solution
@@ -270,24 +274,24 @@ if page == "Home":
     
             while True:
                 # Extract name information
-                pattern_name = r'\bDetail Level of Criteria:\s*(.*)'
-                detailedness = extract_information(st.session_state.messages, pattern_name)
+                pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
+                detailedness = extract_information(st.session_state.messages, pattern_detailedness)
         
                 # Extract service information
-                pattern_service = r'\bGrading Strictness:\s*(.*)'
-                strictness = extract_information(st.session_state.messages, pattern_service)
+                pattern_strictness = r'\bGrading Strictness:\s*(.*)'
+                strictness = extract_information(st.session_state.messages, pattern_strictness)
         
                 # Extract location information
-                pattern_location = r'\bArea of Emphasis in Grading:\s*(.*)'
-                area = extract_information(st.session_state.messages, pattern_location)
+                pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
+                area = extract_information(st.session_state.messages, pattern_area)
         
                 # Extract time information
-                pattern_time = r'\bAssisgnment Type:\s*(.*)'
-                type = extract_information(st.session_state.messages, pattern_time)
+                pattern_type = r'\bAssisgnment Type:\s*(.*)'
+                type = extract_information(st.session_state.messages, pattern_type)
            
                 # Extract email information
-                pattern_email = r'\bAssisgnment Style:\s*(.*)'
-                style = extract_information(st.session_state.messages, pattern_email)
+                pattern_style = r'\bAssisgnment Style:\s*(.*)'
+                style = extract_information(st.session_state.messages, pattern_style)
                         
                 #Performing Action
                 if detailedness and strictness and area and type and style:
@@ -310,12 +314,13 @@ elif page == "Upload Document":
     st.session_state.uploaded_files = st.file_uploader(
         "Upload your document", type=["txt"], accept_multiple_files=True
     )
-            
-    # Button to process uploaded file
-    if st.button("Process Your Files",  help = "Click to process your file before asking questions"):
-        if "st.session_state.uploaded_files" is not None:
-            if st.session_state.vector_store is None:
-                st.session_state.vector_store = example_file(st.session_state.uploaded_files)
+    if "st.session_state.uploaded_files" is not None:
+        if st.session_state.vector_store is None:
+            st.session_state.vector_store = example_file(st.session_state.uploaded_files)
+    else:
+        st.write("Please upload a file first")
+
+        
 
 
 
