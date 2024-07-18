@@ -280,6 +280,8 @@ if page == "Home":
                     answer = python_agent()
                     st.write(answer)
                     break
+                else:
+                    break
                                     
             # Button to clear chat messages
             def clear_messages():
