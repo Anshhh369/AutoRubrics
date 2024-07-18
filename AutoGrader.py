@@ -258,7 +258,6 @@ if page == "Home":
             st.session_state.messages.append({"role": "user", "content": query})
 
             chat_history = format_chat_history(st.session_state.messages)
-            st.write(chat_history)
                     
             # Get answer from retrieval chain
             answer = get_answer(query)
