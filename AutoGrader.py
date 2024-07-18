@@ -93,7 +93,7 @@ def example_file(uploaded_files):
     return db
 
 
-def  get_chain(options):
+def  get_chain():
 
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
@@ -111,7 +111,7 @@ def  get_chain(options):
         [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format(question = "query", selected_options = "options")
+    prompt.format("question", "selected_options")
 
     # memory = ConversationBufferMemory(memory_key="chat_history")
 
@@ -164,8 +164,8 @@ def python_agent():
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chain = get_chain(st.session_state.selected_option)
-    answer = chain({"query": query})
+    chain = get_chain()
+    answer = chain({"question": query, "selected_options": st.session_state.selected_option})
     
     return answer['result']
 
