@@ -291,6 +291,7 @@ if page == "Home":
                 else:
                     # Get answer from retrieval chain
                     answer = get_answer(query)
+                    break
 
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
