@@ -23,7 +23,9 @@ from langchain.prompts.chat import (
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
-from langchain.memory import ConversationBufferMemory
+from langchain_community.chat_message_histories import (
+    StreamlitChatMessageHistory,
+)
 
 
 from langchain import PromptTemplate
@@ -95,6 +97,8 @@ def example_file(uploaded_files):
 
 def  get_chain():
 
+    history = StreamlitChatMessageHistory(key="chat_messages")
+
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, collect the name of the user.
@@ -104,22 +108,20 @@ def  get_chain():
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
         Do not repeat questions.
          
-        {chat_history}
         """
 
     
     prompt = ChatPromptTemplate.from_messages(
-        [("system", system_prompt), ("human", "{question}")]
+        [("system", system_prompt), MessagesPlaceholder(variable_name="history"), ("human", "{question}")]
     )
 
     prompt.format_messages(question = "query", selected_options = "st.session_state.selected_option")
-
-    memory = ConversationBufferMemory(memory_key="chat_history")
+    
 
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
     
-    user_query_chain = LLMChain(llm=llm, prompt=prompt, verbose=True, memory = memory)
+    user_query_chain = LLMChain(llm=llm, prompt=prompt)
     # option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
     # context_based_chain = RetrievalQA.from_chain_type(llm, retriever=options.as_retriever(),chain_type_kwargs={'prompt': prompt})
 
