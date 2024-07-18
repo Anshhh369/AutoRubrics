@@ -93,26 +93,20 @@ def example_file(uploaded_files):
     return db
 
 
-def  get_chain(result, options):
+def  get_chain(options):
 
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, collect the name of the user.
-        Verify the {selected_options} such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
-        use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+
+        After collecting the name, Verify the {selected_options} one by one such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
+        Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
      
-        Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
-
-        Context : {context}
-
-        Human: {question}
-
-        Assistant: 
         
         """
 
-    system_prompt.format(question = "query", context = "result", selected_options = "options")
+    system_prompt.format(question = "query", selected_options = "options")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
@@ -161,7 +155,7 @@ def python_agent():
         )
     
     solution = agent_executor.run(
-        f"Generate a rubric referring to this: {st.session_state.selected_option}."
+        f"Generate a rubric referring to this: {st.session_state.vector_store}, based on this: {st.session_state.selected_option}."
     )
     
     return solution
@@ -169,8 +163,8 @@ def python_agent():
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chain = get_chain(st.session_state.vector_store,st.session_state.selected_option)
-    answer = chain({"query": query, "selected_options": st.session_state.selected_option})
+    chain = get_chain(st.session_state.selected_option)
+    answer = chain({"query": query})
     
     return answer['result']
 
@@ -234,8 +228,67 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document", "Ask Qu
 
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
-    st.session_state.selected_option = select_option()
+    if st.session_state.selected_option is None:
+        st.session_state.selected_option = select_option()
     
+    
+    if st.session_state.selected_option:
+        # Display chat messages from history on app rerun
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+                        
+        if query := st.chat_input("Ask your question here"):
+            # Display user message in chat message container
+            with st.chat_message("user"):
+                st.markdown(query)
+            # Add user message to chat history
+            st.session_state.messages.append({"role": "user", "content": query})
+                
+            # Get answer from retrieval chain
+            answer = get_answer(query)
+                        
+            # Display assistant response in chat message container
+            with st.chat_message("assistant"):
+                st.markdown(answer)
+            # Add assistant response to chat history
+            st.session_state.messages.append({"role": "assistant", "content": answer})
+
+            while True:
+                # Extract name information
+                pattern_name = r'\bDetail Level of Criteria:\s*(.*)'
+                detailedness = extract_information(st.session_state.messages, pattern_name)
+    
+                # Extract service information
+                pattern_service = r'\bGrading Strictness:\s*(.*)'
+                strictness = extract_information(st.session_state.messages, pattern_service)
+    
+                # Extract location information
+                pattern_location = r'\bArea of Emphasis in Grading:\s*(.*)'
+                area = extract_information(st.session_state.messages, pattern_location)
+    
+                # Extract time information
+                pattern_time = r'\bAssisgnment Type:\s*(.*)'
+                type = extract_information(st.session_state.messages, pattern_time)
+       
+                # Extract email information
+                pattern_email = r'\bAssisgnment Style:\s*(.*)'
+                style = extract_information(st.session_state.messages, pattern_email)
+                    
+                #Performing Action
+                if detailedness and strictness and area and type and style:
+                    answer = python_agent()
+                    st.write(answer)
+                    break
+                                
+            # Button to clear chat messages
+            def clear_messages():
+                st.session_state.messages = []
+            st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+
+
+    
+
 
 elif page == "Upload Document": 
     st.session_state.uploaded_files = st.file_uploader(
@@ -247,64 +300,6 @@ elif page == "Upload Document":
         if "st.session_state.uploaded_files" is not None:
             if st.session_state.vector_store is None:
                 st.session_state.vector_store = example_file(st.session_state.uploaded_files)
-
-
-elif page == "Ask Question":
-    if st.session_state.vector_store:
-        if st.session_state.selected_option:
-        
-            # Display chat messages from history on app rerun
-            for message in st.session_state.messages:
-                with st.chat_message(message["role"]):
-                    st.markdown(message["content"])
-                        
-            if query := st.chat_input("Ask your question here"):
-                # Display user message in chat message container
-                with st.chat_message("user"):
-                    st.markdown(query)
-                # Add user message to chat history
-                st.session_state.messages.append({"role": "user", "content": query})
-                
-                # Get answer from retrieval chain
-                answer = get_answer(query)
-                        
-                # Display assistant response in chat message container
-                with st.chat_message("assistant"):
-                    st.markdown(answer)
-                # Add assistant response to chat history
-                st.session_state.messages.append({"role": "assistant", "content": answer})
-
-                while True:
-                    # Extract name information
-                    pattern_name = r'\bDetail Level of Criteria:\s*(.*)'
-                    detailedness = extract_information(st.session_state.messages, pattern_name)
-    
-                    # Extract service information
-                    pattern_service = r'\bGrading Strictness:\s*(.*)'
-                    strictness = extract_information(st.session_state.messages, pattern_service)
-    
-                    # Extract location information
-                    pattern_location = r'\bArea of Emphasis in Grading:\s*(.*)'
-                    area = extract_information(st.session_state.messages, pattern_location)
-    
-                    # Extract time information
-                    pattern_time = r'\bAssisgnment Type:\s*(.*)'
-                    type = extract_information(st.session_state.messages, pattern_time)
-       
-                    # Extract email information
-                    pattern_email = r'\bAssisgnment Style:\s*(.*)'
-                    style = extract_information(st.session_state.messages, pattern_email)
-                    
-                    #Performing Action
-                    if detailedness and strictness and area and type and style:
-                        answer = python_agent()
-                        st.write(answer)
-                        break
-                                
-                # Button to clear chat messages
-                def clear_messages():
-                    st.session_state.messages = []
-                st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
 
