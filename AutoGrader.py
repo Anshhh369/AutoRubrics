@@ -132,7 +132,7 @@ import re
 
 def extract_information(conversation, pattern):
     for line in conversation:
-        line = line.get('content', '')
+        line = line.get('content:', '')
         match = re.search(pattern, line, re.IGNORECASE)
         if match:
             return match.group(1)
