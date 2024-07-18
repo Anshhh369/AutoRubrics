@@ -105,6 +105,7 @@ def format_chat_history(messages):
 def  get_chain(selected_options):
 
     chat_history = format_chat_history(st.session_state.messages)
+    st.write(chat_history)
 
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
@@ -119,12 +120,11 @@ def  get_chain(selected_options):
          
         """
 
-    system_prompt.format("selected_options", "chat_history")
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format_messages(question = "query")
+    prompt.format_messages(question = "query", selected_options = "st.session_state.selected_option", chat_history = "chat_history")
     
 
     model_name = "gpt-4"
