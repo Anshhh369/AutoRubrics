@@ -99,20 +99,19 @@ def  get_chain(options):
         You are an expert in rubric generation for any given type of assignment. 
         Start by greeting the user respectfully, collect the name of the user.
 
-        After collecting the name, Verify the {selected_options} one by one such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
+        After collecting the name, verify the {selected_options} one by one such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
          
         
         """
 
-    system_prompt.format(selected_options = "options")
     
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format(question = "query")
+    prompt.format(question = "query", selected_options = "options")
 
     # memory = ConversationBufferMemory(memory_key="chat_history")
 
