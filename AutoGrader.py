@@ -287,12 +287,11 @@ if page == "Home":
                 #Performing Action
                 if detailedness and strictness and area and type and style:
                     answer = python_agent()
-                    st.write(answer)
                     break
                 else:
                     # Get answer from retrieval chain
                     answer = get_answer(query)
-                            
+
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
                 st.markdown(answer)
