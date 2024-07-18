@@ -170,7 +170,7 @@ def python_agent():
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain(st.session_state.vector_store,st.session_state.selected_option)
-    answer = chain({"query": query})
+    answer = chain({"query": query, "options": st.session_state.selected_option})
     
     return answer['result']
 
