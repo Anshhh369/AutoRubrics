@@ -119,7 +119,7 @@ def  get_chain(options):
     
     # user_query_chain = LLMChain(llm=llm, prompt=user_query_template, verbose=True, output_key='verified_options')
     # option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
-    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt})
+    context_based_chain = RetrievalQA.from_chain_type(llm, retriever=options.as_retriever(),chain_type_kwargs={'prompt': prompt})
 
     # sequential_chain = SequentialChain(chains=[user_query_chain, context_based_chain], input_variables=['question','selected_option', 'context'], output_variables=['verified_options','rubrics'], verbose=True)
 
