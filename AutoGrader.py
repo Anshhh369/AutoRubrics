@@ -110,11 +110,18 @@ def  get_chain(options):
     system_prompt = """
     
         You are an expert in rubric generation for any given type of assignment. 
+        
         Start by greeting the user respectfully, collect the name of the user.
+        The user has already selected {options} for the factors like Detail level of criteria,Grading strictness,Area of emphasis, Assignment type and Assignment style.
+        Verify these selections with user.
+        When you are done verifying all the options, display them to the user like below:
 
-        After collecting the name, ask and verify the {options} selected by the user such as Detail level of criteria,Grading strictness,Area of emphasis, Assignment type and Assignment style.
-        Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
-        Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
+        Detail Level of Criteria: 
+        Grading Strictness:
+        Area of Emphasis in Grading:
+        Assisgnment Type:
+        Assisgnment Style:
+        
         Keep the chat history to have memory and not repeat questions.
         
         chat history: {chat_history}
@@ -170,8 +177,10 @@ def python_agent():
     
     solution = agent_executor.run(
         f"""
-        Based on the: {st.session_state.selected_option}, generate a rubric referring to the context: {st.session_state.vector_store}. 
+        Based on the: {st.session_state.selected_option}, generate a rubric referring to the context: {st.session_state.vector_store}.
         If there is no context available, ask the user to upload one.
+        Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+        Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
         """
     )
     
