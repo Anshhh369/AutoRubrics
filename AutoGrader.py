@@ -105,7 +105,6 @@ def format_chat_history(messages):
 def  get_chain():
 
     chat_history = format_chat_history(st.session_state.messages)
-    st.write(chat_history)
 
     system_prompt = """
         You are an expert in rubric generation for any given type of assignment. 
@@ -114,18 +113,18 @@ def  get_chain():
         After collecting the name, verify the {selected_options} one by one such as Detailedness, Strictness, Area, Type and Style of the assignment selected by the user and then follow below steps:
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-        Do not repeat questions.
-
-        {chat_history}
+        Keep the chat history and do not repeat questions.
+        
+        chat history: {chat_history}
          
         """
 
-    
+    system_prompt.format_messages(selected_options = "st.session_state.selected_option", chat_history = "chat_history")
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format_messages(question = "query", selected_options = "st.session_state.selected_option", chat_history = "chat_history")
+    prompt.format_messages(question = "query")
     
 
     model_name = "gpt-4"
