@@ -266,23 +266,23 @@ if page == "Home":
             
             # Extract name information
             pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
-            detailedness = extract_information(st.session_state.messages, pattern_detailedness)
+            detailedness = extract_information(chat_history, pattern_detailedness)
         
             # Extract service information
             pattern_strictness = r'\bGrading Strictness:\s*(.*)'
-            strictness = extract_information(st.session_state.messages, pattern_strictness)
+            strictness = extract_information(chat_history, pattern_strictness)
         
             # Extract location information
             pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
-            area = extract_information(st.session_state.messages, pattern_area)
+            area = extract_information(chat_history, pattern_area)
         
             # Extract time information
             pattern_type = r'\bAssisgnment Type:\s*(.*)'
-            type = extract_information(st.session_state.messages, pattern_type)
+            type = extract_information(chat_history, pattern_type)
            
             # Extract email information
             pattern_style = r'\bAssisgnment Style:\s*(.*)'
-            style = extract_information(st.session_state.messages, pattern_style)
+            style = extract_information(chat_history, pattern_style)
                         
             #Performing Action
             if detailedness and strictness and area and type and style:
