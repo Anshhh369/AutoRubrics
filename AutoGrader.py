@@ -310,14 +310,19 @@ if page == "Home":
                 st.session_state.messages = []
             st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
+            st.button("Upload_Context", help = "Click to upload your own context for reference", on_click=file_uploader())
 
-    
-elif page == "Upload Document": 
+                      
+def file_uploader():
     st.session_state.uploaded_files = st.file_uploader(
         "Upload your document", type=["txt"], accept_multiple_files=True
     )
     if st.session_state.uploaded_files:
         st.session_state.vector_store = example_file(st.session_state.uploaded_files)  
+
+
+    
+
         
 
             
