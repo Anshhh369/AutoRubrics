@@ -102,7 +102,7 @@ def format_chat_history(messages):
         formatted_history += f"{role}: {content}\n"
     return formatted_history
 
-def  get_chain(options):
+def  get_chain(options,context):
 
     system_prompt = """
     
@@ -118,7 +118,11 @@ def  get_chain(options):
         Area of Emphasis in Grading:
         Assisgnment Type:
         Assisgnment Style:
-        
+
+        Now since you have all the {options} selected by the user, generate a rubric referring to the context: {context}.
+        If there is no context available, ask the user to upload one.
+        Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+        Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
         Keep the chat history to have memory and not repeat questions.
         
         chat history: {chat_history}
@@ -129,7 +133,7 @@ def  get_chain(options):
         [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format_messages(question = "query", options = "st.session_state.selected_option", chat_history = "chat_history")
+    prompt.format_messages(question = "query", options = "st.session_state.selected_option", context = "st.session_state.vector_store", chat_history = "chat_history")
     
 
     model_name = "gpt-4"
@@ -182,7 +186,7 @@ def python_agent():
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chain = get_chain(st.session_state.selected_option)
+    chain = get_chain(st.session_state.selected_option,st.session_state.vector_store)
     answer = chain({"question": query, "options": st.session_state.selected_option, "chat_history": chat_history})
     
     return answer['text']
@@ -265,36 +269,36 @@ if page == "Home":
 
             chat_history = format_chat_history(st.session_state.messages)
 
-            while True:
-                # Extract name information
-                pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
-                detailedness = extract_information(chat_history, pattern_detailedness)
+            # while True:
+            #     # Extract name information
+            #     pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
+            #     detailedness = extract_information(chat_history, pattern_detailedness)
             
-                # Extract service information
-                pattern_strictness = r'\bGrading Strictness:\s*(.*)'
-                strictness = extract_information(chat_history, pattern_strictness)
+            #     # Extract service information
+            #     pattern_strictness = r'\bGrading Strictness:\s*(.*)'
+            #     strictness = extract_information(chat_history, pattern_strictness)
             
-                # Extract location information
-                pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
-                area = extract_information(chat_history, pattern_area)
+            #     # Extract location information
+            #     pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
+            #     area = extract_information(chat_history, pattern_area)
             
-                # Extract time information
-                pattern_type = r'\bAssisgnment Type:\s*(.*)'
-                type = extract_information(chat_history, pattern_type)
+            #     # Extract time information
+            #     pattern_type = r'\bAssisgnment Type:\s*(.*)'
+            #     type = extract_information(chat_history, pattern_type)
                
-                # Extract email information
-                pattern_style = r'\bAssisgnment Style:\s*(.*)'
-                style = extract_information(chat_history, pattern_style)
+            #     # Extract email information
+            #     pattern_style = r'\bAssisgnment Style:\s*(.*)'
+            #     style = extract_information(chat_history, pattern_style)
                             
-                #Performing Action
-                if detailedness and strictness and area and type and style:
-                    st.write(detailedness)
-                    answer = python_agent()
-                    break
-                else:
-                    # Get answer from retrieval chain
-                    answer = get_answer(query)
-                    break
+            #     #Performing Action
+            #     if detailedness and strictness and area and type and style:
+            #         st.write(detailedness)
+            #         answer = python_agent()
+            #         break
+            #     else:
+            # Get answer from retrieval chain
+            answer = get_answer(query)
+                    # break
     
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
