@@ -135,13 +135,13 @@ def  get_chain(options,context):
         [("system", system_prompt), ("human", "{question}")]
     )
 
-    prompt.format_messages(question = "query", options = "st.session_state.selected_option", context = "raw_documents", chat_history = "chat_history")
+    prompt.format_messages(question = "query", options = "st.session_state.selected_option", context = "st.session_state.vector_store", chat_history = "chat_history")
     
 
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
     
-    user_query_chain = LLMChain(llm=llm, prompt=prompt)
+    user_query_chain = LLMChain(llm=llm, retriver = context.as_retriever(), chain_type_kwargs={"prompt": prompt} )
     
     st.session_state.chat_active = True
     
@@ -163,8 +163,8 @@ def extract_information(conversation, pattern):
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chain = get_chain(st.session_state.selected_option,raw_documents)
-    answer = chain({"question": query, "options": st.session_state.selected_option, "context": raw_documents, "chat_history": chat_history})
+    chain = get_chain(st.session_state.selected_option,st.session_state.vector_store)
+    answer = chain({"question": query, "options": st.session_state.selected_option, "context": st.session_state.vector_store, "chat_history": chat_history})
     
     return answer['text']
 
