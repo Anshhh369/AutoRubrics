@@ -321,8 +321,6 @@ elif page == "Upload Document":
         st.session_state.uploaded_files = st.file_uploader(
             "Upload your document", type=["txt"], accept_multiple_files=True
         )
-        
-    elif st.session_state.uploaded_files is not None:
         if st.session_state.vector_store is None:
             st.session_state.vector_store = example_file(st.session_state.uploaded_files)
 
