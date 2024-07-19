@@ -141,7 +141,7 @@ def  get_chain(options,context):
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
     
-    user_query_chain = LLMChain(llm=llm, retriver = context.as_retriever(), chain_type_kwargs={"prompt": prompt} )
+    user_query_chain = LLMChain(llm=llm, retriver = context.as_retriever(), prompt = prompt)
     
     st.session_state.chat_active = True
     
