@@ -321,11 +321,9 @@ elif page == "Upload Document":
             "Upload your document", type=["txt"], accept_multiple_files=True
         )
         if st.session_state.uploaded_files is not None:
-            st.write("Please upload a file first")
+            st.session_state.vector_store = example_file(st.session_state.uploaded_files)
             break
-
-
-    st.session_state.vector_store = example_file(st.session_state.uploaded_files)
+        
     
             
 
