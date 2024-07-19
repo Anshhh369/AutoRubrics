@@ -138,11 +138,7 @@ def  get_chain(options):
     llm = ChatOpenAI(model_name=model_name)
     
     user_query_chain = LLMChain(llm=llm, prompt=prompt)
-    # option_selection_chain = LLMChain(llm=llm, prompt=option_selection_template, verbose=True, output_key='selected_option')
-    # context_based_chain = RetrievalQA.from_chain_type(llm, retriever=options.as_retriever(),chain_type_kwargs={'prompt': prompt})
-
-    # sequential_chain = SequentialChain(chains=[user_query_chain, context_based_chain], input_variables=['question','selected_option', 'context'], output_variables=['verified_options','rubrics'], verbose=True)
-
+    
     st.session_state.chat_active = True
     
     return user_query_chain
@@ -268,28 +264,26 @@ if page == "Home":
                 st.markdown(query)
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": query})
-
-            chat_history = format_chat_history(st.session_state.messages)       
-    
+            
             # Extract name information
             pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
-            detailedness = extract_information(chat_history, pattern_detailedness)
+            detailedness = extract_information(st.session_state.messages, pattern_detailedness)
         
             # Extract service information
             pattern_strictness = r'\bGrading Strictness:\s*(.*)'
-            strictness = extract_information(chat_history, pattern_strictness)
+            strictness = extract_information(st.session_state.messages, pattern_strictness)
         
             # Extract location information
             pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
-            area = extract_information(chat_history, pattern_area)
+            area = extract_information(st.session_state.messages, pattern_area)
         
             # Extract time information
             pattern_type = r'\bAssisgnment Type:\s*(.*)'
-            type = extract_information(chat_history, pattern_type)
+            type = extract_information(st.session_state.messages, pattern_type)
            
             # Extract email information
             pattern_style = r'\bAssisgnment Style:\s*(.*)'
-            style = extract_information(chat_history, pattern_style)
+            style = extract_information(st.session_state.messages, pattern_style)
                         
             #Performing Action
             if detailedness and strictness and area and type and style:
