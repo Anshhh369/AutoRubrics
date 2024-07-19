@@ -155,32 +155,7 @@ def extract_information(conversation, pattern):
             return None
     
 
-def python_agent():
-    speak_toolkit = NLAToolkit.from_llm_and_url(llm, "https://api.speak.com/openapi.yaml")
-    klarna_toolkit = NLAToolkit.from_llm_and_url(
-        llm, "https://www.klarna.com/us/shopping/public/openai/v0/api-docs/"
-    )
-    
-    natural_language_tools = speak_toolkit.get_tools() + klarna_toolkit.get_tools()
 
-    agent_executor = create_python_agent(
-        llm=llm,
-        tool=natural_language_tools,
-        verbose=True,
-        agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-        handle_parsing_errors=True,
-        )
-    
-    solution = agent_executor.run(
-        f"""
-        Based on the: {st.session_state.selected_option}, generate a rubric referring to the context: {st.session_state.vector_store}.
-        If there is no context available, ask the user to upload one.
-        Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
-        Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-        """
-    )
-    
-    return solution
 
 
 def get_answer(query):
@@ -259,33 +234,34 @@ if page == "Home":
         st.session_state.vector_store = example_file(st.session_state.uploaded_files) 
         
     if st.session_state.selected_option is not None:
-        # Display chat messages from history on app rerun
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
-                            
-        if query := st.chat_input("Ask your question here"):
-            # Display user message in chat message container
-            with st.chat_message("user"):
-                st.markdown(query)
-            # Add user message to chat history
-            st.session_state.messages.append({"role": "user", "content": query})
-
-            chat_history = format_chat_history(st.session_state.messages)
-
-            answer = get_answer(query)
-                    # break
+        if st.session_state.vector_store:
+            # Display chat messages from history on app rerun
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
+                                
+            if query := st.chat_input("Ask your question here"):
+                # Display user message in chat message container
+                with st.chat_message("user"):
+                    st.markdown(query)
+                # Add user message to chat history
+                st.session_state.messages.append({"role": "user", "content": query})
     
-            # Display assistant response in chat message container
-            with st.chat_message("assistant"):
-                st.markdown(answer)
-            # Add assistant response to chat history                
-            st.session_state.messages.append({"role": "assistant", "content": answer})
-                                    
-            # Button to clear chat messages
-            def clear_messages():
-                st.session_state.messages = []
-            st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+                chat_history = format_chat_history(st.session_state.messages)
+    
+                answer = get_answer(query)
+                        # break
+        
+                # Display assistant response in chat message container
+                with st.chat_message("assistant"):
+                    st.markdown(answer)
+                # Add assistant response to chat history                
+                st.session_state.messages.append({"role": "assistant", "content": answer})
+                                        
+                # Button to clear chat messages
+                def clear_messages():
+                    st.session_state.messages = []
+                st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
 
@@ -413,3 +389,33 @@ if page == "Home":
     #     document_prompt=document_prompt,
     #     document_variable_name=document_variable_name
     # )
+
+
+
+
+# def python_agent():
+#     speak_toolkit = NLAToolkit.from_llm_and_url(llm, "https://api.speak.com/openapi.yaml")
+#     klarna_toolkit = NLAToolkit.from_llm_and_url(
+#         llm, "https://www.klarna.com/us/shopping/public/openai/v0/api-docs/"
+#     )
+    
+#     natural_language_tools = speak_toolkit.get_tools() + klarna_toolkit.get_tools()
+
+#     agent_executor = create_python_agent(
+#         llm=llm,
+#         tool=natural_language_tools,
+#         verbose=True,
+#         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+#         handle_parsing_errors=True,
+#         )
+    
+#     solution = agent_executor.run(
+#         f"""
+#         Based on the: {st.session_state.selected_option}, generate a rubric referring to the context: {st.session_state.vector_store}.
+#         If there is no context available, ask the user to upload one.
+#         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+#         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
+#         """
+#     )
+    
+#     return solution
