@@ -290,9 +290,11 @@ if page == "Home":
                 if detailedness and strictness and area and type and style:
                     st.write(detailedness)
                     answer = python_agent()
+                    break
                 else:
                     # Get answer from retrieval chain
                     answer = get_answer(query)
+                    break
     
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
