@@ -264,50 +264,49 @@ if page == "Home":
             st.session_state.messages.append({"role": "user", "content": query})
 
             chat_history = format_chat_history(st.session_state.messages)
-            
-            # Extract name information
-            pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
-            detailedness = extract_information(chat_history, pattern_detailedness)
-        
-            # Extract service information
-            pattern_strictness = r'\bGrading Strictness:\s*(.*)'
-            strictness = extract_information(chat_history, pattern_strictness)
-        
-            # Extract location information
-            pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
-            area = extract_information(chat_history, pattern_area)
-        
-            # Extract time information
-            pattern_type = r'\bAssisgnment Type:\s*(.*)'
-            type = extract_information(chat_history, pattern_type)
-           
-            # Extract email information
-            pattern_style = r'\bAssisgnment Style:\s*(.*)'
-            style = extract_information(chat_history, pattern_style)
-                        
-            #Performing Action
-            if detailedness and strictness and area and type and style:
-                st.write(detailedness)
-                answer = python_agent()
-            else:
-                # Get answer from retrieval chain
-                answer = get_answer(query)
 
-            # Display assistant response in chat message container
-            with st.chat_message("assistant"):
-                st.markdown(answer)
-            # Add assistant response to chat history                
-            st.session_state.messages.append({"role": "assistant", "content": answer})
+            while st.session_state.messages is not None:
+                # Extract name information
+                pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
+                detailedness = extract_information(chat_history, pattern_detailedness)
+            
+                # Extract service information
+                pattern_strictness = r'\bGrading Strictness:\s*(.*)'
+                strictness = extract_information(chat_history, pattern_strictness)
+            
+                # Extract location information
+                pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
+                area = extract_information(chat_history, pattern_area)
+            
+                # Extract time information
+                pattern_type = r'\bAssisgnment Type:\s*(.*)'
+                type = extract_information(chat_history, pattern_type)
+               
+                # Extract email information
+                pattern_style = r'\bAssisgnment Style:\s*(.*)'
+                style = extract_information(chat_history, pattern_style)
+                            
+                #Performing Action
+                if detailedness and strictness and area and type and style:
+                    st.write(detailedness)
+                    answer = python_agent()
+                else:
+                    # Get answer from retrieval chain
+                    answer = get_answer(query)
+    
+                # Display assistant response in chat message container
+                with st.chat_message("assistant"):
+                    st.markdown(answer)
+                # Add assistant response to chat history                
+                st.session_state.messages.append({"role": "assistant", "content": answer})
                                     
-            # Button to clear chat messages
-            def clear_messages():
-                st.session_state.messages = []
-            st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+                # Button to clear chat messages
+                def clear_messages():
+                    st.session_state.messages = []
+                st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
     
-
-
 elif page == "Upload Document": 
     st.session_state.uploaded_files = st.file_uploader(
         "Upload your document", type=["txt"], accept_multiple_files=True
