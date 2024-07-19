@@ -316,13 +316,16 @@ if page == "Home":
 
     
 elif page == "Upload Document": 
-    while st.session_state.uploaded_files is None:
-        st.session_state.uploaded_files = st.file_uploader(
-            "Upload your document", type=["txt"], accept_multiple_files=True
-        )
-        if st.session_state.uploaded_files is not None:
-            st.session_state.vector_store = example_file(st.session_state.uploaded_files)
+    st.session_state.uploaded_files = st.file_uploader(
+        "Upload your document", type=["txt"], accept_multiple_files=True
+    )
+    while st.session_state.uploaded_files is not None:
+        st.session_state.vector_store = example_file(st.session_state.uploaded_files)       
+        if st.session_state.uploaded_files is None:
+            st.wrtie("please upload a file first")
             break
+            
+            
         
     
             
