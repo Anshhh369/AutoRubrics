@@ -265,7 +265,7 @@ if page == "Home":
 
             chat_history = format_chat_history(st.session_state.messages)
 
-            while st.session_state.messages is not None:
+            while messages is not None:
                 # Extract name information
                 pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
                 detailedness = extract_information(chat_history, pattern_detailedness)
