@@ -110,10 +110,7 @@ def  get_chain(options,context):
         
         Start by greeting the user respectfully, collect the name of the user.
         The user has already selected {options} for the factors like Detail level of criteria,Grading strictness,Area of emphasis, Assignment type and Assignment style.
-        Verify these selections with user.
-        When you are done verifying all the options, display them to the user like below:
-
-        User Name:
+        Verify these selections with user by displaying the options in the following format:
 
         Detail Level of Criteria: 
         Grading Strictness:
@@ -121,7 +118,7 @@ def  get_chain(options,context):
         Assisgnment Type:
         Assisgnment Style:
 
-        Now since you have all the {options} selected by the user, generate a rubric referring to the format of examples and instructions provided in the context: {context}.
+        When you are done verifying all the options, generate a rubric referring to the format of examples and instructions provided in the context: {context}.
         If there is no context available, suggest the user to upload one for better response.
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
@@ -316,11 +313,11 @@ if page == "Home":
 
     
 elif page == "Upload Document": 
-    uploaded_files = st.file_uploader(
+    st.session_state.uploaded_files = st.file_uploader(
         "Upload your document", type=["txt"], accept_multiple_files=True
     )
-    if uploaded_files:
-        st.session_state.vector_store = example_file(uploaded_files)  
+    if st.session_state.uploaded_files:
+        st.session_state.vector_store = example_file(st.session_state.uploaded_files)  
         
 
             
