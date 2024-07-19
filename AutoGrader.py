@@ -294,16 +294,16 @@ if page == "Home":
                     # Get answer from retrieval chain
                     answer = get_answer(query)
     
-                # Display assistant response in chat message container
-                with st.chat_message("assistant"):
-                    st.markdown(answer)
-                # Add assistant response to chat history                
-                st.session_state.messages.append({"role": "assistant", "content": answer})
+            # Display assistant response in chat message container
+            with st.chat_message("assistant"):
+                st.markdown(answer)
+            # Add assistant response to chat history                
+            st.session_state.messages.append({"role": "assistant", "content": answer})
                                     
-                # Button to clear chat messages
-                def clear_messages():
-                    st.session_state.messages = []
-                st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
+            # Button to clear chat messages
+            def clear_messages():
+                st.session_state.messages = []
+            st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
     
