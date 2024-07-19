@@ -104,8 +104,6 @@ def format_chat_history(messages):
 
 def  get_chain(options):
 
-    chat_history = format_chat_history(st.session_state.messages)
-
     system_prompt = """
     
         You are an expert in rubric generation for any given type of assignment. 
@@ -264,6 +262,8 @@ if page == "Home":
                 st.markdown(query)
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": query})
+
+            chat_history = format_chat_history(st.session_state.messages)
             
             # Extract name information
             pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
