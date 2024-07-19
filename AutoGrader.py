@@ -32,6 +32,7 @@ from langchain import PromptTemplate
 from langchain.agents import AgentType, initialize_agent
 from langchain.requests import Requests
 from langchain_community.agent_toolkits import NLAToolkit
+from langchain.chains import create_history_aware_retriever
 
 
 
@@ -141,7 +142,7 @@ def  get_chain(options,context):
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
     
-    user_query_chain = RetrievalQA.from_chain_type(llm, retriever=context.as_retriever(), chain_type_kwargs={"prompt": prompt})
+    user_query_chain = create_history_aware_retriever(llm, retriever=context.as_retriever(), chain_type_kwargs={"prompt": prompt})
     
     st.session_state.chat_active = True
     
@@ -164,7 +165,7 @@ def extract_information(conversation, pattern):
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain(st.session_state.selected_option,st.session_state.vector_store)
-    answer = chain({"query": query, "st.session_state.selected_option": st.session_state.selected_option, "context": st.session_state.vector_store, "chat_history": chat_history})
+    answer = chain({"query": query, "options": st.session_state.selected_option, "context": st.session_state.vector_store, "chat_history": chat_history})
     
     return answer['text']
 
