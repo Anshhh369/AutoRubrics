@@ -295,6 +295,7 @@ if page == "Home":
                         
                 #Performing Action
                 if detailedness and strictness and area and type and style:
+                    st.write(detailedness)
                     answer = python_agent()
                     break
                 else:
