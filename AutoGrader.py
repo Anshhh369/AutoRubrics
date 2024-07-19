@@ -148,7 +148,8 @@ def extract_information(conversation, pattern):
         match = re.search(pattern, line, re.IGNORECASE)
         if match:
             return match.group(1)
-    return None
+        else:
+            return None
     
 
 def python_agent():
