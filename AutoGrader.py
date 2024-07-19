@@ -257,6 +257,8 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document"])
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
     st.session_state.selected_option = select_option()
+
+    st.button("Upload_Context", help = "Click to upload your own context for reference", on_click=file_uploader())
     
     
     if st.session_state.selected_option:
@@ -274,34 +276,6 @@ if page == "Home":
 
             chat_history = format_chat_history(st.session_state.messages)
 
-            # while True:
-            #     # Extract name information
-            #     pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
-            #     detailedness = extract_information(chat_history, pattern_detailedness)
-            
-            #     # Extract service information
-            #     pattern_strictness = r'\bGrading Strictness:\s*(.*)'
-            #     strictness = extract_information(chat_history, pattern_strictness)
-            
-            #     # Extract location information
-            #     pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
-            #     area = extract_information(chat_history, pattern_area)
-            
-            #     # Extract time information
-            #     pattern_type = r'\bAssisgnment Type:\s*(.*)'
-            #     type = extract_information(chat_history, pattern_type)
-               
-            #     # Extract email information
-            #     pattern_style = r'\bAssisgnment Style:\s*(.*)'
-            #     style = extract_information(chat_history, pattern_style)
-                            
-            #     #Performing Action
-            #     if detailedness and strictness and area and type and style:
-            #         st.write(detailedness)
-            #         answer = python_agent()
-            #         break
-            #     else:
-            # Get answer from retrieval chain
             answer = get_answer(query)
                     # break
     
@@ -316,7 +290,7 @@ if page == "Home":
                 st.session_state.messages = []
             st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
-            st.button("Upload_Context", help = "Click to upload your own context for reference", on_click=file_uploader())
+            
 
                       
  
