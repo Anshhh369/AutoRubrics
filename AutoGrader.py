@@ -240,6 +240,12 @@ def select_option():
         
     return st.session_state.selected_option
 
+def file_uploader():
+    st.session_state.uploaded_files = st.file_uploader(
+        "Upload your document", type=["txt"], accept_multiple_files=True
+    )
+    if st.session_state.uploaded_files:
+        st.session_state.vector_store = example_file(st.session_state.uploaded_files) 
 
 # Title for the web app
 st.title("🦜🔗 AutoGrader")
@@ -313,12 +319,7 @@ if page == "Home":
             st.button("Upload_Context", help = "Click to upload your own context for reference", on_click=file_uploader())
 
                       
-def file_uploader():
-    st.session_state.uploaded_files = st.file_uploader(
-        "Upload your document", type=["txt"], accept_multiple_files=True
-    )
-    if st.session_state.uploaded_files:
-        st.session_state.vector_store = example_file(st.session_state.uploaded_files)  
+ 
 
 
     
