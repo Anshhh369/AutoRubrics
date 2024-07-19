@@ -121,8 +121,8 @@ def  get_chain(options,context):
         Assisgnment Type:
         Assisgnment Style:
 
-        Now since you have all the {options} selected by the user, generate a rubric referring to the examples and instructions provided in the context: {context}.
-        If there is no context available, ask the user to upload one.
+        Now since you have all the {options} selected by the user, generate a rubric referring to the format of examples and instructions provided in the context: {context}.
+        If there is no context available, suggest the user to upload one for better response.
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
         Keep the chat history to have memory and not repeat questions.
@@ -316,11 +316,12 @@ if page == "Home":
 
     
 elif page == "Upload Document": 
-    st.session_state.uploaded_files = st.file_uploader(
-        "Upload your document", type=["txt"], accept_multiple_files=True
-    )
     if st.session_state.uploaded_files is None:
         st.write("Please upload a file first")
+        st.session_state.uploaded_files = st.file_uploader(
+            "Upload your document", type=["txt"], accept_multiple_files=True
+        )
+        
     elif st.session_state.uploaded_files is not None:
         if st.session_state.vector_store is None:
             st.session_state.vector_store = example_file(st.session_state.uploaded_files)
