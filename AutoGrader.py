@@ -105,7 +105,6 @@ def format_chat_history(messages):
 def  get_chain(options):
 
     chat_history = format_chat_history(st.session_state.messages)
-    st.write(chat_history)
 
     system_prompt = """
     
@@ -272,34 +271,33 @@ if page == "Home":
 
             chat_history = format_chat_history(st.session_state.messages)       
     
-            if chat_history is not None:
-                # Extract name information
-                pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
-                detailedness = extract_information(st.session_state.messages, pattern_detailedness)
+            # Extract name information
+            pattern_detailedness = r'\bDetail Level of Criteria:\s*(.*)'
+            detailedness = extract_information(st.session_state.messages, pattern_detailedness)
         
-                # Extract service information
-                pattern_strictness = r'\bGrading Strictness:\s*(.*)'
-                strictness = extract_information(st.session_state.messages, pattern_strictness)
+            # Extract service information
+            pattern_strictness = r'\bGrading Strictness:\s*(.*)'
+            strictness = extract_information(st.session_state.messages, pattern_strictness)
         
-                # Extract location information
-                pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
-                area = extract_information(st.session_state.messages, pattern_area)
+            # Extract location information
+            pattern_area = r'\bArea of Emphasis in Grading:\s*(.*)'
+            area = extract_information(st.session_state.messages, pattern_area)
         
-                # Extract time information
-                pattern_type = r'\bAssisgnment Type:\s*(.*)'
-                type = extract_information(st.session_state.messages, pattern_type)
+            # Extract time information
+            pattern_type = r'\bAssisgnment Type:\s*(.*)'
+            type = extract_information(st.session_state.messages, pattern_type)
            
-                # Extract email information
-                pattern_style = r'\bAssisgnment Style:\s*(.*)'
-                style = extract_information(st.session_state.messages, pattern_style)
+            # Extract email information
+            pattern_style = r'\bAssisgnment Style:\s*(.*)'
+            style = extract_information(st.session_state.messages, pattern_style)
                         
-                #Performing Action
-                if detailedness and strictness and area and type and style:
-                    st.write(detailedness)
-                    answer = python_agent()
-                else:
-                    # Get answer from retrieval chain
-                    answer = get_answer(query)
+            #Performing Action
+            if detailedness and strictness and area and type and style:
+                st.write(detailedness)
+                answer = python_agent()
+            else:
+                # Get answer from retrieval chain
+                answer = get_answer(query)
 
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
