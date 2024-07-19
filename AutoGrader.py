@@ -240,7 +240,6 @@ def select_option():
         
     return st.session_state.selected_option
 
-def file_uploader():
 
 # Title for the web app
 st.title("🦜🔗 AutoGrader")
