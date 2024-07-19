@@ -113,13 +113,15 @@ def  get_chain(options,context):
         Verify these selections with user.
         When you are done verifying all the options, display them to the user like below:
 
+        User Name:
+
         Detail Level of Criteria: 
         Grading Strictness:
         Area of Emphasis in Grading:
         Assisgnment Type:
         Assisgnment Style:
 
-        Now since you have all the {options} selected by the user, generate a rubric referring to the context: {context}.
+        Now since you have all the {options} selected by the user, generate a rubric referring to the examples and instructions provided in the context: {context}.
         If there is no context available, ask the user to upload one.
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
