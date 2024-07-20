@@ -32,7 +32,8 @@ from langchain import PromptTemplate
 from langchain.agents import AgentType, initialize_agent
 from langchain.requests import Requests
 from langchain_community.agent_toolkits import NLAToolkit
-from langchain.chains import create_history_aware_retriever
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains import create_retrieval_chain
 
 
 
@@ -141,8 +142,10 @@ def  get_chain(options,context):
 
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
+
+    combine_docs_chain = create_stuff_documents_chain(llm, prompt = prompt)
     
-    user_query_chain = RetrievalQA.from_llm(llm, retriever=context.as_retriever(), prompt = prompt)
+    user_query_chain = create_retrieval_chain(retriever=context.as_retriever(), combine_docs_chain)
     
     st.session_state.chat_active = True
     
