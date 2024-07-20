@@ -171,7 +171,7 @@ def get_answer(query):
     chain = get_chain(st.session_state.selected_option,st.session_state.vector_store)
     answer = chain({"query": query, "options": st.session_state.selected_option, "context": st.session_state.vector_store, "chat_history": chat_history})
     
-    return answer['text']
+    return answer
 
 def select_option():
     
