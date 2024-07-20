@@ -237,7 +237,7 @@ if page == "Home":
     if st.session_state.uploaded_files:
         st.session_state.vector_store = example_file(st.session_state.uploaded_files) 
         
-    if st.session_state.selected_option is not None:
+    if st.session_state.selected_option:
         if st.session_state.vector_store:
             # Display chat messages from history on app rerun
             for message in st.session_state.messages:
