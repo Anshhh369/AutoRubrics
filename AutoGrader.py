@@ -143,7 +143,7 @@ def  get_chain(options,context):
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
 
-    combine_docs_chain = create_stuff_documents_chain(llm, prompt = prompt)
+    combine_docs_chain = create_stuff_documents_chain(llm, prompt)
     
     user_query_chain = create_retrieval_chain(retriever=context.as_retriever(), combine_docs_chain)
     
