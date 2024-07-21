@@ -145,7 +145,7 @@ def  get_chain(options,context):
 
     combine_docs_chain = create_stuff_documents_chain(llm, prompt)
     
-    user_query_chain = RetrievalQA.from_chain_type(retriever=result.as_retriever(),combine_docs_chain = combine_docs_chain)
+    user_query_chain = RetrievalQA.from_chain_type(retriever=context.as_retriever(),combine_docs_chain = combine_docs_chain)
     
     st.session_state.chat_active = True
     
