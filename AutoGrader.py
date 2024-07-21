@@ -107,7 +107,7 @@ def format_chat_history(messages):
         formatted_history += f"{role}: {content}\n"
     return formatted_history
 
-def  get_chain(options,context):
+def  get_chain(options,context,chat_history):
 
     system_prompt = """
     
@@ -168,7 +168,7 @@ def extract_information(conversation, pattern):
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chain = get_chain(st.session_state.selected_option,st.session_state.vector_store)
+    chain = get_chain(st.session_state.selected_option,st.session_state.vector_store,chat_history)
     answer = chain.invoke({"input": query})
     
     return answer
