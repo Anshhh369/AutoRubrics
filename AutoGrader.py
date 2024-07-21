@@ -234,12 +234,6 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document"])
 if page == "Home":
     st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
     st.session_state.selected_option = select_option()
-
-    st.session_state.uploaded_files = st.file_uploader(
-        "Upload your document", type=["txt"], accept_multiple_files=True
-    )
-    if st.session_state.uploaded_files:
-        st.session_state.vector_store = example_file(st.session_state.uploaded_files) 
         
     if st.session_state.selected_option:
         if st.session_state.vector_store:
@@ -272,7 +266,13 @@ if page == "Home":
                 st.button("Clear", help = "Click to clear the chat", on_click=clear_messages)
 
 
-
+if page == "Upload Document":
+    st.session_state.uploaded_files = st.file_uploader(
+        "Upload your document", type=["txt"], accept_multiple_files=True
+    )
+    if st.session_state.uploaded_files:
+        st.session_state.vector_store = example_file(st.session_state.uploaded_files) 
+    
 
 
             
