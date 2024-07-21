@@ -144,18 +144,15 @@ def  get_chain(options,context,chat_history):
 
     combine_docs_chain = create_stuff_documents_chain(llm, prompt)
 
-    # st.session_state.chat_active = True
-    
     if st.session_state.vector_store:
         retriever = context.as_retriever()
-        user_query_chain = create_retrieval_chain(retriever, combine_docs_chain)
-
-        return user_query_chain
-
+        chain = create_retrieval_chain(retriever, combine_docs_chain)
     else:
+        chain = combine_docs_chain
 
-        return combine_docs_chain
-        
+    st.session_state.chat_active = True
+
+    return chain
     
     
     
