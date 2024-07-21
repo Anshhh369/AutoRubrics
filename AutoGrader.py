@@ -138,19 +138,27 @@ def  get_chain(options,context,chat_history):
     )
 
     prompt.format_messages(input = "query", options = "st.session_state.selected_option", context = "st.session_state.vector_store", chat_history = "chat_history")
-    
 
     model_name = "gpt-4"
-    retriever = context.as_retriever()
     llm = ChatOpenAI(model_name=model_name)
 
     combine_docs_chain = create_stuff_documents_chain(llm, prompt)
+
+    # st.session_state.chat_active = True
     
-    user_query_chain = create_retrieval_chain(retriever, combine_docs_chain)
+    if st.session_state.vector_store:
+        retriever = context.as_retriever()
+        user_query_chain = create_retrieval_chain(retriever, combine_docs_chain)
+
+        return user_query_chain
+
+    else:
+
+        return combine_docs_chain
+        
     
-    st.session_state.chat_active = True
     
-    return user_query_chain
+    
 
 import re
 
