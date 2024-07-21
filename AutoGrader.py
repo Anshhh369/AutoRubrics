@@ -141,11 +141,12 @@ def  get_chain(options,context):
     
 
     model_name = "gpt-4"
+    retriever = context.as_retriever()
     llm = ChatOpenAI(model_name=model_name)
 
     combine_docs_chain = create_stuff_documents_chain(llm, prompt)
     
-    user_query_chain = RetrievalQA.from_chain_type(retriever=context.as_retriever(),combine_docs_chain = combine_docs_chain)
+    user_query_chain = create_retrieval_chain(retriever, combine_docs_chain)
     
     st.session_state.chat_active = True
     
@@ -168,7 +169,7 @@ def extract_information(conversation, pattern):
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain(st.session_state.selected_option,st.session_state.vector_store)
-    answer = chain({"query": query})
+    answer = chain.invoke({"query": query})
     
     return answer
 
