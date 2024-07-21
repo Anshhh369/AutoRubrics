@@ -134,10 +134,10 @@ def  get_chain(options,context):
         """
 
     prompt = ChatPromptTemplate.from_messages(
-        [("system", system_prompt), ("human", "{question}")]
+        [("system", system_prompt), ("human", "{input}")]
     )
 
-    prompt.format_messages(question = "query", options = "st.session_state.selected_option", context = "st.session_state.vector_store", chat_history = "chat_history")
+    prompt.format_messages(input = "query", options = "st.session_state.selected_option", context = "st.session_state.vector_store", chat_history = "chat_history")
     
 
     model_name = "gpt-4"
@@ -169,7 +169,7 @@ def extract_information(conversation, pattern):
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chain = get_chain(st.session_state.selected_option,st.session_state.vector_store)
-    answer = chain.invoke({"query": query})
+    answer = chain.invoke({"input": query})
     
     return answer
 
