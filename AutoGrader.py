@@ -172,9 +172,9 @@ def extract_information(conversation, pattern):
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,chat_history)
-    answer = chains.invoke({"input": query, "options": st.session_state.selected_option, "chat_history": chat_history})
+    answer = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
     
-    return answer
+    return answer['answer']
 
 def select_option():
     
