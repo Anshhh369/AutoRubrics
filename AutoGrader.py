@@ -175,8 +175,7 @@ def get_answer(query):
     except:
         # pattern = r'text:'
         # answer = extract_information(answer, pattern)
-        response = chains.arun({"input": query})
-        answer = response["result"]
+        answer = response['result']
         
 
         
