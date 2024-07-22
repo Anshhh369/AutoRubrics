@@ -123,7 +123,7 @@ def  get_chain(options,context,chat_history):
         Assisgnment Type:
         Assisgnment Style:
 
-        After verifying all the options, generate a rubric referring to the format of examples and instructions provided in the {context}.
+        After verifying all the options, generate a rubric referring to the format of examples and instructions provided in the {context}, make sure you use the same format.
         If there is nothing available in {context}, suggest the user to upload one for better response.
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
@@ -174,7 +174,7 @@ def get_answer(query):
     chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,chat_history)
     answer = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
     
-    return answer
+    return answer['text']
 
 def select_option():
     
