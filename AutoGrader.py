@@ -175,7 +175,7 @@ def get_answer(query):
     except:
         # pattern = r'text:'
         # answer = extract_information(answer, pattern)
-        answer = response['answer']
+        answer = response[chat_history('text')]
         
 
         
