@@ -171,7 +171,7 @@ def get_answer(query):
     chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,chat_history)
     response = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
     try:
-        answer = answer['text']
+        answer = response
     except:
         # pattern = r'text:'
         # answer = extract_information(answer, pattern)
