@@ -176,7 +176,7 @@ def get_answer(query):
     try:
         answer = answer['text']
     except:
-        answer = answer['answer']
+        answer = answer['text']
         
     return answer
 
