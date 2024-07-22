@@ -164,9 +164,6 @@ def extract_information(conversation, pattern):
             return match.group(1)
         else:
             return None
-    
-
-
 
 
 def get_answer(query):
@@ -176,7 +173,7 @@ def get_answer(query):
     try:
         answer = answer['text']
     except:
-        pattern = r'\b text:\s*(.*)'
+        pattern = r'text:'
         answer = extract_information(answer, pattern)
         
     return answer
