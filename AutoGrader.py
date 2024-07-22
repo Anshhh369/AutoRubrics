@@ -176,7 +176,7 @@ def get_answer(query):
     try:
         answer = answer['text']
     except:
-        answer = chains.arun({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
+        answer = chains({"input": query})
         answer = answer['result']
         
     return answer
