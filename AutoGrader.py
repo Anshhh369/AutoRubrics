@@ -176,8 +176,8 @@ def get_answer(query):
     try:
         answer = answer['text']
     except:
-        
-        answer = answer['answer']
+        answer = chains({"query": query})
+        answer = answer['result']
         
     return answer
 
