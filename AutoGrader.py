@@ -173,10 +173,10 @@ def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,chat_history)
     answer = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
-    try:
-        answer = answer['text']
-    except:
-        answer = answer['text']
+    # try:
+    #     answer = answer['text']
+    # except:
+    #     answer = answer['text']
         
     return answer
 
