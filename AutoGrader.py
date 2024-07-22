@@ -176,11 +176,8 @@ def get_answer(query):
     try:
         answer = answer['text']
     except:
-        for line in answer:
-            pattern = r'\b text:\s*(.*)'
-            match = re.search(pattern, line, re.IGNORECASE)
-            if match:
-                answer = match.group(1)
+        pattern = r'\b text:\s*(.*)'
+        answer = extract_information(answer, pattern)
         
     return answer
 
