@@ -169,12 +169,16 @@ def extract_information(conversation, pattern):
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,chat_history)
-    answer = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
+    response = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
     try:
         answer = answer['text']
     except:
-        pattern = r'text:'
-        answer = extract_information(answer, pattern)
+        # pattern = r'text:'
+        # answer = extract_information(answer, pattern)
+        response = chains.invoke({"query": query})
+        answer = response["result"]
+        
+
         
     return answer
 
