@@ -174,7 +174,7 @@ def get_answer(query):
     chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,chat_history)
     answer = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
     
-    return answer['text']
+    return answer['result']
 
 def select_option():
     
