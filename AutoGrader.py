@@ -175,7 +175,8 @@ def get_answer(query):
     except:
         # pattern = r'text:'
         # answer = extract_information(answer, pattern)
-        answer = response[answer['text']]
+        ans = response['answer']
+        answer = ans['text']
         
 
         
