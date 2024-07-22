@@ -234,14 +234,16 @@ def select_option():
 
 
 # Title for the web app
-st.title("🦜🔗 AutoGrader")
+st.title("🦜🔗 AutoRubrics")
 
 # Multi-page navigation
 page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document"])
 
 
 if page == "Home":
-    st.write("Welcome to AutoGrader! Select options and use the sidebar to navigate.")
+    st.write("Welcome to AutoRubrics! Select options and use the sidebar to navigate.")
+
+    
     st.session_state.selected_option = select_option()
         
     if st.session_state.selected_option:
