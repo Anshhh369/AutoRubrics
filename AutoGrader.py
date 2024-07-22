@@ -176,8 +176,8 @@ def get_answer(query):
     try:
         answer = answer['text']
     except:
-        answer = chains({"query": query})
-        answer = answer['result']
+        answer = chains.stream({"query": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
+        answer = answer
         
     return answer
 
