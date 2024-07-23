@@ -36,15 +36,15 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 # Initialize session state variables
 if "selected_option" not in st.session_state:
     st.session_state.selected_option = []
-
-if "vector_store" not in st.session_state:
-    st.session_state.vector_store = None
+    
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 if "uploaded_files" not in st.session_state:
     st.session_state.uploaded_files = None
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+if "vector_store" not in st.session_state:
+    st.session_state.vector_store = None
 
 
 
@@ -126,24 +126,13 @@ def  get_chain(options,context,chat_history):
 
     return chain
     
-    
-    
-
-
-
-def extract_information(conversation, pattern):
-    for line in conversation:
-        match = re.search(pattern, line, re.IGNORECASE)
-        if match:
-            return match.group(1)
-        else:
-            return None
 
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,chat_history)
     response = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": chat_history})
+    
     try:
         answer = response['text']
     except:
