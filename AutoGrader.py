@@ -46,7 +46,8 @@ if "uploaded_files" not in st.session_state:
 if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
 
-
+if "chain" not in st.session_state:
+    st.session_state.chain = None
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
 def example_file(uploaded_files):
@@ -87,14 +88,14 @@ def  get_chain(options,context,chat_history):
         You are an expert in rubric generation for any given type of assignment. 
         
         Start by greeting the user respectfully, collect the name of the user.
-        The user has already selected {options} for the factors like Detail level of criteria,Grading strictness,Area of emphasis, Assignment type and Assignment style.
+        The user has already selected {options} for the factors like Detail level of criteria, Grading strictness, Area of emphasis, Assignment type and Assignment style.
         Verify these selections with user by displaying the options in the following format:
 
         Detail Level of Criteria: 
         Grading Strictness:
         Area of Emphasis in Grading:
-        Assisgnment Type:
-        Assisgnment Style:
+        Assignment Type:
+        Assignment Style:
 
         After verifying all the options, generate a rubric referring to the format of examples and instructions provided in the {context}, make sure you use the same format.
         If there is nothing available in {context}, suggest the user to upload one for better response.
@@ -123,9 +124,10 @@ def  get_chain(options,context,chat_history):
 
     st.session_state.chat_active = True
 
-    return chain
-    
+    st.session_state.chain = chain
 
+    return st.session_state.chain
+    
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
