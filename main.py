@@ -66,7 +66,7 @@ if page == "Home":
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": query})
     
-            st.sessions_state.chat_history = format_chat_history(st.session_state.messages)
+            st.session_state.chat_history = format_chat_history(st.session_state.messages)
     
             answer = get_answer(query)
         
