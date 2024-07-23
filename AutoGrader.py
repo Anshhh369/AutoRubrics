@@ -170,47 +170,44 @@ def select_option():
     options_4 = ("Writing Report or Essay","Coding or Programming Aissignment","Design or Creative Project","Research Paper or Thesis","Case Study Analysis")
     options_5 = ("Research Oriented","Problem Solving","Case Studies","Presentations","Experiential Learning","Literature Reviews","Reflective Journals")
     
+ # Maintain index based on previous selections if they exist
     option_1 = st.selectbox(
         "Detail Level of Criteria",
         options_1,
-        index = None
+        index=options_1.index(st.session_state.selected_option[0]) if len(st.session_state.selected_option) > 0 else 0
     )
-    st.write("You selected:", option_1)
-    st.session_state.selected_option.append(option_1)
+    st.session_state.selected_option[0:1] = [option_1]
 
     option_2 = st.selectbox(
         "Grading Strictness",
         options_2,
-        index = None
+        index=options_2.index(st.session_state.selected_option[1]) if len(st.session_state.selected_option) > 1 else 0
     )
-    st.write("You selected:", option_2)
-    st.session_state.selected_option.append(option_2)
+    st.session_state.selected_option[1:2] = [option_2]
     
     option_3 = st.selectbox(
         "Area of Emphasis in Grading",
         options_3,
-        index = None
+        index=options_3.index(st.session_state.selected_option[2]) if len(st.session_state.selected_option) > 2 else 0
     )
-    st.write("You selected:", option_3)
-    st.session_state.selected_option.append(option_3)
+    st.session_state.selected_option[2:3] = [option_3]
 
     option_4 = st.selectbox(
         "Assignment Type",
         options_4,
-        index = None
+        index=options_4.index(st.session_state.selected_option[3]) if len(st.session_state.selected_option) > 3 else 0
     )
-    st.write("You selected:", option_4)
-    st.session_state.selected_option.append(option_4)
+    st.session_state.selected_option[3:4] = [option_4]
 
     option_5 = st.selectbox(
         "Assignment Style",
         options_5,
-        index = None
+        index=options_5.index(st.session_state.selected_option[4]) if len(st.session_state.selected_option) > 4 else 0
     )
-    st.write("You selected:", option_5)
-    st.session_state.selected_option.append(option_5)
-        
+    st.session_state.selected_option[4:5] = [option_5]
+
     return st.session_state.selected_option
+        
 
 
 # Title for the web app
@@ -256,10 +253,17 @@ if page == "Home":
 
 
 if page == "Upload Document":
-    st.session_state.uploaded_files = st.file_uploader(
-        "Upload your document", type=["txt"], accept_multiple_files=True
-    )
+    
+    uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
+    
+    if uploaded_files:
+        st.session_state.uploaded_files = uploaded_files
+        st.session_state.vector_store = example_file(st.session_state.uploaded_files)
+        st.write("Documents uploaded successfully.")
+    
     if st.session_state.uploaded_files:
-        st.session_state.vector_store = example_file(st.session_state.uploaded_files) 
+        st.write("Uploaded files:")
+        for uploaded_file in st.session_state.uploaded_files:
+            st.write(uploaded_file.name) 
     
 
