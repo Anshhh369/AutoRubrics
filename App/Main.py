@@ -1,9 +1,41 @@
 import streamlit as st
+import os
 from app.document_processing import example_file
 from app.Chain_Response import get_chain, extract_information
 from app.Chat_history import format_chat_history
 from app.utils import select_option
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+import sqlite3
 
+
+## Set up the environment
+# Load secret keys
+
+secrets = st.secrets  # Accessing secrets (API keys) stored securely
+
+openai_api_key = secrets["openai"]["api_key"]  # Accessing OpenAI API key from secrets
+os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable for OpenAI API key
+
+
+
+# Initialize session state variables
+if "selected_option" not in st.session_state:
+    st.session_state.selected_option = ["None"] * 5
+    
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+if "uploaded_files" not in st.session_state:
+    st.session_state.uploaded_files = None
+
+if "vector_store" not in st.session_state:
+    st.session_state.vector_store = None
+
+if "chain" not in st.session_state:
+    st.session_state.chain = None
+    
 
 # Title for the web app
 st.title("🦜🔗 AutoRubrics")
