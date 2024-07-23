@@ -1,9 +1,9 @@
 import streamlit as st
 import os
-from App.document_processing import example_file
-from App.Chain_Response import get_chain, extract_information
-from App.Chat_history import format_chat_history
-from App.utils import select_option
+from app.document_processing import example_file
+from app.chain_response import get_chain, extract_information
+from app.chat_history import format_chat_history
+from app.utils import select_option
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
