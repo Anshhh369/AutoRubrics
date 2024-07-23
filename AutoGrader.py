@@ -1,47 +1,27 @@
 # Importing libraries and modules
 
 import os
+import re
 import openai
+import chardet
+import os.path
+import pathlib
+import tempfile
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain_community.document_loaders import TextLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import CharacterTextSplitter
 from langchain.vectorstores import Chroma
-from langchain.chains import StuffDocumentsChain, LLMChain, SequentialChain
-from langchain_core.prompts import PromptTemplate
-from langchain_community.llms import OpenAI
-import chardet
-import os.path
-import pathlib
-import tempfile
-from tempfile import NamedTemporaryFile
+from langchain.chains import LLMChain, create_retrieval_chain
 from langchain.chains import LLMChain,RetrievalQA
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    MessagesPlaceholder,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
-from langchain_community.chat_message_histories import (
-    StreamlitChatMessageHistory,
-)
-
-
-from langchain import PromptTemplate
-from langchain.agents import AgentType, initialize_agent
-from langchain.requests import Requests
-from langchain_community.agent_toolkits import NLAToolkit
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains import create_retrieval_chain
+from langchain.prompts.chat import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
+# __import__('pysqlite3')
+# import sys
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# import sqlite3
 
-
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
-import sqlite3
 
 ## Set up the environment
 # Load secret keys
@@ -50,6 +30,7 @@ secrets = st.secrets  # Accessing secrets (API keys) stored securely
 
 openai_api_key = secrets["openai"]["api_key"]  # Accessing OpenAI API key from secrets
 os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable for OpenAI API key
+
 
 
 # Initialize session state variables
@@ -64,6 +45,7 @@ if "uploaded_files" not in st.session_state:
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
@@ -98,14 +80,6 @@ def example_file(uploaded_files):
 
      
 
-
-def format_chat_history(messages):
-    formatted_history = ""
-    for message in messages:
-        role = "user" if message["role"] == "user" else "Assistant"
-        content = message["content"]
-        formatted_history += f"{role}: {content}\n"
-    return formatted_history
 
 def  get_chain(options,context,chat_history):
 
@@ -155,7 +129,7 @@ def  get_chain(options,context,chat_history):
     
     
 
-import re
+
 
 def extract_information(conversation, pattern):
     for line in conversation:
@@ -173,14 +147,20 @@ def get_answer(query):
     try:
         answer = response['text']
     except:
-        # pattern = r'text:'
-        # answer = extract_information(answer, pattern)
         ans = response['answer']
         answer = ans['text']
-        
-
-        
+              
     return answer
+
+
+def format_chat_history(messages):
+    formatted_history = ""
+    for message in messages:
+        role = "user" if message["role"] == "user" else "Assistant"
+        content = message["content"]
+        formatted_history += f"{role}: {content}\n"
+    return formatted_history
+
 
 def select_option():
     
@@ -243,7 +223,7 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document"])
 if page == "Home":
     st.write("Welcome to AutoRubrics! Select options and use the sidebar to navigate.")
 
-    
+
     st.session_state.selected_option = select_option()
         
     if st.session_state.selected_option:
@@ -262,7 +242,6 @@ if page == "Home":
             chat_history = format_chat_history(st.session_state.messages)
     
             answer = get_answer(query)
-
         
             # Display assistant response in chat message container
             with st.chat_message("assistant"):
@@ -284,156 +263,3 @@ if page == "Upload Document":
         st.session_state.vector_store = example_file(st.session_state.uploaded_files) 
     
 
-
-            
-
-                      
- 
-
-
-    
-
-        
-
-            
-            
-        
-    
-            
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # # This controls how each document will be formatted. Specifically,
-    # # it will be passed to `format_document` - see that function for more
-    # # details.
-
-    # template = """
-
-
-    # You are an expert in rubric generation for any given type of assignment. 
- 
-    # Start by greeting the user respectfully and help them answer their {question}. 
-    # Collect the name from the user and verify below information from the context. 
-    
-    # Context: {options}
-
-
-    # """
-
-
-    # document_prompt = PromptTemplate(
-    #     input_variables=[options == "st.session_state.option", question == "query"],
-    #     template=template
-    # )
-    # document_variable_name = "result"
-    # # llm = OpenAI()
-    # # The prompt here should take as an input variable the
-    # # `document_variable_name`
-
-
-    # prompt = PromptTemplate.from_template(
-    #     """ 
-    #     use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
-    #     Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-    #     Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
-
-    #     Context : {result}
-    #     """
-    # )
-    
-    # # # Creating the Prompt
- 
-    # # system_prompt = """
-     
-    # # You are an expert in rubric generation for any given type of assignment. 
- 
-    # # Start by greeting the user respectfully and help them answer their {question}. 
-    # # Collect the name from the user and then follow below steps:
-
-    # # Gather the {options} selected by the user. 
-    # # Finally  based on the gathered preferences, use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
-    # # Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-     
-    # # Below is the context of how a rubric must look, use them as a reference to create detailed rubric for user.
-
-    # # Context : {context}
-    
-     
-    # # """
-    
-    # # system_prompt.format(options = "inputs", context = "result", question = "query")
-    
-    # # prompt = ChatPromptTemplate.from_messages(
-    # #     [("system", system_prompt), ("human", "{question}")]
-    # # )
-
-    
-    # #Define a function to find similar documents based on a given query
-     
-    
-    # # Assigning the OPENAI model and Retrieval chain
-     
-    # model_name = "gpt-4"
-    # llm = ChatOpenAI(model_name=model_name)
-     
-    # r_chain = RetrievalQA.from_chain_type(llm, retriever=result.as_retriever(),chain_type_kwargs={'prompt': prompt}
-    #                                )
-
-    # chain = StuffDocumentsChain(
-    #     llm_chain=r_chain,
-    #     document_prompt=document_prompt,
-    #     document_variable_name=document_variable_name
-    # )
-
-
-
-
-# def python_agent():
-#     speak_toolkit = NLAToolkit.from_llm_and_url(llm, "https://api.speak.com/openapi.yaml")
-#     klarna_toolkit = NLAToolkit.from_llm_and_url(
-#         llm, "https://www.klarna.com/us/shopping/public/openai/v0/api-docs/"
-#     )
-    
-#     natural_language_tools = speak_toolkit.get_tools() + klarna_toolkit.get_tools()
-
-#     agent_executor = create_python_agent(
-#         llm=llm,
-#         tool=natural_language_tools,
-#         verbose=True,
-#         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-#         handle_parsing_errors=True,
-#         )
-    
-#     solution = agent_executor.run(
-#         f"""
-#         Based on the: {st.session_state.selected_option}, generate a rubric referring to the context: {st.session_state.vector_store}.
-#         If there is no context available, ask the user to upload one.
-#         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
-#         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-#         """
-#     )
-    
-#     return solution
