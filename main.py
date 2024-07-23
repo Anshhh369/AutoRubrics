@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 from app.document_processing import example_file
-from app.chain_response import get_chain, extract_information
+from app.chain_response import get_chain, get_answer
 from app.chat_history import format_chat_history
 from app.utils import select_option
 __import__('pysqlite3')
