@@ -1,3 +1,5 @@
+import streamlit as st
+
 def select_option():
     
     options_1 = ("None", "Broad Overview", "Moderately Detailed", "Highly Detailed")
