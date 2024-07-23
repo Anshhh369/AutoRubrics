@@ -35,6 +35,9 @@ if "vector_store" not in st.session_state:
 
 if "chain" not in st.session_state:
     st.session_state.chain = None
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
     
 
 # Title for the web app
@@ -63,7 +66,7 @@ if page == "Home":
             # Add user message to chat history
             st.session_state.messages.append({"role": "user", "content": query})
     
-            chat_history = format_chat_history(st.session_state.messages)
+            st.sessions_state.chat_history = format_chat_history(st.session_state.messages)
     
             answer = get_answer(query)
         
