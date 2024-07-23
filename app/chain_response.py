@@ -36,7 +36,7 @@ def  get_chain(options,context,chat_history):
         [("system", system_prompt), ("human", "{input}")]
     )
 
-    prompt.format_messages(input = "query", options = "st.session_state.selected_option", context = "st.session_state.vector_store", chat_history = "st.sessions_state.chat_history")
+    prompt.format_messages(input = "query", options = "st.session_state.selected_option", context = "st.session_state.vector_store", chat_history = "st.session_state.chat_history")
 
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
@@ -56,8 +56,8 @@ def  get_chain(options,context,chat_history):
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,st.sessions_state.chat_history)
-    response = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": st.sessions_state.chat_history})
+    chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,st.session_state.chat_history)
+    response = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": st.session_state.chat_history})
     
     try:
         answer = response['text']
