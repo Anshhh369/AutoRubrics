@@ -54,7 +54,6 @@ def example_file(uploaded_files):
     for uploaded_file in uploaded_files:
         # Display file details
         file_details = {"filename": uploaded_file.name, "filetype": uploaded_file.type}
-        st.write(file_details)
         
         # Create temporary directory and save file there
         temp_dir = tempfile.mkdtemp()
@@ -251,8 +250,7 @@ if page == "Upload Document":
         st.write("Documents uploaded successfully.")
     
     if st.session_state.uploaded_files:
-        st.write("Uploaded files:")
         for uploaded_file in st.session_state.uploaded_files:
-            st.write(uploaded_file.name) 
+            st.write("Uploaded files:", uploaded_file.name) 
     
 
