@@ -1,8 +1,10 @@
+import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain, create_retrieval_chain
 from langchain.prompts.chat import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-import streamlit as st
+
+
 
 def  get_chain(options,context,chat_history):
 
