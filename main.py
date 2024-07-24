@@ -43,7 +43,8 @@ if "chat_history" not in st.session_state:
 if "context" not in st.session_state:
     st.session_state.conext = None
 
-st.session_state.conext = example()
+if st.session_state.context is None:
+    st.session_state.conext = example()
 
 # Title for the web app
 st.title("🦜🔗 AutoRubrics")
@@ -98,3 +99,5 @@ if page == "Upload Document":
     if st.session_state.uploaded_files:
         for uploaded_file in st.session_state.uploaded_files:
             st.write("Uploaded files:", uploaded_file.name)
+
+
