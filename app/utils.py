@@ -2,11 +2,11 @@ import streamlit as st
 
 def select_option():
     
-    options_1 = ("NA", "Broad Overview", "Moderately Detailed", "Highly Detailed")
-    options_2 = ("NA", "Linient","Somewhat Linient","Moderate","Very Strict")
-    options_3 = ("NA", "Technical Accuracy","Depth of Analysis","Clarity and Creativity","Real-World Application","Problem Solving Skills")
-    options_4 = ("NA", "Writing Report or Essay","Coding or Programming Aissignment","Design or Creative Project","Research Paper or Thesis","Case Study Analysis")
-    options_5 = ("NA", "Research Oriented","Problem Solving","Case Studies","Presentations","Experiential Learning","Literature Reviews","Reflective Journals")
+    options_1 = ("None Selected", "Broad Overview", "Moderately Detailed", "Highly Detailed")
+    options_2 = ("None Selected", "Linient","Somewhat Linient","Moderate","Very Strict")
+    options_3 = ("None Selected", "Technical Accuracy","Depth of Analysis","Clarity and Creativity","Real-World Application","Problem Solving Skills")
+    options_4 = ("None Selected", "Writing Report or Essay","Coding or Programming Aissignment","Design or Creative Project","Research Paper or Thesis","Case Study Analysis")
+    options_5 = ("None Selected", "Research Oriented","Problem Solving","Case Studies","Presentations","Experiential Learning","Literature Reviews","Reflective Journals")
     
  # Maintain index based on previous selections if they exist
     option_1 = st.selectbox(
