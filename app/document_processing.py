@@ -35,7 +35,7 @@ def assignment_file(uploaded_files):
         
         for doc in docs:
             text = doc.page_content
-            st.write("file contents:", text)
+            st.write("file contents: \n", text)
             
 
 
