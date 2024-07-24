@@ -6,7 +6,7 @@ from langchain_text_splitters import CharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 
-def example_file(uploaded_files):
+def aissgnment_file(uploaded_files):
     detector = chardet.UniversalDetector()
     for uploaded_file in uploaded_files:
         file_details = {"filename": uploaded_file.name, "filetype": uploaded_file.type}
