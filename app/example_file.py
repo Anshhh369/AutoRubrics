@@ -1,5 +1,5 @@
 def example():
-  context = """ 
+  context = """
   
   What Makes a Good Rubric ?
 
