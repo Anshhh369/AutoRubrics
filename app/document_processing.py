@@ -1,4 +1,3 @@
-import chardet
 import tempfile
 import os
 import os.path
