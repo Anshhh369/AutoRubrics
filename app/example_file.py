@@ -281,3 +281,5 @@ def example():
     This rubric ensures that students are rewarded for both meeting the basic requirements and for demonstrating exceptional skill or understanding in key areas.
 
     """
+    
+  return st.session_state.context
