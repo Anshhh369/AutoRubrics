@@ -43,11 +43,13 @@ def  get_chain(options,assignment,context,chat_history):
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
 
-    llm_chain = LLMChain(llm=llm, prompt=prompt)
-
-    retriever = assignment.as_retriever()
+    chain = LLMChain(llm=llm, prompt=prompt)
     
-    chain = create_retrieval_chain(retriever, llm_chain)
+
+    if st.session_state.vector_store:
+        
+        retriever = assignment.as_retriever()
+        chain = create_retrieval_chain(retriever, llm_chain)
 
     st.session_state.chat_active = True
 
