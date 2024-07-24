@@ -1,6 +1,7 @@
 import streamlit as st
 import os
-from app.document_processing import example_file
+from app.document_processing import assignment_file
+from app.example_file import example
 from app.chain_response import get_chain, get_answer
 from app.chat_history import format_chat_history
 from app.utils import select_option
@@ -42,7 +43,7 @@ if "chat_history" not in st.session_state:
 if "context" is not in st.session_state:
     st.session_state.conext = None
 
-st.session_state.conext = example_file()
+st.session_state.conext = example()
 
 # Title for the web app
 st.title("🦜🔗 AutoRubrics")
