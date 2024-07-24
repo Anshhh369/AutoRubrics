@@ -38,7 +38,11 @@ if "chain" not in st.session_state:
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
-    
+
+if "context" is not in st.session_state:
+    st.session_state.conext = None
+
+st.session_state.conext = example_file()
 
 # Title for the web app
 st.title("🦜🔗 AutoRubrics")
@@ -49,7 +53,6 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document"])
 
 if page == "Home":
     st.write("Welcome to AutoRubrics! Select options and use the sidebar to navigate.")
-
 
     st.session_state.selected_option = select_option()
         
@@ -88,7 +91,7 @@ if page == "Upload Document":
     
     if uploaded_files:
         st.session_state.uploaded_files = uploaded_files
-        st.session_state.vector_store = example_file(st.session_state.uploaded_files)
+        st.session_state.vector_store = assignment_file(st.session_state.uploaded_files)
         st.write("Documents uploaded successfully.")
     
     if st.session_state.uploaded_files:
