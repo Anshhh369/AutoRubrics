@@ -15,12 +15,11 @@ def  get_chain(options,assignment,context,chat_history):
         Start by greeting the user respectfully, collect the name of the user.
         The user has already selected {options} for the factors like Detail level of criteria, Grading strictness, Area of emphasis, Assignment type and Assignment style.
         Verify these selections with user by displaying the options in the following format:
-
-        Detail Level of Criteria: 
-        Grading Strictness:
-        Area of Emphasis in Grading:
-        Assignment Type:
-        Assignment Style:
+        \n Detail Level of Criteria: 
+        \n Grading Strictness:
+        \n Area of Emphasis in Grading:
+        \n Assignment Type:
+        \n Assignment Style:
 
         After verifying all the options, ask the user to upload the assignment and generate a rubric referring to that {assignment}.
         Make sure you learn from {context} about what makes a good rubric and use the same format as given in examples while generating the rubric.
