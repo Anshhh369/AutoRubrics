@@ -43,8 +43,7 @@ if "chat_history" not in st.session_state:
 if "context" not in st.session_state:
     st.session_state.conext = None
 
-if st.session_state.context is None:
-    st.session_state.conext = example()
+
 
 # Title for the web app
 st.title("🦜🔗 AutoRubrics")
@@ -56,6 +55,8 @@ page = st.sidebar.selectbox("Choose a page", ["Home", "Upload Document"])
 if page == "Home":
     st.write("Welcome to AutoRubrics! Select options and use the sidebar to navigate.")
 
+    st.session_state.conext = example()
+    
     st.session_state.selected_option = select_option()
         
     if st.session_state.selected_option:
