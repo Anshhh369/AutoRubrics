@@ -49,7 +49,7 @@ def  get_chain(options,assignment,context,chat_history):
     if st.session_state.vector_store:
         
         retriever = assignment.as_retriever()
-        chain = create_retrieval_chain(retriever, llm_chain)
+        chain = create_retrieval_chain(retriever, chain)
 
     st.session_state.chat_active = True
 
