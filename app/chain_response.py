@@ -21,13 +21,15 @@ def  get_chain(options,assignment,context,chat_history):
         \n Assignment Type:
         \n Assignment Style:
 
-        After verifying all the options, ask the user to upload the assignment and generate a rubric referring to that {assignment}.
-        Make sure you learn from {context} about what makes a good rubric and use the same format as given in examples while generating the rubric.
+        After verifying all the options, ask the user to upload the assignment.
+        Use the persona pattern to take the persona of the  user and generate a rubric for {assignment} that matches their style. 
+        Make sure you refer {context} before generating the rubric and use the same format of rubrics as given in examples in {context}.
         
 
-        Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
+        
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
-        Keep the chat history to have memory and not repeat questions.
+        
+        Keep the chat history to have memory and not repeat questions and be consistent with the rubric generated.
         
         chat history: {chat_history}
          
