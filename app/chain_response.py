@@ -6,7 +6,7 @@ from langchain_core.runnables import RunnablePassthrough
 
 
 
-def  get_chain(options,context,chat_history):
+def  get_chain(options,assignment,context,chat_history):
 
     system_prompt = """
     
@@ -22,9 +22,8 @@ def  get_chain(options,context,chat_history):
         Assignment Type:
         Assignment Style:
 
-        After verifying all the options, generate a rubric referring to the {context}.
-        Make sure you learn from what makes a good rubric and use the same format as given in examples while generating the rubric.
-        If there is nothing available in {context}, suggest the user to upload one for better response.
+        After verifying all the options, ask the user to upload the assignment and generate a rubric referring to that {assignment}.
+        Make sure you learn from {context} about what makes a good rubric and use the same format as given in examples while generating the rubric.
         
 
         Use the persona pattern to take the persona of the  user and generate a rubric that matches their style. 
@@ -39,16 +38,16 @@ def  get_chain(options,context,chat_history):
         [("system", system_prompt), ("human", "{input}")]
     )
 
-    prompt.format_messages(input = "query", options = "st.session_state.selected_option", context = "st.session_state.vector_store", chat_history = "st.session_state.chat_history")
+    prompt.format_messages(input = "query", assignment = "st.session_state.vector_store", options = "st.session_state.selected_option", context = "st.session_state.context", chat_history = "st.session_state.chat_history")
 
     model_name = "gpt-4"
     llm = ChatOpenAI(model_name=model_name)
 
-    chain = LLMChain(llm=llm, prompt=prompt)
+    llm_chain = LLMChain(llm=llm, prompt=prompt)
 
-    if st.session_state.vector_store:
-        retriever = context.as_retriever()
-        chain = create_retrieval_chain(retriever, chain)
+    retriever = assignment.as_retriever()
+    
+    chain = create_retrieval_chain(retriever, llm_chain)
 
     st.session_state.chat_active = True
 
@@ -59,8 +58,8 @@ def  get_chain(options,context,chat_history):
 
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
-    chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,st.session_state.chat_history)
-    response = chains.invoke({"input": query, "options": st.session_state.selected_option, "context" : st.session_state.vector_store, "chat_history": st.session_state.chat_history})
+    chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,st.session_state.context,st.session_state.chat_history)
+    response = chains.invoke({"input": query, "assignment": st.session_state.vector_store,"options": st.session_state.selected_option, "context" : st.session_state.context, "chat_history": st.session_state.chat_history})
     
     try:
         answer = response['text']
