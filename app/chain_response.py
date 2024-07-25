@@ -23,9 +23,9 @@ def  get_chain(options,assignment,context,chat_history):
 
         After verifying all the options, ask the user to upload the assignment.
         Use the persona pattern to take the persona of the  user and generate a rubric for {assignment} that matches their style. 
-        Make sure you refer {context} before generating the rubric and use the same format of rubrics as given in examples in {context}.
+        Make sure you refer the context given below before generating the rubric and use the same format of rubrics as given in the examples.
         
-
+        Context : {context}
         
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? If the user says no then end the conversation.
         
