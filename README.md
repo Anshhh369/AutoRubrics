@@ -2,6 +2,9 @@
 
 Welcome to the AI-Driven Automated Rubric Generation System! This project represents a significant leap in educational technology, focusing on improving the grading and assessment process through advanced AI and Large Language Models (LLMs). This README provides an overview of the project, its relevance, problem formulation, and implementation details.
 
+##APP Link: 
+https://autorubrics.streamlit.app 
+
 # Introduction
 The AI-Driven Automated Rubric Generation System automates the creation of detailed and customized grading rubrics tailored to specific grading needs. By leveraging AI and LLMs, the system provides educators with an intuitive interface to generate rubrics based on their preferences. This innovation enhances grading efficiency, consistency, and accuracy across various educational settings, saving time and improving fairness.
 
