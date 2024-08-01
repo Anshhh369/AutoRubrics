@@ -2,7 +2,7 @@
 
 Welcome to the AI-Driven Automated Rubric Generation System! This project represents a significant leap in educational technology, focusing on improving the grading and assessment process through advanced AI and Large Language Models (LLMs). This README provides an overview of the project, its relevance, problem formulation, and implementation details.
 
-##APP Link: 
+## APP Link: 
 https://autorubrics.streamlit.app 
 
 # Introduction
