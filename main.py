@@ -91,12 +91,8 @@ if page == "Upload Document":
     uploaded_files = st.file_uploader("Choose a file", accept_multiple_files=True)
     
     if uploaded_files:
-        st.session_state.uploaded_files = uploaded_files
-        st.session_state.vector_store = assignment_file(st.session_state.uploaded_files)
+        st.session_state.vector_store = assignment_file(uploaded_files)
         st.write("Documents uploaded successfully.")
     
-    if st.session_state.uploaded_files:
-        for uploaded_file in st.session_state.uploaded_files:
-            st.write("Uploaded files:", uploaded_file.name)
 
 
