@@ -69,6 +69,7 @@ def assignment_file(uploaded_files):
             embedding_function=OpenAIEmbeddings.embed_query,
             # Configure max retries for the Azure client
             additional_search_client_options={"retry_total": 4},
+        
         )
 
         
