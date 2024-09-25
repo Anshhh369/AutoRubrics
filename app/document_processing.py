@@ -5,7 +5,7 @@ import os.path
 import pathlib
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import  RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import AzureSearch
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,Docx2txtLoader
 
