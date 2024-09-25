@@ -26,8 +26,8 @@ if "selected_option" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-if "uploaded_files" not in st.session_state:
-    st.session_state.uploaded_files = None
+# if "uploaded_files" not in st.session_state:
+#     st.session_state.uploaded_files = None
 
 if "vector_store" not in st.session_state:
     st.session_state.vector_store = None
