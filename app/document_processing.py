@@ -9,7 +9,10 @@ from langchain_community.vectorstores import AzureSearch
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,Docx2txtLoader
 
-secrets = st.secrets  
+secrets = st.secrets 
+
+openai_api_key = secrets["openai"]["api_key"]  # Accessing OpenAI API key from secrets
+os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable for OpenAI API key 
 
 azure_api_key = secrets["azure"]["api_key"]
 os.environ["AZURE_API_KEY"] = azure_api_key
