@@ -9,6 +9,15 @@ from langchain.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,Docx2txtLoader
 
+azure_api_key = secrets["azure"]["api_key"]
+os.environ["AZURE_API_KEY"] = azure_api_key
+
+vector_store_address = "https://ragservices.search.windows.net"
+vector_store_password = "azure_api_key"
+
+index_name = "autograder-vectordb"
+model = "text-embedding-ada-002"
+
 def assignment_file(uploaded_files):
     for uploaded_file in uploaded_files:
         file_details = {"filename": uploaded_file.name, "filetype": uploaded_file.type}
@@ -42,6 +51,18 @@ def assignment_file(uploaded_files):
         
         text_splitter =  RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
         documents = text_splitter.split_documents(docs)
+
+        vector_store = AzureSearch(
+            azure_search_endpoint=vector_store_address,
+            azure_search_key=vector_store_password,
+            index_name=index_name,
+            api_version = "2024-05-01-preview",
+            embedding_function=OpenAIEmbeddings.embed_query,
+            # Configure max retries for the Azure client
+            additional_search_client_options={"retry_total": 4},
+        )
+
+        
         db = Chroma.from_documents(documents, OpenAIEmbeddings())
         
     return db
