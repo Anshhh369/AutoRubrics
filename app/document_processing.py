@@ -21,10 +21,10 @@ vector_store_address = "https://ragservices.search.windows.net"
 vector_store_password = "azure_api_key"
 
 index_name = "autorubrics-vectordb"
-# model = "text-embedding-ada-002"
+model = "text-embedding-ada-002"
 
 
-OpenAIEmbeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+OpenAIEmbeddings = OpenAIEmbeddings(openai_api_key=openai_api_key, model=model)
 
 
 def assignment_file(uploaded_files):
