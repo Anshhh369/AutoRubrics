@@ -20,7 +20,7 @@ os.environ["AZURE_API_KEY"] = azure_api_key
 vector_store_address = "https://ragservices.search.windows.net"
 vector_store_password = "azure_api_key"
 
-index_name = "autograder-vectordb"
+index_name = "autorubrics-vectordb"
 model = "text-embedding-ada-002"
 
 
