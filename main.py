@@ -11,13 +11,6 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import sqlite3
 
 
-## Set up the environment
-# Load secret keys
-
-secrets = st.secrets  # Accessing secrets (API keys) stored securely
-
-
-
 
 # Initialize session state variables
 if "selected_option" not in st.session_state:
