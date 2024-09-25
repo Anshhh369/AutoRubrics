@@ -22,6 +22,8 @@ vector_store_password = "azure_api_key"
 
 index_name = "autograder-vectordb"
 model = "text-embedding-ada-002"
+
+
 OpenAIEmbeddings = OpenAIEmbeddings(openai_api_key=openai_api_key, model=model)
 
 
