@@ -70,10 +70,10 @@ def assignment_file(uploaded_files):
             # Configure max retries for the Azure client
             additional_search_client_options={"retry_total": 4},
         
-        )
+            )
 
         
-        db = vector_store.add_documents(documents)
+            db = vector_store.add_documents(documents)
         
     return db
 
