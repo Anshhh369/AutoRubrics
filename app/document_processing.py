@@ -9,15 +9,6 @@ from langchain_community.vectorstores import AzureSearch
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,Docx2txtLoader
 
-azure_api_key = secrets["azure"]["api_key"]
-os.environ["AZURE_API_KEY"] = azure_api_key
-
-vector_store_address = "https://ragservices.search.windows.net"
-vector_store_password = "azure_api_key"
-
-index_name = "autograder-vectordb"
-model = "text-embedding-ada-002"
-OpenAIEmbeddings = OpenAIEmbeddings(openai_api_key=openai_api_key, model=model)
 
 
 def assignment_file(uploaded_files):
