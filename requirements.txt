@@ -4,7 +4,8 @@ langchain
 langchain-openai
 langchain_community
 langchain_text_splitters
-langchain-chroma
+azure-search-documents
+azure-identity
 
 chromadb
 docx2txt
