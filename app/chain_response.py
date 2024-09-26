@@ -10,7 +10,8 @@ secrets = st.secrets
 
 
 azure_api_key = secrets["azure"]["api_key"]
-os.environ["AZURE_API_KEY"] = azure_api_key
+os.environ["AZURE_AI_SEARCH_API_KEY"] = azure_api_key
+
 
 def  get_chain(options,assignment,context,chat_history):
 
