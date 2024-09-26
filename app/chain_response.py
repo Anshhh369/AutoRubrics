@@ -4,6 +4,7 @@ from langchain.chains import LLMChain, create_retrieval_chain
 from langchain.prompts.chat import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 import os
+from langchain_community.retrievers import AzureAISearchRetriever
 
 secrets = st.secrets
 
@@ -53,7 +54,7 @@ def  get_chain(options,assignment,context,chat_history):
 
     if st.session_state.vector_store:
         
-        retriever = retriever = AzureAISearchRetriever(content_key=azure_api_key, top_k=1, index_name="autorubrics-vectordb")
+        retriever = AzureAISearchRetriever(content_key=azure_api_key, top_k=1, index_name="autorubrics-vectordb")
         chain = create_retrieval_chain(retriever, chain)
 
     st.session_state.chat_active = True
