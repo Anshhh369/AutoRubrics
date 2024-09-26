@@ -3,8 +3,12 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain, create_retrieval_chain
 from langchain.prompts.chat import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
+import os
 
+secrets = st.secrets
 
+azure_api_key = secrets["azure"]["api_key"]
+os.environ["AZURE_API_KEY"] = azure_api_key
 
 def  get_chain(options,assignment,context,chat_history):
 
