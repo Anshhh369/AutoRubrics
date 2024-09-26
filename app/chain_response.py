@@ -11,7 +11,6 @@ secrets = st.secrets
 
 azure_api_key = secrets["azure"]["api_key"]
 os.environ["AZURE_API_KEY"] = azure_api_key
-os.environ["AZURE_AI_SEARCH_SERVICE_NAME"] = "ragservices"
 
 def  get_chain(options,assignment,context,chat_history):
 
@@ -56,7 +55,11 @@ def  get_chain(options,assignment,context,chat_history):
 
     if st.session_state.vector_store:
         
-        retriever = AzureAISearchRetriever(content_key=azure_api_key, top_k=1, index_name="autorubrics-vectordb")
+        retriever = AzureAISearchRetriever(
+            content_key="assignment", 
+            top_k=1, 
+            index_name="autorubrics-vectordb"
+        )
         chain = create_retrieval_chain(retriever, chain)
 
     st.session_state.chat_active = True
