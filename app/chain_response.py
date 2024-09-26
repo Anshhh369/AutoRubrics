@@ -58,7 +58,7 @@ def  get_chain(options,assignment,context,chat_history):
         retriever = AzureAISearchRetriever(
             content_key="assignment", 
             top_k=1, 
-            index_name="autorubrics-vectordb"
+            index_name="autorubrics-vectordb",
         )
         chain = create_retrieval_chain(retriever, chain)
 
