@@ -72,7 +72,17 @@ if page == "Home":
                 st.markdown(answer)
             # Add assistant response to chat history                
             st.session_state.messages.append({"role": "assistant", "content": answer})
-                                        
+
+            pattern = r"="
+            
+            search_result = re.search(pattern, st.session_state.messages, re.DOTALL)
+
+            if search_result: 
+                result = search_result.group()
+
+                st.write("final rubric:", result)
+
+            
             # Button to clear chat messages
             def clear_messages():
                 st.session_state.messages = []
