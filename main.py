@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import re
 from app.document_processing import assignment_file
 from app.example_file import example
 from app.chain_response import get_chain, get_answer
