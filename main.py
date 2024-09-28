@@ -76,7 +76,7 @@ if page == "Home":
 
             pattern = r"="
             
-            for line st.session_state.messages:
+            for line in st.session_state.messages:
                 search_result = re.search(pattern,line, re.DOTALL)
 
                 if search_result: 
