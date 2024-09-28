@@ -11,9 +11,20 @@ from langchain_community.vectorstores import AzureSearch
 secrets = st.secrets
 
 
+openai_api_key = secrets["openai"]["api_key"]  # Accessing OpenAI API key from secrets
+os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable for OpenAI API key 
+
+
 azure_api_key = secrets["azure"]["api_key"]
-os.environ["AZURE_AI_SEARCH_API_KEY"] = azure_api_key
+os.environ["AZURE_API_KEY"] = azure_api_key
 os.environ["AZURE_AI_SEARCH_SERVICE_NAME"] = "https://ragservices.search.windows.net"
+
+
+vector_store_address = "https://ragservices.search.windows.net"
+vector_store_password = azure_api_key
+
+index_name = "autorubrics-vectordb"
+model = "text-embedding-ada-002"
 
 
 def  get_chain(options,assignment,context,chat_history):
