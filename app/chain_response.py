@@ -94,6 +94,19 @@ def get_answer(query):
         if search_result:
             result = search_result.group(1)
 
+            vector_store = AzureSearch(
+                azure_search_endpoint=vector_store_address,
+                azure_search_key=vector_store_password,
+                index_name=index_name,
+                api_version = "2020-08-01",
+                embedding_function=OpenAIEmbeddings.embed_query,
+                # Configure max retries for the Azure client
+                additional_search_client_options={"retry_total": 4},
+            )
+            db = vector_store.add_documents(result)
+
+    
+
         
     return answer
 
