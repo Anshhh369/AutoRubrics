@@ -4,6 +4,7 @@ from langchain.chains import LLMChain, create_retrieval_chain
 from langchain.prompts.chat import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 import os
+import re
 from langchain_community.retrievers import AzureAISearchRetriever
 
 secrets = st.secrets
