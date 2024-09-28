@@ -85,5 +85,30 @@ def get_answer(query):
     except:
         ans = response['answer']
         answer = ans['text']
-              
+
+    pattern = r"=\s*(.*?)"
+            
+    for line in answer:
+        search_result = re.search(pattern,answer, re.DOTALL)
+        if search_result:
+            result = search_result.group(1)
+
+            st.write("Matched Pattern:", result)
+
+        
     return answer
+
+
+
+
+
+
+ # for line in st.session_state.messages:
+ #                if isinstance(line,dict):
+ #                    if 'answer' in line:
+ #                        search_result = re.search(pattern,line['answer'], re.DOTALL)
+
+ #                        if search_result: 
+ #                            result = search_result.group(1)
+
+ #                            st.write("final rubric:", result)
