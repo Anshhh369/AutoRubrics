@@ -6,6 +6,7 @@ from langchain_core.runnables import RunnablePassthrough
 import os
 import re
 from langchain_community.retrievers import AzureAISearchRetriever
+from langchain_community.vectorstores import AzureSearch
 
 secrets = st.secrets
 
