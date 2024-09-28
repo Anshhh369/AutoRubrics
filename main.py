@@ -76,12 +76,13 @@ if page == "Home":
 
             pattern = r"="
             
-            search_result = re.search(pattern, st.session_state.messages, re.DOTALL)
+            for line st.session_state.messages:
+                search_result = re.search(pattern,line, re.DOTALL)
 
-            if search_result: 
-                result = search_result.group()
+                if search_result: 
+                    result = search_result.group(1)
 
-                st.write("final rubric:", result)
+                    st.write("final rubric:", result)
 
             
             # Button to clear chat messages
