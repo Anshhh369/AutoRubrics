@@ -74,7 +74,7 @@ if page == "Home":
             # Add assistant response to chat history                
             st.session_state.messages.append({"role": "assistant", "content": answer})
 
-            pattern = r"="
+            pattern = r"=\s*(.*?)"
             
             for line in st.session_state.messages:
                 if isinstance(line,dict):
@@ -85,7 +85,6 @@ if page == "Home":
                             result = search_result.group(1)
 
                             st.write("final rubric:", result)
-
             
             # Button to clear chat messages
             def clear_messages():
