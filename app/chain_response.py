@@ -106,16 +106,16 @@ def get_answer(query):
         if search_result:
             result = search_result.group(1)
 
-            vector_store = AzureSearch(
+            vector_store_2 = AzureSearch(
                 azure_search_endpoint=vector_store_address,
                 azure_search_key=vector_store_password,
-                index_name=index_name,
+                index_name="Predefined_rubrics",
                 api_version = "2020-08-01",
                 embedding_function=OpenAIEmbeddings.embed_query,
                 # Configure max retries for the Azure client
                 additional_search_client_options={"retry_total": 4},
             )
-            db = vector_store.add_documents(result)
+            db = vector_store_2.add_documents(result)
 
     
 
