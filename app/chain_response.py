@@ -120,9 +120,7 @@ def get_answer(query):
                 documents = []
 
                 for line in file:
-                    # Assuming each line in the file represents a document
-                    document = {"id": hash(line), "content": line.strip()}  # Create a document with id
-                    documents.append(document)
+                    documents.append(line.strip())
                 
                 
                 vector_store_2 = AzureSearch(
