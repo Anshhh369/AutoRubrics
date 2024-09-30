@@ -10,6 +10,7 @@ azure-identity
 chromadb
 docx2txt
 PyPDF
+pdfplumber
 
 protobuf==3.20.1
 opentelemetry-api
