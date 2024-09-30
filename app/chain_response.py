@@ -7,6 +7,8 @@ import os
 import re
 from langchain_community.retrievers import AzureAISearchRetriever
 from langchain_community.vectorstores import AzureSearch
+from langchain_openai import OpenAIEmbeddings
+
 
 secrets = st.secrets
 
