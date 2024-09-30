@@ -106,15 +106,15 @@ def get_answer(query):
         answer = ans['text']
 
     pattern = r"\s=\s*(.*?)($)"
-    
-    with open("extracted_information.txt", "w+") as file:
-        for text in answer.splitlines():
-            search_result = re.search(pattern, text)
-            if search_result:
-                result = search_result.group(1)
+    for text in answer.splitlines():
+        search_result = re.search(pattern, text)
+        if search_result:
+            result = search_result.group(1)
+            
+            with open("extracted_information.txt", "w+") as file:                
                 # Write the extracted information to the file
                 file.write(result + "\n")
-
+                
                 file.seek(0)
                 
                 docu = file.read()
