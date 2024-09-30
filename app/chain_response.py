@@ -113,7 +113,8 @@ def get_answer(query):
             if search_result:
                 result = search_result.group(1)
                 # Write the extracted information to the file
-                file.write(result + "\n")
+                w = file.write(result + "\n")
+                # r = file.readlines()
 
                 vector_store_2 = AzureSearch(
                     azure_search_endpoint=vector_store_address,
@@ -124,7 +125,7 @@ def get_answer(query):
                     # Configure max retries for the Azure client
                     additional_search_client_options={"retry_total": 4},
                 )
-                db_2 = vector_store_2.add_documents(file)
+                db_2 = vector_store_2.add_documents(w)
 
     
 
