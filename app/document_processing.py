@@ -54,15 +54,23 @@ def assignment_file(uploaded_files):
         for doc in docs:
             text = doc.page_content
             st.write("file contents: \n", text)
-            
-
-
         
         text_splitter =  RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
         documents = text_splitter.split_documents(docs)
 
+        vector_store = AzureSearch(
+            azure_search_endpoint=vector_store_address,
+            azure_search_key=vector_store_password,
+            index_name=index_name,
+            api_version = "2020-08-01",
+            embedding_function=OpenAIEmbeddings.embed_query,
+            # Configure max retries for the Azure client
+            additional_search_client_options={"retry_total": 4},
+        )
+        db = vector_store.add_documents(documents)
+
     
-    return documents
+    return db
 
 
 
