@@ -88,7 +88,8 @@ if page == "Upload Document":
     if uploaded_files:
         st.session_state.uploaded_files = uploaded_files
         st.session_state.vector_store = assignment_file(st.session_state.uploaded_files)
-        st.write("Documents uploaded successfully.")
+        if st.session_state.vector_store:
+            st.write("Documents uploaded successfully.")
     
 
 
