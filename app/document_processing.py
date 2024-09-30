@@ -70,7 +70,7 @@ def assignment_file(uploaded_files):
         db = vector_store.add_documents(documents)
 
     
-    return db
+    return text
 
 
 
