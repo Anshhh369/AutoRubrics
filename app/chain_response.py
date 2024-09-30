@@ -120,7 +120,8 @@ def get_answer(query):
                 documents = []
 
                 for line in file:
-                    documents.append(line.strip())
+                    document = Document(content = line.strip())
+                    documents.append(document)
                 
                 
                 vector_store_2 = AzureSearch(
