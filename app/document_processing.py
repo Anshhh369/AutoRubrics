@@ -8,6 +8,8 @@ from langchain_text_splitters import  RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import AzureSearch
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,Docx2txtLoader
+import pdfplumber
+from langchain.docstore.document import Document
 
 secrets = st.secrets 
 
@@ -43,17 +45,21 @@ def assignment_file(uploaded_files):
         # Load document based on its extension
         if file_extension == "pdf":
             loader = PyPDFLoader(path)
+            with pdfplumber.open(uploaded_file) as pdf:
+                pages = [page.extract_text() for page in pdf.pages]
+                text = "\n".join(pages)
         elif file_extension == "docx":
             loader = Docx2txtLoader(path)
-        # elif file_extension == "pptx":
-        #     loader = UnstructuredPowerPointLoader(path)
+            pages = docx.Document(uploaded_file)
+            text = "\n".join([para.text for para in pages.paragraphs])
+
 
         # Load documents and split text
         docs = loader.load()
         
         for doc in docs:
-            text = doc.page_content
-            st.write("file contents: \n", text)
+            content = doc.page_content
+            st.write("file contents: \n", content)
         
         text_splitter =  RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
         documents = text_splitter.split_documents(docs)
