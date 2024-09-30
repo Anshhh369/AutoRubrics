@@ -106,22 +106,25 @@ def get_answer(query):
         answer = ans['text']
 
     pattern = r"\s=\s*(.*?)($)"
-            
-    for line in answer:
-        search_result = re.search(pattern,answer, re.DOTALL)
-        if search_result:
-            result = search_result.group(1)
+    
+    with open("extracted_information.txt", "w") as file:
+        for line in answer.splitlines():
+            search_result = re.search(pattern, line)
+            if search_result:
+                result = search_result.group(1)
+                # Write the extracted information to the file
+                file.write(result + "\n")
 
-            vector_store_2 = AzureSearch(
-                azure_search_endpoint=vector_store_address,
-                azure_search_key=vector_store_password,
-                index_name="predefined_rubrics",
-                api_version = "2023-11-01",
-                embedding_function=OpenAIEmbeddings.embed_query,
-                # Configure max retries for the Azure client
-                additional_search_client_options={"retry_total": 4},
-            )
-            db_2 = vector_store_2.add_documents(result)
+                vector_store_2 = AzureSearch(
+                    azure_search_endpoint=vector_store_address,
+                    azure_search_key=vector_store_password,
+                    index_name="predefined_rubrics",
+                    api_version = "2023-11-01",
+                    embedding_function=OpenAIEmbeddings.embed_query,
+                    # Configure max retries for the Azure client
+                    additional_search_client_options={"retry_total": 4},
+                )
+                db_2 = vector_store_2.add_documents(file)
 
     
 
