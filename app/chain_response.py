@@ -85,10 +85,11 @@ def  get_chain(options,assignment,context,chat_history):
             api_key=azure_api_key
         )
         retrieval_chain = create_retrieval_chain(retriever, chain)
+        st.session_state.chain = retrieval_chain   
+
+    st.session_state.chain = chain
 
     st.session_state.chat_active = True
-
-    st.session_state.chain = retrieval_chain
 
     return st.session_state.chain
     
