@@ -116,8 +116,13 @@ def get_answer(query):
                 file.write(result + "\n")
                 
                 file.seek(0)
-                
-                docu = file.read()
+
+                documents = []
+
+                for line in file:
+                    # Assuming each line in the file represents a document
+                    document = {"id": hash(line), "content": line.strip()}  # Create a document with id
+                    documents.append(document)
                 
                 
                 vector_store_2 = AzureSearch(
@@ -130,7 +135,7 @@ def get_answer(query):
                     additional_search_client_options={"retry_total": 4},
                 )
                 
-                db_2 = vector_store_2.add_documents(docu)
+                db_2 = vector_store_2.add_documents(documents)
 
     
 
