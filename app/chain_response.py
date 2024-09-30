@@ -79,7 +79,7 @@ def  get_chain(options,assignment,context,chat_history):
     if st.session_state.vector_store:
         
         retriever = AzureAISearchRetriever(
-            content_key="assignment", 
+            content_key="content", 
             top_k=1, 
             index_name="autorubrics-vectordb",
         )
