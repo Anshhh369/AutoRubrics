@@ -115,7 +115,7 @@ def get_answer(query):
             vector_store_2 = AzureSearch(
                 azure_search_endpoint=vector_store_address,
                 azure_search_key=vector_store_password,
-                index_name="Predefined_rubrics",
+                index_name="predefined_rubrics",
                 api_version = "2023-11-01",
                 embedding_function=OpenAIEmbeddings.embed_query,
                 # Configure max retries for the Azure client
