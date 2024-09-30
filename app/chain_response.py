@@ -121,7 +121,7 @@ def get_answer(query):
                 documents = []
 
                 for line in file:
-                    document = Document(content = line.strip())
+                    document = Document(page_content = line.strip())
                     documents.append(document)
                 
                 
