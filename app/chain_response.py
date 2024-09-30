@@ -116,7 +116,7 @@ def get_answer(query):
                 file.write(result + "\n")
                 
                 docu = []
-                with open(file, "r") as f:
+                with open("file", "r") as f:
                     for line in f:
                         docu = docu.append(line.strip())
                 
