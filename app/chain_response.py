@@ -108,14 +108,18 @@ def get_answer(query):
     pattern = r"\s=\s*(.*?)($)"
     
     with open("extracted_information.txt", "w") as file:
-        for line in answer.splitlines():
-            search_result = re.search(pattern, line)
+        for text in answer.splitlines():
+            search_result = re.search(pattern, text)
             if search_result:
                 result = search_result.group(1)
                 # Write the extracted information to the file
-                w = file.write(result + "\n")
-                # r = file.readlines()
-
+                file.write(result + "\n")
+                
+                docu = []
+                with open(file, "r") as f:
+                    for line in f:
+                        docu = docu.append(line.strip())
+                
                 vector_store_2 = AzureSearch(
                     azure_search_endpoint=vector_store_address,
                     azure_search_key=vector_store_password,
@@ -125,7 +129,8 @@ def get_answer(query):
                     # Configure max retries for the Azure client
                     additional_search_client_options={"retry_total": 4},
                 )
-                db_2 = vector_store_2.add_documents(w)
+                
+                db_2 = vector_store_2.add_documents(docu)
 
     
 
