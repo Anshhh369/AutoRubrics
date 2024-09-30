@@ -107,7 +107,7 @@ def get_answer(query):
 
     pattern = r"\s=\s*(.*?)($)"
     
-    with open("extracted_information.txt", "w") as file:
+    with open("extracted_information.txt", "r+") as file:
         for text in answer.splitlines():
             search_result = re.search(pattern, text)
             if search_result:
@@ -116,9 +116,8 @@ def get_answer(query):
                 file.write(result + "\n")
                 
                 docu = []
-                with open("file", "r") as f:
-                    for line in f:
-                        docu = docu.append(line.strip())
+                for line in file:
+                    docu = docu.append(line.strip())
                 
                 vector_store_2 = AzureSearch(
                     azure_search_endpoint=vector_store_address,
