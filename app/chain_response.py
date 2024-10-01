@@ -99,8 +99,6 @@ def get_answer(query):
     search_result = re.search(pattern, answer,re.DOTALL)
     if search_result:
         result = search_result.group()
-
-        st.write("result:", result)
         
         with open("extracted_information.txt", "w+") as file:                
             # Write the extracted information to the file
@@ -128,6 +126,8 @@ def get_answer(query):
 
                 if db_2:
                     st.write("Final Rubric Submitted")
+
+                    break
     
 
         
