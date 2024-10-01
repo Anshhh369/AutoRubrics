@@ -96,7 +96,7 @@ def  get_chain(options,assignment,context,chat_history):
 def get_answer(query):
     # st.write(f"Selected Option: {st.session_state.selected_option}")
     chains = get_chain(st.session_state.selected_option,st.session_state.vector_store,st.session_state.context,st.session_state.chat_history)
-    response = chains.run()
+    response = chains.invoke({"input" : query, "assignment": st.session_state.vector_store})
     
     try:
         answer = response['text']
