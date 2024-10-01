@@ -123,16 +123,7 @@ def get_answer(query):
                 )
                 
                 db_2 = vector_store_2.add_documents(documents)
-
-                if db_2:
-                    st.write("Final Rubric Submitted")
-
-                    break
-
-        break
                 
-    
-
         
     return answer
 
