@@ -101,7 +101,7 @@ def get_answer(query):
         if search_result:
             result = search_result.group(0).strip()
 
-            st.write(result)
+            st.write("result: ",result)
             
             with open("extracted_information.txt", "w+") as file:                
                 # Write the extracted information to the file
