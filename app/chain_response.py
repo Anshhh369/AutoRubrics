@@ -76,10 +76,6 @@ def  get_chain(options,assignment,context,chat_history):
 
     st.session_state.chain = LLMChain(llm=llm, prompt=prompt)
 
- 
-            
-        retrieval_chain = create_retrieval_chain(document, st.session_state.chain)
-        st.session_state.chain = retrieval_chain   
 
     st.session_state.chat_active = True
 
