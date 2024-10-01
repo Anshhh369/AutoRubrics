@@ -110,7 +110,7 @@ def get_answer(query):
                 for line in file:
                     document = Document(page_content = line.strip())
                     documents.append(document)
-                    text = "\n".join([para.text for para in documents.paragraphs])
+                    st.write("document: {documents}")
                 
                 
                 vector_store_2 = AzureSearch(
@@ -123,7 +123,7 @@ def get_answer(query):
                     additional_search_client_options={"retry_total": 4},
                 )
                 
-                db_2 = vector_store_2.add_documents(text)
+                db_2 = vector_store_2.add_documents(documents)
 
                 if db_2:
                     st.write("Final Rubric Submitted")
