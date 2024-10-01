@@ -20,6 +20,9 @@ os.environ["OPENAI_API_KEY"] = openai_api_key  # Setting environment variable fo
 azure_api_key = secrets["azure"]["api_key"]
 os.environ["AZURE_API_KEY"] = azure_api_key
 
+os.environ["AZURE_AI_SEARCH_API_KEY"] = azure_api_key
+os.environ["AZURE_AI_SEARCH_SERVICE_NAME"] = "https://ragservices.search.windows.net"
+
 vector_store_address = "https://ragservices.search.windows.net"
 vector_store_password = azure_api_key
 
