@@ -123,6 +123,8 @@ def get_answer(query):
                 )
                 
                 db_2 = vector_store_2.add_documents(documents)
+
+        return answer
                 
         
     return answer
