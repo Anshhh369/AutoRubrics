@@ -135,7 +135,8 @@ def get_answer(query):
                 
                 db_2 = vector_store_2.add_documents(text)
 
-                st.write("Final Rubric: {documents}")
+                if db_2:
+                    st.write("Final Rubric Submitted")
     
 
         
