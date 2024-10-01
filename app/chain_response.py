@@ -94,11 +94,11 @@ def get_answer(query):
         ans = response['answer']
         answer = ans['text']
 
-    pattern = r"\s=\s*(.*?)($)"
+    pattern = r"^(.*?)=(.*)$"
     for text in answer.splitlines():
         search_result = re.search(pattern, text)
         if search_result:
-            result = search_result.group(1)
+            result = search_result.group()
 
             st.write("result:", result)
             
