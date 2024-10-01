@@ -105,11 +105,10 @@ def get_answer(query):
                 
                 file.seek(0)
 
-                documents = []
+                docx_file = Document()
 
                 for line in file:
-                    document = Document(page_content = line.strip())
-                    documents.append(document)
+                    documents = docx_file.add_paragraph(doc.page_content)
                 
                 
                 vector_store_2 = AzureSearch(
