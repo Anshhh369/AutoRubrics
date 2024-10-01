@@ -55,9 +55,9 @@ def  get_chain(options,assignment,context,chat_history):
         Context : {context}
         
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? 
-        If and only if the user says no to the above question and is satisfied with the rubric then end the conversation and save the whole final generated rubric in a variable with user's name and display it in the exact following format. 
+        If and only if the user says no to the above question and is satisfied with the rubric then end the conversation and save the whole final generated rubric in a variable like username_rubric and display it in the exact following format. 
 
-        Variable = whole final generated rubric
+        username_rubric = whole final generated rubric
         
 
         Keep the chat history to have memory and not repeat questions and be consistent with the rubric generated.
