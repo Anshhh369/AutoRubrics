@@ -98,7 +98,9 @@ def get_answer(query):
     for text in answer.splitlines():
         search_result = re.search(pattern, text)
         if search_result:
-            result = search_result.group()
+            result = search_result.group(1)
+
+            st.write(result)
             
             with open("extracted_information.txt", "w+") as file:                
                 # Write the extracted information to the file
