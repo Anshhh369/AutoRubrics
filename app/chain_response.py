@@ -76,22 +76,7 @@ def  get_chain(options,assignment,context,chat_history):
 
     st.session_state.chain = LLMChain(llm=llm, prompt=prompt)
 
-    if st.session_state.vector_store:
-        
-        retriever = AzureAISearchRetriever(
-            content_key="content", 
-            top_k=1, 
-            index_name="index_name",
-            api_key=azure_api_key
-        )
-        
-        query = "*" 
-
-        # Retrieve relevant documents from the index
-        rubrics = retriever.get_relevant_documents(query)
-
-        for rubric in rubrics:
-            document = rubric.metadata.get('content')
+ 
             
         retrieval_chain = create_retrieval_chain(document, st.session_state.chain)
         st.session_state.chain = retrieval_chain   
