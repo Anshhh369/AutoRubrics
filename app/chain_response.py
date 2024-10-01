@@ -99,8 +99,6 @@ def get_answer(query):
     
     if search_result:
         result = search_result.group(0)
-
-        st.write("result: ",result)
             
         with open("extracted_information.txt", "w+") as file:                
             # Write the extracted information to the file
@@ -112,6 +110,8 @@ def get_answer(query):
             for line in file:
                 document = Document(page_content=line.strip())
                 documents.append(document)
+
+            st.write("documents: ",documents)
                     
                     
             vector_store_2 = AzureSearch(
