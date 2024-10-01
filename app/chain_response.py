@@ -94,7 +94,7 @@ def get_answer(query):
         ans = response['answer']
         answer = ans['text']
 
-    pattern = r"^(.*?)=(.*)$"
+    pattern = r"^(.*=.*)$"
     for text in answer.splitlines():
         search_result = re.search(pattern, text)
         if search_result:
