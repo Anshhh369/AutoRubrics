@@ -94,7 +94,7 @@ def get_answer(query):
         ans = response['answer']
         answer = ans['text']
 
-    pattern = r"^(.*=)([\s\S]*)"
+    pattern = r"^(.*=.*)"
     for text in answer:
         search_result = re.search(pattern, text,re.DOTALL)
     
