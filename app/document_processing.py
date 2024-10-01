@@ -63,7 +63,7 @@ def assignment_file(uploaded_files):
         
         for doc in docs:
             content = doc.page_content
-            st.write("file contents: \n", content)
+            # st.write("file contents: \n", content)
         
         text_splitter =  RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
         documents = text_splitter.split_documents(docs)
@@ -88,7 +88,7 @@ def assignment_file(uploaded_files):
             )
 
             docs = docs[0].page_content
-            st.write("Assignment: ", docs)
+            # st.write("Assignment: ", docs)
 
     
     return docs
