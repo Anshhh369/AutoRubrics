@@ -90,7 +90,7 @@ def assignment_file(uploaded_files):
             rubrics = retriever.get_relevant_documents(query)
 
             for rubric in rubrics:
-                document = rubric.metadata.get('content')
+                document = rubric.metadata.get('page_content')
 
     
     return document
