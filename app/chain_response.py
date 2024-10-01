@@ -95,7 +95,7 @@ def get_answer(query):
         answer = ans['text']
 
     pattern = r"^.*?=.*$"
-    search_result = re.search(pattern, text,re.DOTALL)
+    search_result = re.search(pattern, answer,re.DOTALL)
     
     if search_result:
         result = search_result.group(0)
