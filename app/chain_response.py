@@ -84,8 +84,16 @@ def  get_chain(options,assignment,context,chat_history):
             index_name="index_name",
             api_key=azure_api_key
         )
+        
+        query = "*" 
 
-        retrieval_chain = create_retrieval_chain(retriever, st.session_state.chain)
+        # Retrieve relevant documents from the index
+        rubrics = retriever.get_relevant_documents(query)
+
+        for rubric in rubrics:
+            document = rubric.metadata.get('content')
+            
+        retrieval_chain = create_retrieval_chain(document, st.session_state.chain)
         st.session_state.chain = retrieval_chain   
 
     st.session_state.chat_active = True
