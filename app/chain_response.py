@@ -94,12 +94,12 @@ def get_answer(query):
         ans = response['answer']
         answer = ans['text']
 
-    pattern = r"(.+?)\s*=\s*([\s\S]+)"
+    pattern = r"^.*?=.*$"
     for text in answer:
         search_result = re.search(pattern, text,re.DOTALL)
     
         if search_result:
-            result = search_result.group()
+            result = search_result.group(0)
 
             st.write("result: ",result)
             
