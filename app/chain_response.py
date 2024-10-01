@@ -95,11 +95,11 @@ def get_answer(query):
         answer = ans['text']
 
     pattern = r"^(.*=)([\s\S]*)$"
-    for text in answer.splitlines():
+    for text in answer:
         search_result = re.search(pattern, text,re.DOTALL)
     
         if search_result:
-            result = search_result.group(2)
+            result = search_result.group()
             
             with open("extracted_information.txt", "w+") as file:                
                 # Write the extracted information to the file
