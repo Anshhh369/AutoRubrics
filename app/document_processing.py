@@ -80,23 +80,18 @@ def assignment_file(uploaded_files):
         db = vector_store.add_documents(documents)
 
         if db:
-            retriever = AzureAISearchRetriever(
-                content_key="content", 
-                top_k=1, 
-                index_name="index_name",
-                api_key=azure_api_key
+
+            docs = vector_store.similarity_search(
+                query="Assignment",
+                k=1, 
+                search_type="similarity"
             )
-        
-            query = "*" 
 
-            # Retrieve relevant documents from the index
-            rubrics = retriever.get_relevant_documents(query)
-
-            for rubric in rubrics:
-                document = rubric.metadata.get('page_content')
+            docs = docs[0].page_content
+            st.write("Assignment: ", docs)
 
     
-    return document
+    return docs
 
 
 
