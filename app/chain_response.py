@@ -106,26 +106,26 @@ def get_answer(query):
                 
                 file.seek(0)
 
-                docx_file = Document()
-
+                documents = []
                 for line in file:
-                    documents = docx_file.add_paragraph(line.strip())
+                    document = Document(page_content=line.strip())
+                    documents.append(document)
                 
                 
-                vector_store_2 = AzureSearch(
-                    azure_search_endpoint=vector_store_address,
-                    azure_search_key=vector_store_password,
-                    index_name="predefined_rubrics",
-                    api_version = "2023-11-01",
-                    embedding_function=OpenAIEmbeddings.embed_query,
-                    # Configure max retries for the Azure client
-                    additional_search_client_options={"retry_total": 4},
-                )
+                    vector_store_2 = AzureSearch(
+                        azure_search_endpoint=vector_store_address,
+                        azure_search_key=vector_store_password,
+                        index_name="predefined_rubrics",
+                        api_version = "2023-11-01",
+                        embedding_function=OpenAIEmbeddings.embed_query,
+                        # Configure max retries for the Azure client
+                        additional_search_client_options={"retry_total": 4},
+                    )
                 
-                db_2 = vector_store_2.add_documents(documents)
+                    db_2 = vector_store_2.add_documents(documents)
 
-                if db_2:
-                    st.write("Final Rubric Submitted")
+                    if db_2:
+                        st.write("Final Rubric Submitted")
     
 
         
