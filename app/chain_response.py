@@ -85,9 +85,6 @@ def  get_chain(options,assignment,context,chat_history):
             api_key=azure_api_key
         )
 
-        query = "*"
-
-        retriever = retriever.get_relevant_documents(query)
         retrieval_chain = create_retrieval_chain(retriever, st.session_state.chain)
         st.session_state.chain = retrieval_chain   
 
