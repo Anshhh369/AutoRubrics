@@ -99,7 +99,7 @@ def get_answer(query):
         search_result = re.search(pattern, text,re.DOTALL)
     
         if search_result:
-            result = search_result.group().
+            result = search_result.group()
 
             st.write("result: ",result)
             
