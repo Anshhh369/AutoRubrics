@@ -95,37 +95,38 @@ def get_answer(query):
         answer = ans['text']
 
     pattern = r"^.*?=.*$"
-    for text in answer:
-        search_result = re.search(pattern, text,re.DOTALL)
+    search_result = re.search(pattern, text,re.DOTALL)
     
-        if search_result:
-            result = search_result.group(0)
+    if search_result:
+        result = search_result.group(0)
 
-            st.write("result: ",result)
+        st.write("result: ",result)
             
-            with open("extracted_information.txt", "w+") as file:                
-                # Write the extracted information to the file
-                file.write(result + "\n")
+        with open("extracted_information.txt", "w+") as file:                
+            # Write the extracted information to the file
+            file.write(result + "\n")
                     
-                file.seek(0)
+            file.seek(0)
     
-                documents = []
-                for line in file:
-                    document = Document(page_content=line.strip())
-                    documents.append(document)
+            documents = []
+            for line in file:
+                document = Document(page_content=line.strip())
+                documents.append(document)
                     
                     
-                    vector_store_2 = AzureSearch(
-                        azure_search_endpoint=vector_store_address,
-                        azure_search_key=vector_store_password,
-                        index_name="predefined_rubrics",
-                        api_version = "2023-11-01",
-                        embedding_function=OpenAIEmbeddings.embed_query,
-                        # Configure max retries for the Azure client
-                        additional_search_client_options={"retry_total": 4},
-                    )
+                vector_store_2 = AzureSearch(
+                    azure_search_endpoint=vector_store_address,
+                    azure_search_key=vector_store_password,
+                    index_name="predefined_rubrics",
+                    api_version = "2023-11-01",
+                    embedding_function=OpenAIEmbeddings.embed_query,
+                    # Configure max retries for the Azure client
+                    additional_search_client_options={"retry_total": 4},
+                )
                     
-                    db_2 = vector_store_2.add_documents(documents)
+                db_2 = vector_store_2.add_documents(documents)
+
+                return answer
 
                 
         
