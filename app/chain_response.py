@@ -127,7 +127,8 @@ def get_answer(query):
                 if db_2:
                     st.write("Final Rubric Submitted")
 
-                    break
+        break
+                
     
 
         
