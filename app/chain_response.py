@@ -96,8 +96,8 @@ def get_answer(query):
 
     pattern = r"^(.*=)([\s\S]*)$"
     # for text in answer.splitlines():
-    for text in answer:
-        search_result = re.search(pattern, text,re.DOTALL)
+    for text in range(len(answer):
+        search_result = re.search(pattern, answer,re.DOTALL)
     
         if search_result:
             result = search_result.group()
