@@ -8,8 +8,8 @@ import re
 from langchain_community.retrievers import AzureAISearchRetriever
 from langchain_community.vectorstores import AzureSearch
 from langchain_openai import OpenAIEmbeddings
-from langchain.docstore.document import Document
-from docx import Document as DocxDocument
+# from langchain.docstore.document import Document
+from docx import Document 
 
 
 secrets = st.secrets
@@ -106,7 +106,7 @@ def get_answer(query):
                 
                 file.seek(0)
 
-                docx_file = DocxDocument()
+                docx_file = Document()
 
                 for line in file:
                     documents = docx_file.add_paragraph(line.page_content)
