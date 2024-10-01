@@ -9,6 +9,7 @@ from langchain_community.retrievers import AzureAISearchRetriever
 from langchain_community.vectorstores import AzureSearch
 from langchain_openai import OpenAIEmbeddings
 from langchain.docstore.document import Document
+from docx import Document as DocxDocument
 
 
 secrets = st.secrets
@@ -105,10 +106,10 @@ def get_answer(query):
                 
                 file.seek(0)
 
-                docx_file = Document()
+                docx_file = DocxDocument()
 
                 for line in file:
-                    documents = docx_file.add_paragraph(doc.page_content)
+                    documents = docx_file.add_paragraph(line.page_content)
                 
                 
                 vector_store_2 = AzureSearch(
