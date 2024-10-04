@@ -11,6 +11,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,Docx2txtLoader
 import pdfplumber
 from langchain.docstore.document import Document
+import docx
 
 secrets = st.secrets 
 
