@@ -88,7 +88,7 @@ def assignment_file(uploaded_files):
             
             files = vector_store.similarity_search(
                 query=query,
-                k=1, 
+                k=1000, 
                 search_type="similarity"
             )
 
