@@ -91,13 +91,16 @@ def assignment_file(uploaded_files):
                 k=1, 
                 search_type="similarity"
             )
+
+            content = []
             for file in files:
                 
-                content = file.page_content
-                files.append(content)
-            st.write("Assignment: ", files)
+                document = file.page_content
+                content.append(document)
+                
+            st.write("Assignment: ", content)
 
-            return files
+            return content
 
     
     return docs
