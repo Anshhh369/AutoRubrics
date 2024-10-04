@@ -94,7 +94,7 @@ def assignment_file(uploaded_files):
             for file in files:
                 
                 files = file.page_content
-                st.write("Assignment: ", file)
+            st.write("Assignment: ", file)
 
             return file
 
