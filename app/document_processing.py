@@ -91,11 +91,12 @@ def assignment_file(uploaded_files):
                 k=1, 
                 search_type="similarity"
             )
+            for file in files:
+                
+                files = file.page_content
+                st.write("Assignment: ", file)
 
-            files = files.page_content
-            st.write("Assignment: ", files)
-
-            return files
+            return file
 
     
     return docs
