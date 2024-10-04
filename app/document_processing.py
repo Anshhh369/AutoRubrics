@@ -92,7 +92,7 @@ def assignment_file(uploaded_files):
                 search_type="similarity"
             )
 
-            files = files[0].page_content
+            files = files.page_content
             st.write("Assignment: ", files)
 
             return files
