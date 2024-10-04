@@ -84,7 +84,7 @@ def assignment_file(uploaded_files):
 
             query = uploaded_file.name
 
-            st.write("name: ", query)
+            # st.write("name: ", query)
             
             files = vector_store.similarity_search(
                 query=query,
