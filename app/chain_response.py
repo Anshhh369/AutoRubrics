@@ -48,13 +48,14 @@ def  get_chain(options,assignment,context,chat_history):
         \n Assignment Type:
         \n Assignment Style:
 
-        Only after verifying all the options, ask the user to upload the {assignment} which can be done by navigating to upload page from left hand side.
-        Generate a rubric for the {assignment} that matches their options and make sure you refer the context given below before generating the rubric and use the same format of rubrics as given in the examples in context.
+        Only after verifying all the options move to the next step.
+        Next step is to ask the user to upload the {assignment} which can be done by navigating to upload page from left hand side.
+        Generate a rubric for the {assignment} that matches their options. Also, make sure you refer the context given below before generating the rubric and use the same format of rubrics as given in the examples in context.
         
         Context : {context}
         
         Lastly, ask user if you want any modification or adjustments to the rubrics generated? 
-        If and only if the user says no to the above question and is satisfied with the rubric then end the conversation and save the whole final generated rubric in a variable like username_rubric and display it in the exact following format. 
+        If and only if the user says no to the above question and is satisfied with the rubric then end the conversation and save the whole final generated rubric in a variable called username_rubric and display it in the exact following format. 
 
         username_rubric = whole final generated rubric
         
