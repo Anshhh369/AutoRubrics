@@ -93,10 +93,11 @@ def assignment_file(uploaded_files):
             )
             for file in files:
                 
-                files = file.page_content
-            st.write("Assignment: ", file)
+                content = file.page_content
+                files.append(content)
+            st.write("Assignment: ", files)
 
-            return file
+            return files
 
     
     return docs
